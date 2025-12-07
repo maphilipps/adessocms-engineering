@@ -1,0 +1,26 @@
+{
+  "name": "adessocms-marketplace",
+  "owner": {
+    "name": "Marc Philipps",
+    "url": "https://github.com/maphilipps"
+  },
+  "metadata": {
+    "description": "Plugin marketplace for adesso CMS Drupal development",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "adessocms-engineering",
+      "description": "AI-powered Drupal 11 development tools. 27 agents, 17 commands, 10 skills for Drupal, Twig, Tailwind v4, SDC, and frontend excellence.",
+      "version": "1.0.1",
+      "author": {
+        "name": "Marc Philipps",
+        "url": "https://github.com/maphilipps",
+        "email": "marc.philipps@adesso.de"
+      },
+      "homepage": "https://github.com/maphilipps/adessocms-engineering",
+      "tags": ["ai-powered", "drupal", "drupal-11", "php", "twig", "tailwind", "storybook", "accessibility", "frontend"],
+      "source": "./plugins/adessocms-engineering"
+    }
+  ]
+}

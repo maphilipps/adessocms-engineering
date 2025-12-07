@@ -1,14 +1,14 @@
 {
   "name": "adessocms-engineering",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AI-powered Drupal development tools. 26 agents, 19 commands, 11 skills, 2 MCP servers for Drupal, Twig, Tailwind v4, SDC, and frontend excellence.",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",
-    "url": "https://github.com/marcphilipps"
+    "url": "https://github.com/maphilipps"
   },
-  "homepage": "https://github.com/adesso/adesso-cms",
-  "repository": "https://github.com/adesso/adesso-cms",
+  "homepage": "https://github.com/maphilipps/adessocms-engineering",
+  "repository": "https://github.com/maphilipps/adessocms-engineering",
   "license": "MIT",
   "keywords": [
     "ai-powered",
