@@ -1,0 +1,41 @@
+{
+  "name": "adessocms-engineering",
+  "version": "1.0.0",
+  "description": "AI-powered Drupal development tools. 26 agents, 19 commands, 11 skills, 2 MCP servers for Drupal, Twig, Tailwind v4, SDC, and frontend excellence.",
+  "author": {
+    "name": "Marc Philipps",
+    "email": "marc.philipps@adesso.de",
+    "url": "https://github.com/marcphilipps"
+  },
+  "homepage": "https://github.com/adesso/adesso-cms",
+  "repository": "https://github.com/adesso/adesso-cms",
+  "license": "MIT",
+  "keywords": [
+    "ai-powered",
+    "compound-engineering",
+    "workflow-automation",
+    "code-review",
+    "drupal",
+    "drupal-11",
+    "php",
+    "twig",
+    "tailwind",
+    "storybook",
+    "accessibility",
+    "frontend",
+    "playwright",
+    "browser-automation"
+  ],
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  }
+}
