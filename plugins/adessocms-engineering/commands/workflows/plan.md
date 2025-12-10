@@ -28,11 +28,11 @@ Do not proceed until you have a clear feature description from the user.
 First, I need to understand the project's conventions and existing patterns, leveraging all available resources and use paralel subagents to do this.
 </thinking>
 
-Runn these three agents in paralel at the same time:
+Run these three agents in parallel at the same time using Task tool with the correct subagent_type:
 
-- Task repo-research-analyst(feature_description)
-- Task best-practices-researcher(feature_description)
-- Task framework-docs-researcher(feature_description)
+- Task(subagent_type="adessocms-engineering:research:repo-research-analyst", prompt=feature_description)
+- Task(subagent_type="adessocms-engineering:research:best-practices-researcher", prompt=feature_description)
+- Task(subagent_type="adessocms-engineering:research:framework-docs-researcher", prompt=feature_description)
 
 **Reference Collection:**
 
@@ -40,6 +40,31 @@ Runn these three agents in paralel at the same time:
 - [ ] Include URLs to external documentation and best practices guides
 - [ ] Create a reference list of similar issues or PRs (e.g., `#123`, `#456`)
 - [ ] Note any team conventions discovered in `CLAUDE.md` or team documentation
+
+### 1b. Gemini Co-Author: Verify Understanding (Optional)
+
+Check Gemini availability and invoke the skill for verification:
+
+```bash
+# Check Gemini availability
+which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not available"
+```
+
+**If Gemini is available, invoke the gemini-coauthor skill using the Skill tool:**
+
+```
+Skill(skill="adessocms-engineering:gemini-coauthor")
+```
+
+Then select option **1 (Verify understanding)** and provide the feature description.
+
+This will:
+- Compare Claude's and Gemini's interpretation of the task
+- Identify any differences in understanding
+- Formulate joint clarifying questions if needed
+- Present both perspectives to user if there are discrepancies
+
+**If Gemini is unavailable:** Continue without verification - this step is non-blocking.
 
 ### 2. Issue Planning & Structure
 
@@ -68,7 +93,7 @@ Think like a product manager - what would make this issue clear and actionable? 
 
 After planning the issue structure, run SpecFlow Analyzer to validate and refine the feature specification:
 
-- Task spec-flow-analyzer(feature_description, research_findings)
+- Task(subagent_type="adessocms-engineering:workflow:spec-flow-analyzer", prompt="Analyze: {feature_description} with context: {research_findings}")
 
 **SpecFlow Analyzer Output:**
 
@@ -354,6 +379,39 @@ public function processUser(UserInterface $user): void {
 - [ ] Note which AI tools were used for initial exploration (Claude, Copilot, etc.)
 - [ ] Emphasize comprehensive testing given rapid implementation
 - [ ] Document any AI-generated code that needs human review
+
+### 5b. Gemini Co-Author: Co-Plan Review (Optional)
+
+Before presenting the plan to the user, have Gemini review for completeness:
+
+```bash
+# Check Gemini availability
+which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not available"
+```
+
+**If Gemini is available, invoke the gemini-coauthor skill using the Skill tool:**
+
+```
+Skill(skill="adessocms-engineering:gemini-coauthor")
+```
+
+Then select option **2 (Co-plan)** and provide the plan content.
+
+This will:
+- Review plan structure and completeness
+- Check if acceptance criteria are testable
+- Identify missing edge cases
+- Verify technical approach soundness
+- Document any changes in "Review Notes" section
+
+**After Gemini review (or if unavailable), open plan in Typora if available:**
+```bash
+if [ -d "/Applications/Typora.app" ]; then
+  open -a Typora "plans/<issue_title>.md"
+fi
+```
+
+**If Gemini is unavailable:** Continue without review - this step is non-blocking.
 
 ### 6. Final Review & Submission
 

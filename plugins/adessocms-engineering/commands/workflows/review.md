@@ -72,6 +72,35 @@ Run ALL or most of these agents at the same time:
 
 </parallel_tasks>
 
+### 3b. Gemini Co-Author: Cross-Check Review Findings (Optional)
+
+After parallel agents return findings, cross-check with Gemini to catch missed issues or validate findings:
+
+```bash
+# Check Gemini availability
+if which gemini >/dev/null 2>&1; then
+  echo "Gemini available - cross-checking review findings..."
+fi
+```
+
+**If available, invoke gemini-coauthor skill:**
+- Use `workflows/review-output.md` from gemini-coauthor skill
+- Collect all agent findings with severity levels
+- Send to Gemini for validation and cross-check
+- Identify:
+  - **Confirmed Issues**: Both Claude agents and Gemini agree
+  - **Disputed Issues**: Different severity or validity assessments
+  - **Additional Issues**: New findings from Gemini
+  - **False Positives**: Issues to dismiss or downgrade
+
+**Synthesis Results:**
+- Present consolidated findings with confidence levels
+- For disputed issues, present both perspectives
+- Remove or downgrade confirmed false positives
+- Add any additional issues found by Gemini
+
+**If unavailable:** Continue with agent findings only.
+
 ### 4. Ultra-Thinking Deep Dive Phases
 
 <ultrathink_instruction> For each phase below, spend maximum cognitive effort. Think step by step. Consider all angles. Question assumptions. And bring all reviews in a synthesis to the user.</ultrathink_instruction>

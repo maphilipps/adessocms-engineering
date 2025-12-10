@@ -159,6 +159,34 @@ This command takes a work document (plan, specification, or todo file) and execu
    - Figma designs match (if applicable)
    - No console errors or warnings
 
+### Phase 3b: Gemini Co-Author: Verify Implementation (Optional)
+
+Before shipping, verify the plan was fully implemented:
+
+```bash
+# Check Gemini availability
+if which gemini >/dev/null 2>&1; then
+  echo "Gemini available - verifying implementation..."
+fi
+```
+
+**If available, invoke gemini-coauthor skill:**
+- Use `workflows/verify-implementation.md` from gemini-coauthor skill
+- Gather original plan, git diff, and changed files
+- Send to Gemini for implementation verification
+- Generate verification report with:
+  - Completion percentage
+  - Acceptance criteria status (Complete/Partial/Missing)
+  - File references for implemented items
+  - Missing items with suggestions
+
+**Handle Results:**
+- **100% Complete**: Proceed to Ship It phase
+- **Partially Complete**: Present missing items, ask user to complete or proceed
+- **Major Gaps**: Recommend completing before PR, add missing items to TodoWrite
+
+**If unavailable:** Proceed to Ship It phase after manual verification.
+
 ### Phase 4: Ship It
 
 1. **Create Commit**

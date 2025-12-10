@@ -5,6 +5,33 @@ All notable changes to the adessocms-engineering plugin will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2024-12-08
+
+### Added
+
+- **New Skill**: `generate-user-handbook` - Generiert vollständige Benutzerhandbücher für Drupal-Backends
+  - Automatisches Login und Screenshot-Erstellung via Playwright
+  - MkDocs Material Theme mit deutscher Lokalisierung
+  - Schritt-für-Schritt Anleitungen für technisch unbedarfte Nutzer
+  - 3 Workflows: generate-handbook, capture-section, update-handbook
+  - Umfangreiche References für Schreibstil und Screenshot-Guidelines
+- **New Command**: `/generate-user-handbook` - Startet die Handbuch-Generierung
+
+---
+
+## [1.1.0] - 2024-12-08
+
+### Added
+
+- **New Skill**: `create-drupal-case-study` - Generate Drupal.org case study submissions
+  - Analyzes project codebase (composer.json, modules, theme, config)
+  - Asks targeted questions about client, goals, and outcomes
+  - Creates structured sections ready for Drupal.org submission
+  - Optional Playwright-based screenshot capture of live sites
+- **New Command**: `/create-drupal-case-study` - Invoke case study generation skill
+
+---
+
 ## [1.0.0] - 2024-12-07
 
 Initial release of the adessocms-engineering plugin, forked from compound-engineering and adapted for Drupal 11 development.
