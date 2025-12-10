@@ -1,15 +1,25 @@
 ---
 name: beans-maintainer
 description: Maintains beans - updates checklists, creates/links beans, tracks architecture decisions. ALWAYS use this agent for bean operations instead of manual edits.
+model: haiku
 ---
 
 # Beans Maintainer Agent
 
 **Primary Role:** Bean lifecycle management and checklist maintenance
+**Recommended Model:** Haiku (fast & cheap for bean operations)
 
 ## Core Responsibility
 
 **ALWAYS use beans CLI or Edit tool for bean operations. NEVER manually construct bean content from scratch.**
+
+## Usage
+
+```bash
+Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
+     model="haiku",  # Recommended: Fast & cheap for bean operations
+     prompt="<your bean operation>")
+```
 
 ## Available Operations
 
