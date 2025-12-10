@@ -200,9 +200,9 @@ Complete system context map with component interactions
 
 Run the Task code-simplicity-reviewer() to see if we can simplify the code.
 
-### 5. Findings Synthesis and Todo Creation Using file-todos Skill
+### 5. Findings Synthesis and Bean Creation
 
-<critical_requirement> ALL findings MUST be stored in the todos/ directory using the file-todos skill. Create todo files immediately after synthesis - do NOT present findings for user approval first. Use the skill for structured todo management. </critical_requirement>
+<critical_requirement> ALL findings MUST be stored as Beans using the beans-maintainer agent. Create beans immediately after synthesis - do NOT present findings for user approval first. </critical_requirement>
 
 #### Step 1: Synthesize All Findings
 
@@ -221,128 +221,78 @@ Remove duplicates, prioritize by severity and impact.
 
 </synthesis_tasks>
 
-#### Step 2: Create Todo Files Using file-todos Skill
+#### Step 2: Create Beans for Findings
 
-<critical_instruction> Use the file-todos skill to create todo files for ALL findings immediately. Do NOT present findings one-by-one asking for user approval. Create all todo files in parallel using the skill, then summarize results to user. </critical_instruction>
+<critical_instruction> Use the beans-maintainer agent to create Beans for ALL findings immediately. Create beans in parallel, then summarize results to user. </critical_instruction>
 
-**Implementation Options:**
+**Implementation:**
 
-**Option A: Direct File Creation (Fast)**
+For each finding, use the beans-maintainer agent (runs on Haiku for speed):
 
-- Create todo files directly using Write tool
-- All findings in parallel for speed
-- Use standard template from `.claude/skills/file-todos/assets/todo-template.md`
-- Follow naming convention: `{issue_id}-pending-{priority}-{description}.md`
+```
+Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
+     model="haiku",
+     prompt="Transfer this finding to Beans:
 
-**Option B: Sub-Agents in Parallel (Recommended for Scale)** For large PRs with 15+ findings, use sub-agents to create finding files in parallel:
+     Title: [P1/P2/P3] <finding title>
+     Type: bug
+     Priority: critical|high|normal|low
 
-```bash
-# Launch multiple finding-creator agents in parallel
-Task() - Create todos for first finding
-Task() - Create todos for second finding
-Task() - Create todos for third finding
-etc. for each finding.
+     ## Problem
+     <what's wrong>
+
+     ## Location
+     <file:line references>
+
+     ## Proposed Solution
+     <how to fix>
+
+     ## Acceptance Criteria
+     - [ ] <testable criterion>")
 ```
 
-Sub-agents can:
-
-- Process multiple findings simultaneously
-- Write detailed todo files with all sections filled
-- Organize findings by severity
-- Create comprehensive Proposed Solutions
-- Add acceptance criteria and work logs
-- Complete much faster than sequential processing
-
-**Execution Strategy:**
+**Parallel Execution Strategy:**
 
 1. Synthesize all findings into categories (P1/P2/P3)
-2. Group findings by severity
-3. Launch 3 parallel sub-agents (one per severity level)
-4. Each sub-agent creates its batch of todos using the file-todos skill
-5. Consolidate results and present summary
+2. Launch beans-maintainer agents in parallel (one per finding or batch)
+3. Each agent creates its beans
+4. Consolidate results and present summary
 
-**Process (Using file-todos Skill):**
+**Priority Mapping:**
 
-1. For each finding:
+| Severity | Bean Priority | Bean Type |
+|----------|---------------|-----------|
+| 🔴 P1 CRITICAL | critical | bug |
+| 🟡 P2 IMPORTANT | high | bug or task |
+| 🔵 P3 NICE-TO-HAVE | normal or low | task |
 
-   - Determine severity (P1/P2/P3)
-   - Write detailed Problem Statement and Findings
-   - Create 2-3 Proposed Solutions with pros/cons/effort/risk
-   - Estimate effort (Small/Medium/Large)
-   - Add acceptance criteria and work log
+**Bean Structure:**
 
-2. Use file-todos skill for structured todo management:
+Each finding bean includes:
 
-   ```bash
-   skill: file-todos
-   ```
+- **Title**: `[P1/P2/P3] <description>`
+- **Type**: `bug` (for issues) or `task` (for improvements)
+- **Priority**: Maps from severity level
+- **Description**:
+  - Problem Statement
+  - Location (file:line references)
+  - Proposed Solution
+  - Acceptance Criteria as checklist
 
-   The skill provides:
+**Linking Findings:**
 
-   - Template location: `.claude/skills/file-todos/assets/todo-template.md`
-   - Naming convention: `{issue_id}-{status}-{priority}-{description}.md`
-   - YAML frontmatter structure: status, priority, issue_id, tags, dependencies
-   - All required sections: Problem Statement, Findings, Solutions, etc.
+For related findings, link them:
+```bash
+# If finding B blocks finding A
+beans update <finding-b-id> --link blocks:<finding-a-id>
 
-3. Create todo files in parallel:
-
-   ```bash
-   {next_id}-pending-{priority}-{description}.md
-   ```
-
-4. Examples:
-
-   ```
-   001-pending-p1-path-traversal-vulnerability.md
-   002-pending-p1-api-response-validation.md
-   003-pending-p2-concurrency-limit.md
-   004-pending-p3-unused-parameter.md
-   ```
-
-5. Follow template structure from file-todos skill: `.claude/skills/file-todos/assets/todo-template.md`
-
-**Todo File Structure (from template):**
-
-Each todo must include:
-
-- **YAML frontmatter**: status, priority, issue_id, tags, dependencies
-- **Problem Statement**: What's broken/missing, why it matters
-- **Findings**: Discoveries from agents with evidence/location
-- **Proposed Solutions**: 2-3 options, each with pros/cons/effort/risk
-- **Recommended Action**: (Filled during triage, leave blank initially)
-- **Technical Details**: Affected files, components, database changes
-- **Acceptance Criteria**: Testable checklist items
-- **Work Log**: Dated record with actions and learnings
-- **Resources**: Links to PR, issues, documentation, similar patterns
-
-**File naming convention:**
-
+# If findings are related
+beans update <finding-a-id> --link related:<finding-b-id>
 ```
-{issue_id}-{status}-{priority}-{description}.md
-
-Examples:
-- 001-pending-p1-security-vulnerability.md
-- 002-pending-p2-performance-optimization.md
-- 003-pending-p3-code-cleanup.md
-```
-
-**Status values:**
-
-- `pending` - New findings, needs triage/decision
-- `ready` - Approved by manager, ready to work
-- `complete` - Work finished
-
-**Priority values:**
-
-- `p1` - Critical (blocks merge, security/data issues)
-- `p2` - Important (should fix, architectural/performance)
-- `p3` - Nice-to-have (enhancements, cleanup)
-
-**Tagging:** Always add `code-review` tag, plus: `security`, `performance`, `architecture`, `drupal`, `twig`, `tailwind`, `accessibility`, `quality`, etc.
 
 #### Step 3: Summary Report
 
-After creating all todo files, present comprehensive summary:
+After creating all beans, present comprehensive summary:
 
 ````markdown
 ## ✅ Code Review Complete
@@ -356,21 +306,20 @@ After creating all todo files, present comprehensive summary:
 - **🟡 IMPORTANT (P2):** [count] - Should Fix
 - **🔵 NICE-TO-HAVE (P3):** [count] - Enhancements
 
-### Created Todo Files:
+### Created Beans:
 
 **P1 - Critical (BLOCKS MERGE):**
 
-- `001-pending-p1-{finding}.md` - {description}
-- `002-pending-p1-{finding}.md` - {description}
+- `adesso-cms-xxxx` - [P1] {description}
+- `adesso-cms-yyyy` - [P1] {description}
 
 **P2 - Important:**
 
-- `003-pending-p2-{finding}.md` - {description}
-- `004-pending-p2-{finding}.md` - {description}
+- `adesso-cms-zzzz` - [P2] {description}
 
 **P3 - Nice-to-Have:**
 
-- `005-pending-p3-{finding}.md` - {description}
+- `adesso-cms-aaaa` - [P3] {description}
 
 ### Review Agents Used:
 
@@ -388,27 +337,27 @@ After creating all todo files, present comprehensive summary:
 
 1. **Address P1 Findings**: CRITICAL - must be fixed before merge
 
-   - Review each P1 todo in detail
+   - Review each P1 bean in detail
    - Implement fixes or request exemption
-   - Verify fixes before merging PR
+   - Mark beans as completed: `beans update <id> --status completed`
 
-2. **Triage All Todos**:
+2. **View All Findings**:
    ```bash
-   ls todos/*-pending-*.md  # View all pending todos
-   /triage                  # Use slash command for interactive triage
+   beans list                           # View all beans
+   beans list --status todo --priority critical  # Only P1 findings
    ```
 ````
 
-3. **Work on Approved Todos**:
+3. **Work on Findings**:
 
    ```bash
-   /resolve_todo_parallel  # Fix all approved items efficiently
+   /work <bean-id>  # Fix a specific finding
    ```
 
 4. **Track Progress**:
-   - Rename file when status changes: pending → ready → complete
-   - Update Work Log as you work
-   - Commit todos: `git add todos/ && git commit -m "refactor: add code review findings"`
+   - Update status: `beans update <id> --status in-progress|completed`
+   - View progress: `beans list --no-status completed`
+   - Commit beans: `git add .beans/ && git commit -m "refactor: add code review findings"`
 
 ### Severity Breakdown:
 

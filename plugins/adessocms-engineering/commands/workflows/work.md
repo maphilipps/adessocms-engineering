@@ -55,7 +55,26 @@ This command takes a work document (plan, specification, or todo file) and execu
    - You're working on a single feature
    - You prefer staying in the main repository
 
-3. **Create Todo List**
+3. **Create/Load Task List**
+
+   **If input is a Bean ID (e.g., `adesso-cms-xxxx`):**
+   ```bash
+   # Load the bean and mark as in-progress
+   beans show <bean-id> --json
+   beans update <bean-id> --status in-progress
+   ```
+   The bean's checklist becomes your task list.
+
+   **If input is a plan file:**
+   - Use beans-maintainer agent to transfer plan to Beans first:
+     ```
+     Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
+          model="haiku",
+          prompt="Transfer this plan to Beans: <plan content>")
+     ```
+   - Then load the created bean as your task list
+
+   **Fallback (no Beans):**
    - Use TodoWrite to break plan into actionable tasks
    - Include dependencies between tasks
    - Prioritize based on what needs to be done first
@@ -70,14 +89,23 @@ This command takes a work document (plan, specification, or todo file) and execu
 
    ```
    while (tasks remain):
-     - Mark task as in_progress in TodoWrite
+     - If using Beans: Check off item in bean markdown file
+     - If using TodoWrite: Mark task as in_progress
      - Read any referenced files from the plan
      - Look for similar patterns in codebase
      - Implement following existing conventions
      - Write tests for new functionality
      - Run tests after changes
-     - Mark task as completed
+     - Mark task as completed (update bean file or TodoWrite)
    ```
+
+   **Bean Checklist Updates:**
+   When completing a checklist item in a Bean, edit the bean file directly:
+   ```bash
+   # Change from:  - [ ] Task description
+   # To:           - [x] Task description
+   ```
+   Commit bean file changes alongside code changes.
 
 2. **Follow Existing Patterns**
 
@@ -104,6 +132,14 @@ This command takes a work document (plan, specification, or todo file) and execu
    - Repeat until implementation matches design
 
 5. **Track Progress**
+
+   **If using Beans:**
+   - Update bean checklist by editing the markdown file
+   - For blockers, create a new bean and link with `--link blocks:<bean-id>`
+   - For scope expansion, create child beans with `--link parent:<current-bean-id>`
+   - Keep user informed of major milestones
+
+   **If using TodoWrite:**
    - Keep TodoWrite updated as you complete tasks
    - Note any blockers or unexpected discoveries
    - Create new tasks if scope expands
@@ -152,7 +188,8 @@ This command takes a work document (plan, specification, or todo file) and execu
    Present findings to user and address critical issues.
 
 3. **Final Validation**
-   - All TodoWrite tasks marked completed
+   - All tasks marked completed (Bean checklist or TodoWrite)
+   - If using Beans: `beans update <bean-id> --status completed`
    - All tests pass
    - Linting passes
    - Code follows existing patterns

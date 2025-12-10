@@ -89,10 +89,11 @@ After installation, restart Claude Code. The plugin provides:
 | `design-iterator` | Iteratively refine UI through systematic design iterations |
 | `figma-design-sync` | Synchronize web implementations with Figma designs |
 
-### Workflow (4)
+### Workflow (5)
 
 | Agent | Description |
 |-------|-------------|
+| `beans-maintainer` | Transfer finished plans into Beans (runs on Haiku) |
 | `bug-reproduction-validator` | Systematically reproduce and validate bug reports |
 | `lint` | Run linting and code quality checks (PHP, Twig, JS, CSS) |
 | `pr-comment-resolver` | Address PR comments and implement fixes |
@@ -191,6 +192,32 @@ MCP servers start automatically when the plugin is enabled.
 **Drupal Theme PR:**
 ```
 @drupal-theme-reviewer @twig-template-reviewer @tailwind-reviewer @accessibility-reviewer @storybook-reviewer
+```
+
+### Beans Integration
+
+After `/plan` creates a plan, transfer it to Beans using the `beans-maintainer` agent:
+
+```
+Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
+     prompt="Transfer this plan to Beans: <plan content>")
+```
+
+The agent runs on **Haiku** for speed - it only formats and writes, no planning.
+
+**Setup Beans hooks** in `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "matcher": "", "hooks": [{ "type": "command", "command": "beans prompt" }] }
+    ],
+    "PreCompact": [
+      { "matcher": "", "hooks": [{ "type": "command", "command": "beans prompt" }] }
+    ]
+  }
+}
 ```
 
 ## Requirements
