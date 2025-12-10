@@ -41,30 +41,36 @@ Run these three agents in parallel at the same time using Task tool with the cor
 - [ ] Create a reference list of similar issues or PRs (e.g., `#123`, `#456`)
 - [ ] Note any team conventions discovered in `CLAUDE.md` or team documentation
 
-### 1b. Gemini Co-Author: Verify Understanding (Optional)
+### 1b. Gemini Strategic Architect: Design Architecture (CRITICAL)
 
-Check Gemini availability and invoke the skill for verification:
+**Gemini 3 Pro acts as Strategic Architect** to design system architecture BEFORE Claude plans implementation.
 
 ```bash
 # Check Gemini availability
 which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not available"
 ```
 
-**If Gemini is available, invoke the gemini-coauthor skill using the Skill tool:**
+**If Gemini is available:**
+
+Use gemini-coauthor skill for architecture design:
 
 ```
 Skill(skill="adessocms-engineering:gemini-coauthor")
 ```
 
-Then select option **1 (Verify understanding)** and provide the feature description.
+Select **Architecture Design** and provide research findings.
 
-This will:
-- Compare Claude's and Gemini's interpretation of the task
-- Identify any differences in understanding
-- Formulate joint clarifying questions if needed
-- Present both perspectives to user if there are discrepancies
+Gemini will:
+- Design system architecture
+- Make technology decisions (Plugin vs Service, Events vs Hooks, etc.)
+- Analyze trade-offs (performance vs simplicity)
+- Identify risks and mitigation strategies
+- Create Architecture Decision Record (ADR)
+- Create architecture bean for tracking
 
-**If Gemini is unavailable:** Continue without verification - this step is non-blocking.
+**Output:** `architecture/<feature>-architecture.md` + Architecture Bean
+
+**If Gemini unavailable:** Claude creates architecture (fallback, less optimal for strategic decisions)
 
 ### 2. Issue Planning & Structure
 

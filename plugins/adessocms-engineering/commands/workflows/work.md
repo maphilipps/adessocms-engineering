@@ -196,33 +196,77 @@ This command takes a work document (plan, specification, or todo file) and execu
    - Figma designs match (if applicable)
    - No console errors or warnings
 
-### Phase 3b: Gemini Co-Author: Verify Implementation (Optional)
+### Phase 3: Strategic Oversight (Gemini 3 Pro)
 
-Before shipping, verify the plan was fully implemented:
+**Gemini provides strategic checkpoints during implementation:**
+
+#### Checkpoint 1: Foundation (25% complete)
+
+After models/basic structure:
 
 ```bash
-# Check Gemini availability
 if which gemini >/dev/null 2>&1; then
-  echo "Gemini available - verifying implementation..."
+  Skill(skill="adessocms-engineering:gemini-coauthor")
+  # Select: Strategic Checkpoint
 fi
 ```
 
-**If available, invoke gemini-coauthor skill:**
-- Use `workflows/verify-implementation.md` from gemini-coauthor skill
-- Gather original plan, git diff, and changed files
-- Send to Gemini for implementation verification
-- Generate verification report with:
-  - Completion percentage
-  - Acceptance criteria status (Complete/Partial/Missing)
-  - File references for implemented items
-  - Missing items with suggestions
+Gemini verifies:
+- Architecture alignment
+- Technology choices respected
+- No architectural violations
 
-**Handle Results:**
-- **100% Complete**: Proceed to Ship It phase
-- **Partially Complete**: Present missing items, ask user to complete or proceed
-- **Major Gaps**: Recommend completing before PR, add missing items to TodoWrite
+**If violations:** STOP, fix before continuing
 
-**If unavailable:** Proceed to Ship It phase after manual verification.
+#### Checkpoint 2: Core Logic (50% complete)
+
+After business logic implemented:
+
+```bash
+Skill(skill="adessocms-engineering:gemini-coauthor")
+# Strategic Checkpoint
+```
+
+Gemini checks:
+- Trade-offs being respected
+- Performance concerns
+- Security considerations
+
+#### Checkpoint 3: Integration (75% complete)
+
+After frontend/integration:
+
+```bash
+Skill(skill="adessocms-engineering:gemini-coauthor")
+# Strategic Checkpoint
+```
+
+Gemini validates:
+- System coherence
+- Integration points
+- Technical debt level
+
+#### Final Validation (100% complete)
+
+Before creating PR:
+
+```bash
+Skill(skill="adessocms-engineering:gemini-coauthor")
+# Architecture Validation (option 3)
+```
+
+Gemini provides:
+- Compliance score (0-100%)
+- Go/No-Go decision
+- Critical issues (if any)
+- Technical debt assessment
+
+**Results:**
+- ✅ 90-100%: Approved, proceed
+- ⚠️ 70-89%: Approved with concerns, create follow-up beans
+- ❌ <70%: Rejected, fix critical issues
+
+**If Gemini unavailable:** Claude does self-validation (less strategic)
 
 ### Phase 4: Ship It
 

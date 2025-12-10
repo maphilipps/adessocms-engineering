@@ -1,5 +1,42 @@
 # Changelog
 
+## [1.4.0] - 2025-12-10
+
+### Changed - Architecture-First with Gemini 3 Pro
+
+**BREAKING: Gemini role completely redesigned**
+
+- **Gemini 3 Pro = Strategic Architect** (architecture, system design, oversight)
+- **Claude Opus 4.5 = Implementation Expert** (code, details, execution)
+
+### Added
+
+- `architecture-design.md`: Gemini designs system architecture FIRST in /plan
+- `strategic-checkpoint.md`: Gemini provides oversight during /work (25%, 50%, 75%, 100%)
+- `architecture-validation.md`: Final Go/No-Go decision before PR
+- `beans-maintainer` agent: Manages bean operations (checklists, links, architecture tracking)
+
+### Modified
+
+- `/plan` workflow: Gemini creates architecture before Claude plans implementation
+- `/work` workflow: Strategic checkpoints at 25/50/75/100% completion
+- `gemini-coauthor` skill: Updated for Strategic Architect role
+- Beans integration: Architecture beans link to implementation beans
+
+### Benefits
+
+- **Better architecture decisions**: Gemini 3 Pro INCREDIBLE at system design
+- **Strategic oversight**: Catches architectural violations during implementation
+- **Token optimization**: Gemini handles strategy, Claude handles code
+- **Graceful fallback**: Works without Gemini (Claude does everything)
+
+### Migration
+
+- Old approach: Gemini verified after Claude planned
+- New approach: Gemini architects before Claude implements
+
+# Changelog
+
 All notable changes to the adessocms-engineering plugin will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

@@ -1,12 +1,15 @@
 ---
 name: gemini-coauthor
-description: Integrates Gemini CLI as a co-author to assist with planning, verification, and review workflows. Use when you need a second opinion or parallel verification during complex tasks.
+description: Integrates Gemini 3 Pro as Strategic Architect for architecture decisions, system design, and strategic oversight. Claude Opus 4.5 handles implementation. Use for architecture-first planning and strategic validation during complex features.
 ---
 
 <essential_principles>
-## How Gemini Co-Author Works
+## How Gemini Strategic Architect Works
 
-This skill enables Gemini CLI to act as a co-author, providing a second perspective during planning and implementation workflows.
+**Gemini 3 Pro = Strategic Architect** (architecture, system design, oversight)
+**Claude Opus 4.5 = Implementation Expert** (code, details, execution)
+
+This skill enables Gemini 3 Pro to act as Strategic Architect, making architectural decisions and providing strategic oversight while Claude handles implementation.
 
 ### Principle 1: Availability Check First
 
@@ -42,26 +45,25 @@ open -a Typora "plans/my-plan.md" 2>/dev/null || open "plans/my-plan.md"
 </essential_principles>
 
 <integration_points>
-## When to Invoke Gemini
+## When to Invoke Gemini 3 Pro
 
-Gemini should be consulted at these workflow points:
+Gemini acts as Strategic Architect at these critical points:
 
-| Workflow | Integration Point | Purpose |
-|----------|-------------------|---------|
-| `/plan` | After requirements gathering | Verify understanding of user input |
-| `/plan` | After plan draft | Review plan structure and completeness |
-| `/plan_review` | After agents return | Cross-check review findings |
-| `/work` | After implementation | Verify plan was fully implemented |
+| Workflow | Integration Point | Purpose | Gemini Role |
+|----------|-------------------|---------|-------------|
+| `/plan` | FIRST (after research) | Design system architecture | Strategic Architect |
+| `/plan` | Before Claude plans | Technology decisions, trade-offs | Strategic Architect |
+| `/work` | Strategic checkpoints | Verify architecture alignment | Strategic Overseer |
+| `/work` | Final validation | Approve implementation | Strategic Validator |
 </integration_points>
 
 <intake>
-What would you like to do?
+What would you like Gemini 3 Pro Strategic Architect to do?
 
-1. **Verify understanding** - Check if Claude and Gemini interpret the task the same way
-2. **Co-plan** - Get Gemini's input on a plan draft
-3. **Review output** - Have Gemini cross-check review findings
-4. **Verify implementation** - Check if implementation matches the plan
-5. **Check availability** - Test if Gemini CLI is available
+1. **Architecture Design** - Design system architecture for a feature (CRITICAL for /plan)
+2. **Strategic Checkpoint** - Review implementation progress for architecture alignment
+3. **Architecture Validation** - Final validation before PR (implementation complete?)
+4. **Check availability** - Test if Gemini CLI is available
 
 **Wait for response before proceeding.**
 </intake>
@@ -69,11 +71,10 @@ What would you like to do?
 <routing>
 | Response | Workflow |
 |----------|----------|
-| 1, "verify", "understanding", "interpret" | `workflows/verify-understanding.md` |
-| 2, "co-plan", "plan", "draft" | `workflows/co-plan.md` |
-| 3, "review", "check", "findings" | `workflows/review-output.md` |
-| 4, "implementation", "verify impl", "complete" | `workflows/verify-implementation.md` |
-| 5, "available", "check", "test" | Run availability check inline |
+| 1, "architecture", "design", "architect" | `workflows/architecture-design.md` |
+| 2, "checkpoint", "strategic", "review progress" | `workflows/strategic-checkpoint.md` |
+| 3, "validation", "final", "approve", "complete" | `workflows/architecture-validation.md` |
+| 4, "available", "check", "test" | Run availability check inline |
 
 **After reading the workflow, follow it exactly.**
 </routing>
