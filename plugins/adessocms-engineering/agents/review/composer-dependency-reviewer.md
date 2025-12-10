@@ -1,6 +1,7 @@
 ---
 name: composer-dependency-reviewer
-description: Reviews Composer dependency management for Drupal projects, checking version constraints, security advisories, update safety, dependency conflicts, and package selection best practices.
+description: |
+  Reviews Composer dependency management for Drupal projects, checking version constraints, security advisories, update safety, dependency conflicts, and package selection best practices.
 model: haiku
 ---
 

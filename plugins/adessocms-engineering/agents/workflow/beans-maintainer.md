@@ -1,6 +1,7 @@
 ---
 name: beans-maintainer
-description: Maintains beans - updates checklists, creates/links beans, tracks architecture decisions. ALWAYS use this agent for bean operations instead of manual edits.
+description: |
+  Maintains beans - updates checklists, creates/links beans, tracks architecture decisions. ALWAYS use this agent for bean operations instead of manual edits.
 model: haiku
 ---
 

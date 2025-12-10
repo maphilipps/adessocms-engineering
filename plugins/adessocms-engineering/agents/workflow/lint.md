@@ -1,6 +1,7 @@
 ---
 name: lint
-description: Use this agent when you need to run linting and code quality checks on PHP, Twig, CSS, and JavaScript files. Run before pushing to origin.
+description: |
+  Use this agent when you need to run linting and code quality checks on PHP, Twig, CSS, and JavaScript files. Run before pushing to origin.
 model: haiku
 color: yellow
 ---
