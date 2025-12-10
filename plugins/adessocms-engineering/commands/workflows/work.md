@@ -66,14 +66,17 @@ This command takes a work document (plan, specification, or todo file) and execu
    The bean's checklist becomes your task list.
 
    **If input is a plan file:**
-   - Transfer plan to Beans first:
-     ```bash
-     beans create "<plan-title>" \
-       -t feature \
-       -p normal \
-       -d "$(cat <plan-file>.md)" \
-       -s in-progress \
-       --json
+   - Transfer plan to Beans using beans-maintainer (haiku):
+     ```
+     Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
+          model="haiku",
+          prompt="Create bean from plan file: <plan-file>.md
+
+          Type: feature
+          Priority: normal
+          Status: in-progress
+
+          Return bean ID.")
      ```
    - Then load the created bean as your task list
 

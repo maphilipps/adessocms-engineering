@@ -428,14 +428,18 @@ After writing the plan file, use the **AskUserQuestion tool** to present these o
 6. **Simplify** - Reduce detail level
 
 Based on selection:
-- **Transfer to Beans** → Create bean directly with beans CLI:
-  ```bash
-  beans create "<plan_title>" \
-    -t feature \
-    -p normal \
-    -d "$(cat plans/<plan_file>.md)" \
-    -s todo \
-    --json
+- **Transfer to Beans** → Use beans-maintainer agent (haiku):
+  ```
+  Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
+       model="haiku",
+       prompt="Create bean from plan:
+
+       Title: <plan_title>
+       Type: feature
+       Priority: normal
+       Plan file: plans/<plan_file>.md
+
+       Create bean and return ID.")
   ```
   Save bean ID and ask if user wants to start `/work` with the bean-id.
 - **Open plan in editor** → Run `open plans/<issue_title>.md` to open the file in the user's default editor
