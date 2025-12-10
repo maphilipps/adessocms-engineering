@@ -386,38 +386,16 @@ public function processUser(UserInterface $user): void {
 - [ ] Emphasize comprehensive testing given rapid implementation
 - [ ] Document any AI-generated code that needs human review
 
-### 5b. Gemini Co-Author: Co-Plan Review (Optional)
-
-Before presenting the plan to the user, have Gemini review for completeness:
+### 5b. Open Plan in Typora (Optional)
 
 ```bash
-# Check Gemini availability
-which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not available"
-```
-
-**If Gemini is available, invoke the gemini-coauthor skill using the Skill tool:**
-
-```
-Skill(skill="adessocms-engineering:gemini-coauthor")
-```
-
-Then select option **2 (Co-plan)** and provide the plan content.
-
-This will:
-- Review plan structure and completeness
-- Check if acceptance criteria are testable
-- Identify missing edge cases
-- Verify technical approach soundness
-- Document any changes in "Review Notes" section
-
-**After Gemini review (or if unavailable), open plan in Typora if available:**
-```bash
+# Open in Typora for better editing experience
 if [ -d "/Applications/Typora.app" ]; then
   open -a Typora "plans/<issue_title>.md"
 fi
 ```
 
-**If Gemini is unavailable:** Continue without review - this step is non-blocking.
+**Note:** Gemini Architecture Design already validated the plan structure in Phase 1b.
 
 ### 6. Final Review & Submission
 
@@ -450,19 +428,16 @@ After writing the plan file, use the **AskUserQuestion tool** to present these o
 6. **Simplify** - Reduce detail level
 
 Based on selection:
-- **Transfer to Beans** → Use beans-maintainer agent to create Bean:
+- **Transfer to Beans** → Create bean directly with beans CLI:
+  ```bash
+  beans create "<plan_title>" \
+    -t feature \
+    -p normal \
+    -d "$(cat plans/<plan_file>.md)" \
+    -s todo \
+    --json
   ```
-  Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
-       model="haiku",
-       prompt="Transfer this plan to Beans:
-
-       Title: <plan_title>
-       Type: feature
-       Priority: normal
-
-       <full plan content>")
-  ```
-  After Bean is created, ask if user wants to start `/work` with the bean-id.
+  Save bean ID and ask if user wants to start `/work` with the bean-id.
 - **Open plan in editor** → Run `open plans/<issue_title>.md` to open the file in the user's default editor
 - **`/plan_review`** → Call the /plan_review command with the plan file path
 - **`/work`** → Call the /work command with the plan file path or bean-id
