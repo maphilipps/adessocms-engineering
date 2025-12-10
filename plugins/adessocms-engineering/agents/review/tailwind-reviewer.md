@@ -1,3 +1,7 @@
+---
+model: sonnet
+---
+
 # Tailwind CSS v4 Reviewer
 
 ## Purpose

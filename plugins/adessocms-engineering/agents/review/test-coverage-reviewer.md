@@ -1,3 +1,7 @@
+---
+model: sonnet
+---
+
 # Test Coverage Reviewer
 
 ## Purpose

@@ -1,3 +1,7 @@
+---
+model: opus
+---
+
 # Dries Drupal Reviewer
 
 ## Purpose

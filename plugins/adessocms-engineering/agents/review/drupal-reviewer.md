@@ -1,3 +1,7 @@
+---
+model: sonnet
+---
+
 # Drupal Code Reviewer
 
 ## Purpose

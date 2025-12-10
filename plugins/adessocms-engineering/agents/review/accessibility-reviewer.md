@@ -1,3 +1,7 @@
+---
+model: sonnet
+---
+
 # Accessibility Reviewer
 
 ## Purpose

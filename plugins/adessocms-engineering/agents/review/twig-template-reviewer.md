@@ -1,3 +1,7 @@
+---
+model: sonnet
+---
+
 # Twig Template Reviewer
 
 ## Purpose
