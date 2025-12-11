@@ -1,39 +1,118 @@
 # Changelog
 
+## [1.6.0] - 2025-12-11
+
+### Added - Plan Triage Agent for Token Optimization
+
+**New orchestrator agent that right-sizes planning effort based on task complexity.**
+
+### Added
+
+- **plan-triage agent** - Opus-based orchestrator that classifies tasks and acts accordingly
+  - TRIVIAL: Writes minimal plan with commands (no research agents)
+  - SIMPLE: Writes checklist plan (no research agents)
+  - COMPLEX: Spawns research agents in parallel, synthesizes comprehensive plan
+- **Consistent markdown output** - ALL classifications produce `plans/<slug>.md`
+
+### Changed
+
+- `/plan` workflow: Now delegates entirely to plan-triage agent
+  - Single agent invocation instead of hardcoded 3 parallel research agents
+  - Research agents only spawned for COMPLEX tasks
+  - Plan file always created and opened in Typora
+
+### Token Savings
+
+| Task Type | Before (v1.5) | After (v1.6) | Savings |
+|-----------|---------------|--------------|---------|
+| TRIVIAL (install module) | ~150k tokens | ~15k tokens | 90% |
+| SIMPLE (add field) | ~150k tokens | ~25k tokens | 83% |
+| COMPLEX (SSO integration) | ~150k tokens | ~150k tokens | 0% (appropriate) |
+
+### Example Classifications
+
+| Task | Classification | Research Agents |
+|------|----------------|-----------------|
+| "Install drupal/memcache" | TRIVIAL | None |
+| "Add phone field to contact" | SIMPLE | None |
+| "Implement Azure AD SSO" | COMPLEX | 3 parallel |
+
+---
+
+## [1.5.0] - 2025-12-11
+
+### Changed - Token Optimization & Simplified Architecture
+
+**BREAKING: Major simplification for token efficiency**
+
+This release removes ~50,000 tokens of overhead per workflow cycle by eliminating Beans and simplifying Gemini integration.
+
+### Removed
+
+- **Beans System** - Replaced with native TodoWrite for task tracking
+- **beans-maintainer agent** - No longer needed
+- **gemini-coauthor skill** - Replaced with simple CLI agents
+- **Strategic Checkpoints** - Removed 4x Gemini calls during /work
+- **Opus model tier** - All agents now use Sonnet or Haiku
+
+### Added
+
+- **gemini-brainstorm agent** - Simple CLI-based architecture brainstorming (optional)
+- **gemini-reviewer agent** - Simple CLI-based review cross-check (optional)
+
+### Modified
+
+- `/plan` workflow: Uses TodoWrite instead of Beans, Gemini is optional
+- `/work` workflow: Uses TodoWrite, no strategic checkpoints, simpler flow
+- `/review` workflow: Direct markdown output instead of Beans, Gemini optional
+- **Critical agents**: Removed model field (inherits session model)
+  - dries-drupal-reviewer, security-sentinel, performance-oracle, architecture-strategist
+- **Standard agents**: Changed from Opus to Sonnet
+  - design-iterator: opus → sonnet
+
+### Token Savings
+
+| Component | Before | After | Savings |
+|-----------|--------|-------|---------|
+| Beans (per cycle) | ~30,000 | 0 | -30,000 |
+| Gemini Checkpoints | ~20,000 | 0-2,000 | -18,000+ |
+| Opus Agents (5x) | ~25,000 | ~8,000 | -17,000 |
+| **Total** | ~75,000 | ~10,000 | **~65,000** |
+
+### Model Tier Strategy (EveryInc-Style)
+
+| Model | Count | Use Case |
+|-------|-------|----------|
+| *(none)* | 8 | Critical analysis, design review - inherits session model |
+| sonnet | 14 | Standard reviews, external research |
+| haiku | 6 | Local research, simple tasks, CLI |
+
+### Gemini Integration
+
+Gemini is now **optional and non-blocking**:
+- Only invoked when explicitly requested
+- Uses simple CLI: `gemini -m gemini-3-pro-preview -p "..." --output-format json`
+- Failures are ignored (graceful degradation)
+
+### Migration
+
+1. Remove any Beans hooks from `~/.claude/settings.json`
+2. TodoWrite now handles all task tracking
+3. Gemini agents are opt-in, not automatic
+
+---
+
 ## [1.4.0] - 2025-12-10
 
 ### Changed - Architecture-First with Gemini 3 Pro
 
-**BREAKING: Gemini role completely redesigned**
+**Note: This version was superseded by 1.5.0 due to high token usage.**
 
-- **Gemini 3 Pro = Strategic Architect** (architecture, system design, oversight)
-- **Claude Opus 4.5 = Implementation Expert** (code, details, execution)
+- Gemini 3 Pro as Strategic Architect
+- Beans integration for task tracking
+- Strategic checkpoints during /work
 
-### Added
-
-- `architecture-design.md`: Gemini designs system architecture FIRST in /plan
-- `strategic-checkpoint.md`: Gemini provides oversight during /work (25%, 50%, 75%, 100%)
-- `architecture-validation.md`: Final Go/No-Go decision before PR
-- `beans-maintainer` agent: Manages bean operations (checklists, links, architecture tracking)
-
-### Modified
-
-- `/plan` workflow: Gemini creates architecture before Claude plans implementation
-- `/work` workflow: Strategic checkpoints at 25/50/75/100% completion
-- `gemini-coauthor` skill: Updated for Strategic Architect role
-- Beans integration: Architecture beans link to implementation beans
-
-### Benefits
-
-- **Better architecture decisions**: Gemini 3 Pro INCREDIBLE at system design
-- **Strategic oversight**: Catches architectural violations during implementation
-- **Token optimization**: Gemini handles strategy, Claude handles code
-- **Graceful fallback**: Works without Gemini (Claude does everything)
-
-### Migration
-
-- Old approach: Gemini verified after Claude planned
-- New approach: Gemini architects before Claude implements
+---
 
 # Changelog
 

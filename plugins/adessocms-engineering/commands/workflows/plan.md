@@ -6,11 +6,7 @@ argument-hint: "[feature description, bug report, or improvement idea]"
 
 # Create a plan for a new feature or bug fix
 
-## Introduction
-
-**Note: The current year is 2025.** Use this when dating plans and searching for recent documentation.
-
-Transform feature descriptions, bug reports, or improvement ideas into well-structured markdown files issues that follow project conventions and best practices. This command provides flexible detail levels to match your needs.
+**Note: The current year is 2025.**
 
 ## Feature Description
 
@@ -20,472 +16,85 @@ Transform feature descriptions, bug reports, or improvement ideas into well-stru
 
 Do not proceed until you have a clear feature description from the user.
 
-## Main Tasks
+---
 
-### 1. Repository Research & Context Gathering
+## Execution: Single Agent Orchestration
 
-<thinking>
-First, I need to understand the project's conventions and existing patterns, leveraging all available resources and use paralel subagents to do this.
-</thinking>
-
-Run these three agents in parallel at the same time using Task tool with the correct subagent_type:
-
-- Task(subagent_type="adessocms-engineering:research:repo-research-analyst", prompt=feature_description)
-- Task(subagent_type="adessocms-engineering:research:best-practices-researcher", prompt=feature_description)
-- Task(subagent_type="adessocms-engineering:research:framework-docs-researcher", prompt=feature_description)
-
-**Reference Collection:**
-
-- [ ] Document all research findings with specific file paths (e.g., `web/modules/custom/my_module/src/Service/MyService.php:42`)
-- [ ] Include URLs to external documentation and best practices guides
-- [ ] Create a reference list of similar issues or PRs (e.g., `#123`, `#456`)
-- [ ] Note any team conventions discovered in `CLAUDE.md` or team documentation
-
-### 1b. Gemini Strategic Architect: Design Architecture (CRITICAL)
-
-**Gemini 3 Pro acts as Strategic Architect** to design system architecture BEFORE Claude plans implementation.
-
-```bash
-# Check Gemini availability
-which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not available"
-```
-
-**If Gemini is available:**
-
-Use gemini-coauthor skill for architecture design:
+**Invoke the Plan Triage Agent** which will:
+1. Classify task complexity (TRIVIAL / SIMPLE / COMPLEX)
+2. For TRIVIAL: Return execution commands directly
+3. For SIMPLE: Create minimal plan directly
+4. For COMPLEX: Spawn research agents, synthesize findings, create comprehensive plan
 
 ```
-Skill(skill="adessocms-engineering:gemini-coauthor")
+Task(subagent_type="adessocms-engineering:workflow:plan-triage",
+     model="opus",
+     prompt="Plan this task: {feature_description}
+
+     Context from CLAUDE.md:
+     - DDEV-first development (all commands via ddev)
+     - Drupal 10 project
+     - Custom modules in web/modules/custom/
+     - Theme: eab_2024 with Vite/TailwindCSS/Alpine.js
+
+     Your job:
+     1. Classify as TRIVIAL, SIMPLE, or COMPLEX
+     2. Act accordingly:
+        - TRIVIAL: Return ddev commands to execute
+        - SIMPLE: Create minimal checklist plan
+        - COMPLEX: Spawn research agents in parallel, then create comprehensive plan
+
+     For COMPLEX tasks, spawn these agents IN PARALLEL:
+     - adessocms-engineering:research:repo-research-analyst
+     - adessocms-engineering:research:best-practices-researcher
+     - adessocms-engineering:research:framework-docs-researcher
+
+     Then synthesize findings into a plan at plans/<slug>.md and open in Typora.")
 ```
 
-Select **Architecture Design** and provide research findings.
+---
 
-Gemini will:
-- Design system architecture
-- Make technology decisions (Plugin vs Service, Events vs Hooks, etc.)
-- Analyze trade-offs (performance vs simplicity)
-- Identify risks and mitigation strategies
-- Create Architecture Decision Record (ADR)
-- Create architecture bean for tracking
+## What the Triage Agent Handles
 
-**Output:** `architecture/<feature>-architecture.md` + Architecture Bean
+### TRIVIAL Tasks (No Plan Needed)
+- Module installation/enabling
+- Cache operations
+- Config export/import
+- Simple drush commands
+- Obvious syntax fixes
 
-**If Gemini unavailable:** Claude creates architecture (fallback, less optimal for strategic decisions)
+**Result:** Direct execution commands returned
 
-### 2. Issue Planning & Structure
+### SIMPLE Tasks (Minimal Plan)
+- Field additions to content types
+- View creation
+- Template updates
+- Form modifications
+- Menu/routing changes
 
-<thinking>
-Think like a product manager - what would make this issue clear and actionable? Consider multiple perspectives
-</thinking>
+**Result:** Quick checklist created directly by triage agent
 
-**Title & Categorization:**
+### COMPLEX Tasks (Full Research)
+- External integrations (APIs, SSO, payment)
+- Security-sensitive features
+- Architectural changes
+- Data migrations
+- Custom module development
+- Multi-component features
 
-- [ ] Draft clear, searchable issue title using conventional format (e.g., `feat:`, `fix:`, `docs:`)
-- [ ] Determine issue type: enhancement, bug, refactor
+**Result:** Research agents spawned, comprehensive plan created
 
-**Stakeholder Analysis:**
+---
 
-- [ ] Identify who will be affected by this issue (end users, developers, operations)
-- [ ] Consider implementation complexity and required expertise
+## Post-Plan Options
 
-**Content Planning:**
+After the triage agent completes, it will present options:
 
-- [ ] Choose appropriate detail level based on issue complexity and audience
-- [ ] List all necessary sections for the chosen template
-- [ ] Gather supporting materials (error logs, screenshots, design mockups)
-- [ ] Prepare code examples or reproduction steps if applicable, name the mock filenames in the lists
+1. **Start `/work`** - Begin implementing
+2. **Run `/plan_review`** - Get feedback from reviewers
+3. **Create Issue** - Create in GitHub/Linear
+4. **Simplify** - Reduce detail level
 
-### 3. SpecFlow Analysis
+---
 
-After planning the issue structure, run SpecFlow Analyzer to validate and refine the feature specification:
-
-- Task(subagent_type="adessocms-engineering:workflow:spec-flow-analyzer", prompt="Analyze: {feature_description} with context: {research_findings}")
-
-**SpecFlow Analyzer Output:**
-
-- [ ] Review SpecFlow analysis results
-- [ ] Incorporate any identified gaps or edge cases into the issue
-- [ ] Update acceptance criteria based on SpecFlow findings
-
-### 4. Choose Implementation Detail Level
-
-Select how comprehensive you want the issue to be, simpler is mostly better.
-
-#### 📄 MINIMAL (Quick Issue)
-
-**Best for:** Simple bugs, small improvements, clear features
-
-**Includes:**
-
-- Problem statement or feature description
-- Basic acceptance criteria
-- Essential context only
-
-**Structure:**
-
-````markdown
-[Brief problem/feature description]
-
-## Acceptance Criteria
-
-- [ ] Core requirement 1
-- [ ] Core requirement 2
-
-## Context
-
-[Any critical information]
-
-## MVP
-
-### ExampleService.php
-
-```php
-<?php
-
-namespace Drupal\my_module\Service;
-
-class ExampleService {
-  public function __construct(
-    private readonly EntityTypeManagerInterface $entityTypeManager,
-  ) {}
-}
-```
-
-## References
-
-- Related issue: #[issue_number]
-- Documentation: [relevant_docs_url]
-
-#### 📋 MORE (Standard Issue)
-
-**Best for:** Most features, complex bugs, team collaboration
-
-**Includes everything from MINIMAL plus:**
-
-- Detailed background and motivation
-- Technical considerations
-- Success metrics
-- Dependencies and risks
-- Basic implementation suggestions
-
-**Structure:**
-
-```markdown
-## Overview
-
-[Comprehensive description]
-
-## Problem Statement / Motivation
-
-[Why this matters]
-
-## Proposed Solution
-
-[High-level approach]
-
-## Technical Considerations
-
-- Architecture impacts
-- Performance implications
-- Security considerations
-
-## Acceptance Criteria
-
-- [ ] Detailed requirement 1
-- [ ] Detailed requirement 2
-- [ ] Testing requirements
-
-## Success Metrics
-
-[How we measure success]
-
-## Dependencies & Risks
-
-[What could block or complicate this]
-
-## References & Research
-
-- Similar implementations: [file_path:line_number]
-- Best practices: [documentation_url]
-- Related PRs: #[pr_number]
-```
-
-#### 📚 A LOT (Comprehensive Issue)
-
-**Best for:** Major features, architectural changes, complex integrations
-
-**Includes everything from MORE plus:**
-
-- Detailed implementation plan with phases
-- Alternative approaches considered
-- Extensive technical specifications
-- Resource requirements and timeline
-- Future considerations and extensibility
-- Risk mitigation strategies
-- Documentation requirements
-
-**Structure:**
-
-```markdown
-## Overview
-
-[Executive summary]
-
-## Problem Statement
-
-[Detailed problem analysis]
-
-## Proposed Solution
-
-[Comprehensive solution design]
-
-## Technical Approach
-
-### Architecture
-
-[Detailed technical design]
-
-### Implementation Phases
-
-#### Phase 1: [Foundation]
-
-- Tasks and deliverables
-- Success criteria
-- Estimated effort
-
-#### Phase 2: [Core Implementation]
-
-- Tasks and deliverables
-- Success criteria
-- Estimated effort
-
-#### Phase 3: [Polish & Optimization]
-
-- Tasks and deliverables
-- Success criteria
-- Estimated effort
-
-## Alternative Approaches Considered
-
-[Other solutions evaluated and why rejected]
-
-## Acceptance Criteria
-
-### Functional Requirements
-
-- [ ] Detailed functional criteria
-
-### Non-Functional Requirements
-
-- [ ] Performance targets
-- [ ] Security requirements
-- [ ] Accessibility standards
-
-### Quality Gates
-
-- [ ] Test coverage requirements
-- [ ] Documentation completeness
-- [ ] Code review approval
-
-## Success Metrics
-
-[Detailed KPIs and measurement methods]
-
-## Dependencies & Prerequisites
-
-[Detailed dependency analysis]
-
-## Risk Analysis & Mitigation
-
-[Comprehensive risk assessment]
-
-## Resource Requirements
-
-[Team, time, infrastructure needs]
-
-## Future Considerations
-
-[Extensibility and long-term vision]
-
-## Documentation Plan
-
-[What docs need updating]
-
-## References & Research
-
-### Internal References
-
-- Architecture decisions: [file_path:line_number]
-- Similar features: [file_path:line_number]
-- Configuration: [file_path:line_number]
-
-### External References
-
-- Framework documentation: [url]
-- Best practices guide: [url]
-- Industry standards: [url]
-
-### Related Work
-
-- Previous PRs: #[pr_numbers]
-- Related issues: #[issue_numbers]
-- Design documents: [links]
-```
-
-### 5. Issue Creation & Formatting
-
-<thinking>
-Apply best practices for clarity and actionability, making the issue easy to scan and understand
-</thinking>
-
-**Content Formatting:**
-
-- [ ] Use clear, descriptive headings with proper hierarchy (##, ###)
-- [ ] Include code examples in triple backticks with language syntax highlighting
-- [ ] Add screenshots/mockups if UI-related (drag & drop or use image hosting)
-- [ ] Use task lists (- [ ]) for trackable items that can be checked off
-- [ ] Add collapsible sections for lengthy logs or optional details using `<details>` tags
-- [ ] Apply appropriate emoji for visual scanning (🐛 bug, ✨ feature, 📚 docs, ♻️ refactor)
-
-**Cross-Referencing:**
-
-- [ ] Link to related issues/PRs using #number format
-- [ ] Reference specific commits with SHA hashes when relevant
-- [ ] Link to code using GitHub's permalink feature (press 'y' for permanent link)
-- [ ] Mention relevant team members with @username if needed
-- [ ] Add links to external resources with descriptive text
-
-**Code & Examples:**
-
-```markdown
-# Good example with syntax highlighting and line references
-```
-
-```php
-// web/modules/custom/my_module/src/Service/UserService.php:42
-public function processUser(UserInterface $user): void {
-  // Implementation here
-}
-```
-````
-
-# Collapsible error logs
-
-<details>
-<summary>Full error stacktrace</summary>
-
-`Error details here...`
-
-</details>
-
-**AI-Era Considerations:**
-
-- [ ] Account for accelerated development with AI pair programming
-- [ ] Include prompts or instructions that worked well during research
-- [ ] Note which AI tools were used for initial exploration (Claude, Copilot, etc.)
-- [ ] Emphasize comprehensive testing given rapid implementation
-- [ ] Document any AI-generated code that needs human review
-
-### 5b. Open Plan in Typora (Optional)
-
-```bash
-# Open in Typora for better editing experience
-if [ -d "/Applications/Typora.app" ]; then
-  open -a Typora "plans/<issue_title>.md"
-fi
-```
-
-**Note:** Gemini Architecture Design already validated the plan structure in Phase 1b.
-
-### 6. Final Review & Submission
-
-**Pre-submission Checklist:**
-
-- [ ] Title is searchable and descriptive
-- [ ] Labels accurately categorize the issue
-- [ ] All template sections are complete
-- [ ] Links and references are working
-- [ ] Acceptance criteria are measurable
-- [ ] Add names of files in pseudo code examples and todo lists
-- [ ] Add an ERD mermaid diagram if applicable for new model changes
-
-## Output Format
-
-Write the plan to `plans/<issue_title>.md`
-
-## ⛔ CRITICAL: STOP HERE - PLAN COMPLETE
-
-**DO NOT proceed to implementation.**
-**DO NOT modify any code.**
-**DO NOT start the /work workflow automatically.**
-
-The /plan command ONLY creates the plan. Implementation requires explicit user approval.
-
-## Post-Generation Options
-
-After writing the plan file, use the **AskUserQuestion tool** to present these options:
-
-**Question:** "Plan ready at `plans/<issue_title>.md`. What would you like to do next?"
-
-**Options:**
-1. **Transfer to Beans** - Create a Bean from this plan (recommended)
-2. **Open plan in editor** - Open the plan file for review
-3. **Run `/plan_review`** - Get feedback from reviewers (Dries, Drupal, Simplicity)
-4. **Create Issue** - Create issue in project tracker (GitHub/Linear)
-5. **Simplify** - Reduce detail level
-
-**NOTE:** Option "Start /work" is NOT offered here. User must explicitly run `/work` after reviewing and approving the plan.
-
-Based on selection:
-- **Transfer to Beans** → Use beans-maintainer agent (haiku):
-  ```
-  Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
-       model="haiku",
-       prompt="Create bean from plan:
-
-       Title: <plan_title>
-       Type: feature
-       Priority: normal
-       Plan file: plans/<plan_file>.md
-
-       Create bean and return ID.")
-  ```
-  Save bean ID and inform user: "Bean created. Run `/work <bean-id>` when ready to implement."
-- **Open plan in editor** → Run `open plans/<issue_title>.md` to open the file in the user's default editor
-- **`/plan_review`** → Call the /plan_review command with the plan file path. **STOP after reviews are presented.**
-- **Create Issue** → See "Issue Creation" section below
-- **Simplify** → Ask "What should I simplify?" then regenerate simpler version
-- **Other** (automatically provided) → Accept free text for rework or specific changes
-
-Loop back to options after Simplify or Other changes. **NEVER auto-start /work.**
-
-## Issue Creation
-
-When user selects "Create Issue", detect their project tracker from CLAUDE.md:
-
-1. **Check for tracker preference** in user's CLAUDE.md (global or project):
-   - Look for `project_tracker: github` or `project_tracker: linear`
-   - Or look for mentions of "GitHub Issues" or "Linear" in their workflow section
-
-2. **If GitHub:**
-   ```bash
-   # Extract title from plan filename (kebab-case to Title Case)
-   # Read plan content for body
-   gh issue create --title "feat: [Plan Title]" --body-file plans/<issue_title>.md
-   ```
-
-3. **If Linear:**
-   ```bash
-   # Use linear CLI if available, or provide instructions
-   # linear issue create --title "[Plan Title]" --description "$(cat plans/<issue_title>.md)"
-   ```
-
-4. **If no tracker configured:**
-   Ask user: "Which project tracker do you use? (GitHub/Linear/Other)"
-   - Suggest adding `project_tracker: github` or `project_tracker: linear` to their CLAUDE.md
-
-5. **After creation:**
-   - Display the issue URL
-   - Ask if they want to proceed to `/work` or `/plan_review`
-
-NEVER CODE! Just research and write the plan.
+**IMPORTANT:** This command delegates ALL work to the plan-triage agent. Do not manually invoke research agents.
