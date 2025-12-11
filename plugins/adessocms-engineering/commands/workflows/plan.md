@@ -413,6 +413,14 @@ fi
 
 Write the plan to `plans/<issue_title>.md`
 
+## ⛔ CRITICAL: STOP HERE - PLAN COMPLETE
+
+**DO NOT proceed to implementation.**
+**DO NOT modify any code.**
+**DO NOT start the /work workflow automatically.**
+
+The /plan command ONLY creates the plan. Implementation requires explicit user approval.
+
 ## Post-Generation Options
 
 After writing the plan file, use the **AskUserQuestion tool** to present these options:
@@ -423,9 +431,10 @@ After writing the plan file, use the **AskUserQuestion tool** to present these o
 1. **Transfer to Beans** - Create a Bean from this plan (recommended)
 2. **Open plan in editor** - Open the plan file for review
 3. **Run `/plan_review`** - Get feedback from reviewers (Dries, Drupal, Simplicity)
-4. **Start `/work`** - Begin implementing this plan locally
-5. **Create Issue** - Create issue in project tracker (GitHub/Linear)
-6. **Simplify** - Reduce detail level
+4. **Create Issue** - Create issue in project tracker (GitHub/Linear)
+5. **Simplify** - Reduce detail level
+
+**NOTE:** Option "Start /work" is NOT offered here. User must explicitly run `/work` after reviewing and approving the plan.
 
 Based on selection:
 - **Transfer to Beans** → Use beans-maintainer agent (haiku):
@@ -441,15 +450,14 @@ Based on selection:
 
        Create bean and return ID.")
   ```
-  Save bean ID and ask if user wants to start `/work` with the bean-id.
+  Save bean ID and inform user: "Bean created. Run `/work <bean-id>` when ready to implement."
 - **Open plan in editor** → Run `open plans/<issue_title>.md` to open the file in the user's default editor
-- **`/plan_review`** → Call the /plan_review command with the plan file path
-- **`/work`** → Call the /work command with the plan file path or bean-id
+- **`/plan_review`** → Call the /plan_review command with the plan file path. **STOP after reviews are presented.**
 - **Create Issue** → See "Issue Creation" section below
 - **Simplify** → Ask "What should I simplify?" then regenerate simpler version
 - **Other** (automatically provided) → Accept free text for rework or specific changes
 
-Loop back to options after Simplify or Other changes until user selects `/work` or transfers to Beans.
+Loop back to options after Simplify or Other changes. **NEVER auto-start /work.**
 
 ## Issue Creation
 

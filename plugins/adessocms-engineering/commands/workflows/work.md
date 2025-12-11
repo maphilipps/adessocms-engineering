@@ -8,6 +8,17 @@ argument-hint: "[plan file, specification, or todo file path]"
 
 Execute a work plan efficiently while maintaining quality and finishing features.
 
+## ⚠️ IMPORTANT: User-Initiated Only
+
+**This command must ONLY run when the user explicitly calls `/work`.**
+
+DO NOT auto-start this workflow from:
+- `/plan` command (plan only creates the plan)
+- `/plan_review` command (review only presents findings)
+- Any other workflow
+
+The user must consciously decide to start implementation by running `/work <plan-or-bean>`.
+
 ## Introduction
 
 This command takes a work document (plan, specification, or todo file) and executes it systematically. The focus is on **shipping complete features** by understanding requirements quickly, following existing patterns, and maintaining quality throughout.
