@@ -105,6 +105,12 @@ Gemini returns architecture document. Save to `architecture/[feature-name]-archi
 ## Step 5: Create Architecture Bean (Beans Integration)
 
 ```bash
+# Check and init beans if needed
+if ! [ -d ".beans" ]; then
+  echo "Initializing Beans for this project..."
+  beans init
+fi
+
 # Create architecture bean
 beans create "Architecture: [Feature Name]" \
   -t milestone \
