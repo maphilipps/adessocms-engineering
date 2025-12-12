@@ -1,9 +1,0 @@
-# Browser data and cache - generated at runtime
-profiles/
-tmp/
-
-# Dependencies - installed by bun
-node_modules/
-
-# Bun lock file - regenerated on install
-bun.lock

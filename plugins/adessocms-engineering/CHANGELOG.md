@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.8.0] - 2025-12-12
+
+### Removed - Triage and Duplicated dev-browser
+
+**Simplified plugin by removing triage workflow and dev-browser duplication.**
+
+### Removed
+
+- **`/triage` command** - Triage decisions are made by the user before planning
+- **Bundled dev-browser skill** - Now references externally installed skill
+  - Removed ~150MB of node_modules from plugin
+  - Users must install `SawyerHood/dev-browser` marketplace separately
+  - `/plan` workflow already uses `Skill(skill="dev-browser")` correctly
+
+### Changed
+
+- **dev-browser is now a prerequisite** - Install via `/plugin marketplace add SawyerHood/dev-browser`
+- **Component counts**: 28 agents, 21 commands, 16 skills, 1 MCP server
+- **Updated README** with Prerequisites section and troubleshooting
+
+### Why This Change
+
+1. **No duplication**: dev-browser skill should be installed once, not bundled
+2. **Simpler triage**: Users decide what to plan - no intermediate triage step needed
+3. **Smaller plugin**: Removed unnecessary node_modules bloat
+
+---
+
 ## [1.7.0] - 2025-12-11
 
 ### Added - dev-browser Skill

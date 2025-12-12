@@ -37,18 +37,20 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 After installation, restart Claude Code. The plugin provides:
 
 - **28 Agents** - Available via `@agent-name` in conversations
-- **22 Commands** - Available via `/command-name`
+- **21 Commands** - Available via `/command-name`
 - **16 Skills** - Available via `Skill` tool
-- **2 MCP Servers** - Playwright + Context7 (auto-started)
+- **1 MCP Server** - Context7 (auto-started)
+
+**Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
 
 ## Components
 
 | Component | Count |
 |-----------|-------|
 | Agents | 28 |
-| Commands | 22 |
+| Commands | 21 |
 | Skills | 16 |
-| MCP Servers | 2 |
+| MCP Servers | 1 |
 
 ## Model Tier Strategy
 
@@ -138,7 +140,6 @@ After installation, restart Claude Code. The plugin provides:
 | `/reproduce-bug` | Reproduce bugs using logs and console |
 | `/resolve_parallel` | Resolve TODO comments in parallel |
 | `/resolve_pr_parallel` | Resolve PR comments in parallel |
-| `/triage` | Triage and prioritize issues |
 | `/plan-from-jira` | Create plan from Jira ticket |
 
 ## Skills
@@ -190,10 +191,28 @@ which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not inst
 
 | Server | Description |
 |--------|-------------|
-| `playwright` | Browser automation via `@playwright/mcp` |
 | `context7` | Framework documentation lookup via Context7 |
 
 MCP servers start automatically when the plugin is enabled.
+
+## Prerequisites: dev-browser Skill
+
+This plugin relies on the `dev-browser` skill for browser automation (screenshots, form filling, UI testing). Install it from the dev-browser marketplace:
+
+```bash
+/plugin marketplace add SawyerHood/dev-browser
+```
+
+The `/plan` and `/review` workflows use dev-browser for:
+- Taking screenshots of web pages
+- Comparing designs between sites
+- Extracting HTML structure via ARIA snapshots
+- Testing UI interactions
+
+**Usage in plans:**
+```
+Skill(skill="dev-browser")
+```
 
 ## Usage Examples
 
@@ -241,18 +260,27 @@ Captures solved problems to `docs/solutions/` with YAML frontmatter.
 
 ## Troubleshooting
 
-### MCP Servers Not Loading
+### dev-browser Skill Not Working
+
+1. Ensure you installed the dev-browser marketplace:
+   ```bash
+   /plugin marketplace add SawyerHood/dev-browser
+   ```
+
+2. Start the dev-browser server before using browser automation:
+   ```bash
+   ./skills/dev-browser/server.sh &
+   ```
+
+3. Wait for the "Ready" message before running scripts.
+
+### Context7 MCP Not Loading
 
 Add to your project's `.claude/settings.json`:
 
 ```json
 {
   "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
-    },
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
