@@ -1,6 +1,6 @@
 {
   "name": "adessocms-engineering",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "AI-powered Drupal development tools. 28 agents, 21 commands, 16 skills, 1 MCP server. Requires dev-browser skill (install separately).",
   "author": {
     "name": "Marc Philipps",

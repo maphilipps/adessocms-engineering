@@ -1,5 +1,5 @@
 ---
-name: work
+name: acms-work
 description: Execute work plans efficiently while maintaining quality and finishing features
 argument-hint: "[plan file path or task description]"
 ---

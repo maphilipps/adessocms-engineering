@@ -1,5 +1,5 @@
 ---
-name: compound
+name: acms-compound
 description: Document a recently solved problem to compound your team's knowledge
 argument-hint: "[optional: brief context about the fix]"
 ---

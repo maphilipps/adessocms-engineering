@@ -122,10 +122,10 @@ After installation, restart Claude Code. The plugin provides:
 
 | Command | Description |
 |---------|-------------|
-| `/plan` | Create implementation plans (parallel research agents) |
-| `/review` | Run comprehensive code reviews (~15 parallel agents) |
-| `/work` | Execute work items systematically (TodoWrite tracking) |
-| `/compound` | Document solved problems to compound team knowledge |
+| `/acms-plan` | Create implementation plans (parallel research agents) |
+| `/acms-review` | Run comprehensive code reviews (~15 parallel agents) |
+| `/acms-work` | Execute work items systematically (TodoWrite tracking) |
+| `/acms-compound` | Document solved problems to compound team knowledge |
 
 ### Utility Commands
 
@@ -219,7 +219,7 @@ Skill(skill="dev-browser")
 ### Code Review
 
 ```
-/review
+/acms-review
 ```
 
 Runs ~15 parallel agents with **model="sonnet"** for token efficiency.
@@ -227,7 +227,7 @@ Runs ~15 parallel agents with **model="sonnet"** for token efficiency.
 ### Create Implementation Plan
 
 ```
-/plan "Add new paragraph type for testimonials"
+/acms-plan "Add new paragraph type for testimonials"
 ```
 
 Runs 3 research agents in parallel, creates plan in `plans/` folder.
@@ -235,7 +235,7 @@ Runs 3 research agents in parallel, creates plan in `plans/` folder.
 ### Document a Solution
 
 ```
-/compound
+/acms-compound
 ```
 
 Captures solved problems to `docs/solutions/` with YAML frontmatter.

@@ -1,6 +1,6 @@
 ---
-name: codify
-description: "[DEPRECATED] Use /compound instead - Document solved problems"
+name: acms-codify
+description: "[DEPRECATED] Use /acms-compound instead - Document solved problems"
 argument-hint: "[optional: brief context about the fix]"
 ---
 

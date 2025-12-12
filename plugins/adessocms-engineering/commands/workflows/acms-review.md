@@ -1,5 +1,5 @@
 ---
-name: review
+name: acms-review
 description: Perform exhaustive code reviews using multi-agent analysis and parallel execution
 argument-hint: "[PR number, GitHub URL, branch name, or latest]"
 ---

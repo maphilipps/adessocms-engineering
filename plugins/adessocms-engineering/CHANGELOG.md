@@ -1,11 +1,19 @@
 # Changelog
 
-## [1.8.1] - 2025-12-12
+## [1.8.2] - 2025-12-12
 
-### Changed - Workflow Agents Renamed with acms- Prefix
+### Changed - Workflow Commands and Agents Renamed with acms- Prefix
 
-**Renamed workflow agents to avoid naming conflicts with other plugins.**
+**Renamed workflow commands to avoid naming conflicts with other plugins.**
 
+Commands:
+- `/plan` → `/acms-plan`
+- `/review` → `/acms-review`
+- `/work` → `/acms-work`
+- `/compound` → `/acms-compound`
+- `/codify` → `/acms-codify`
+
+Agents:
 - `bug-reproduction-validator` → `acms-bug-reproduction-validator`
 - `lint` → `acms-lint`
 - `pr-comment-resolver` → `acms-pr-comment-resolver`
