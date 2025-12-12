@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.8.3] - 2025-12-12
+
+### Changed - Gemini as Primary Architecture Source
+
+**`/acms-plan` now requires Gemini for initial architecture draft.**
+
+Based on [EveryInc/compound-engineering-plugin#34](https://github.com/EveryInc/compound-engineering-plugin/issues/34).
+
+### Changed
+
+- **`/acms-plan` workflow**: Gemini brainstorm is now REQUIRED (not optional)
+  - Step 2 calls `gemini-brainstorm` agent before any research
+  - Gemini provides: Architecture recommendations, trade-offs, risks, alternatives
+  - Technical approach is built on Gemini's draft
+- **Plan template**: New "Gemini Architecture Draft" section
+  - Recommendations
+  - Trade-offs table
+  - Risks & Mitigations
+- **Graceful fallback**: If Gemini unavailable, continues with note in plan
+
+### Why This Change
+
+Getting a second AI perspective (Gemini 3 Pro) on architecture decisions early in planning helps:
+1. Catch blind spots in initial approach
+2. Surface alternative implementation strategies
+3. Identify risks before implementation begins
+4. Provide trade-off analysis with different AI reasoning
+
+---
+
 ## [1.8.2] - 2025-12-12
 
 ### Changed - Workflow Commands and Agents Renamed with acms- Prefix

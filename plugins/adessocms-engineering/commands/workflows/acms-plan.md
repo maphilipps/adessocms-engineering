@@ -28,7 +28,36 @@ First, understand what's being asked:
 - Are there external systems or integrations?
 - What files/modules need to be modified?
 
-### 2. Use Appropriate Research Tools
+### 2. Get Gemini Architecture Draft (REQUIRED)
+
+**Before any implementation planning, get Gemini's architecture perspective:**
+
+```
+Task(subagent_type="adessocms-engineering:research:gemini-brainstorm",
+     model="haiku",
+     prompt="Feature to analyze:
+
+{feature_description}
+
+Codebase context:
+- Drupal 11 project
+- Custom theme with Tailwind CSS
+- SDC components in web/themes/custom/*/components/
+
+Provide your architecture recommendations.")
+```
+
+Gemini will provide:
+- **Architecture Recommendations** - Drupal patterns (Services, Plugins, Events)
+- **Technology Trade-offs** - Options with pros/cons
+- **Risks & Mitigations** - Potential issues to consider
+- **Alternative Approaches** - Different ways to solve this
+
+**Use Gemini's output as the foundation for your technical approach.**
+
+If Gemini is unavailable (CLI not installed, timeout), continue without it but note this in the plan.
+
+### 3. Use Appropriate Research Tools
 
 **For web-based research (analyzing live websites, comparing designs, extracting HTML/CSS):**
 
@@ -52,7 +81,7 @@ The dev-browser skill provides browser automation for:
 - Use Context7 MCP for up-to-date Drupal docs
 - Check contrib module documentation
 
-### 3. Create the Plan
+### 4. Create the Plan
 
 Write a comprehensive plan to `plans/<slug>.md` with this structure:
 
@@ -67,6 +96,19 @@ feature: [Short feature name]
 ## Summary
 [2-3 sentence description of what will be built/fixed]
 
+## Gemini Architecture Draft
+
+### Recommendations
+[Gemini's architecture recommendations]
+
+### Trade-offs
+| Option | Pros | Cons |
+|--------|------|------|
+| ... | ... | ... |
+
+### Risks & Mitigations
+[From Gemini analysis]
+
 ## Research Findings
 
 ### [Source 1 - e.g., "Claroty.com Header Analysis"]
@@ -76,7 +118,7 @@ feature: [Short feature name]
 [Relevant patterns found in repo]
 
 ## Technical Approach
-[How we will implement this - architecture decisions]
+[How we will implement this - based on Gemini draft + research findings]
 
 ## Implementation Steps
 
@@ -100,7 +142,7 @@ feature: [Short feature name]
 - [Relevant links]
 ```
 
-### 4. Open in Typora
+### 5. Open in Typora
 
 After writing the plan:
 
