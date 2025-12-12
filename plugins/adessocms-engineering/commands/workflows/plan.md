@@ -18,83 +18,132 @@ Do not proceed until you have a clear feature description from the user.
 
 ---
 
-## Execution: Single Agent Orchestration
+## Planning Instructions
 
-**Invoke the Plan Triage Agent** which will:
-1. Classify task complexity (TRIVIAL / SIMPLE / COMPLEX)
-2. For TRIVIAL: Return execution commands directly
-3. For SIMPLE: Create minimal plan directly
-4. For COMPLEX: Spawn research agents, synthesize findings, create comprehensive plan
+### 1. Analyze the Task
+
+First, understand what's being asked:
+- What is the core feature/fix being requested?
+- What Drupal components are involved?
+- Are there external systems or integrations?
+- What files/modules need to be modified?
+
+### 2. Use Appropriate Research Tools
+
+**For web-based research (analyzing live websites, comparing designs, extracting HTML/CSS):**
 
 ```
-Task(subagent_type="adessocms-engineering:workflow:plan-triage",
-     model="opus",
-     prompt="Plan this task: {feature_description}
+Skill(skill="dev-browser")
+```
 
-     Context from CLAUDE.md:
-     - DDEV-first development (all commands via ddev)
-     - Drupal 10 project
-     - Custom modules in web/modules/custom/
-     - Theme: eab_2024 with Vite/TailwindCSS/Alpine.js
+The dev-browser skill provides browser automation for:
+- Navigating to websites and taking screenshots
+- Extracting HTML structure and CSS
+- Comparing designs between sites
+- Discovering page elements via ARIA snapshots
+- Testing UI interactions
 
-     Your job:
-     1. Classify as TRIVIAL, SIMPLE, or COMPLEX
-     2. Act accordingly:
-        - TRIVIAL: Return ddev commands to execute
-        - SIMPLE: Create minimal checklist plan
-        - COMPLEX: Spawn research agents in parallel, then create comprehensive plan
+**For codebase research:**
+- Use Grep/Glob to find relevant files
+- Use Read to examine existing code patterns
+- Check existing components in `web/themes/custom/*/components/`
 
-     For COMPLEX tasks, spawn these agents IN PARALLEL:
-     - adessocms-engineering:research:repo-research-analyst
-     - adessocms-engineering:research:best-practices-researcher
-     - adessocms-engineering:research:framework-docs-researcher
+**For Drupal documentation:**
+- Use Context7 MCP for up-to-date Drupal docs
+- Check contrib module documentation
 
-     Then synthesize findings into a plan at plans/<slug>.md and open in Typora.")
+### 3. Create the Plan
+
+Write a comprehensive plan to `plans/<slug>.md` with this structure:
+
+```markdown
+---
+date: YYYY-MM-DD
+feature: [Short feature name]
+---
+
+# [feat|fix|refactor]: [Feature Title]
+
+## Summary
+[2-3 sentence description of what will be built/fixed]
+
+## Research Findings
+
+### [Source 1 - e.g., "Claroty.com Header Analysis"]
+[Key findings from research]
+
+### [Source 2 - e.g., "Existing Codebase Patterns"]
+[Relevant patterns found in repo]
+
+## Technical Approach
+[How we will implement this - architecture decisions]
+
+## Implementation Steps
+
+### Phase 1: [Phase Name]
+- [ ] Step 1
+- [ ] Step 2
+
+### Phase 2: [Phase Name]
+- [ ] Step 1
+- [ ] Step 2
+
+## Files to Modify/Create
+- `path/to/file1.php` - [what changes]
+- `path/to/file2.twig` - [what changes]
+
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+## References
+- [Relevant links]
+```
+
+### 4. Open in Typora
+
+After writing the plan:
+
+```bash
+open -a Typora "plans/<slug>.md"
 ```
 
 ---
 
-## What the Triage Agent Handles
+## Example: Website Component Migration
 
-### TRIVIAL Tasks (No Plan Needed)
-- Module installation/enabling
-- Cache operations
-- Config export/import
-- Simple drush commands
-- Obvious syntax fixes
+When planning to migrate components from one website to another (like header/hero from claroty.com):
 
-**Result:** Direct execution commands returned
+1. **Use dev-browser skill** to:
+   - Navigate to source site and capture screenshots
+   - Extract HTML structure using getAISnapshot()
+   - Document CSS classes and styling
+   - Identify all variants (e.g., hero variants)
 
-### SIMPLE Tasks (Minimal Plan)
-- Field additions to content types
-- View creation
-- Template updates
-- Form modifications
-- Menu/routing changes
+2. **Analyze existing codebase** for:
+   - Current component structure
+   - Existing styling patterns (Tailwind classes)
+   - Drupal field mappings
+   - Icon handling (UI Icons module)
 
-**Result:** Quick checklist created directly by triage agent
+3. **Compare and document**:
+   - What matches current implementation
+   - What needs to be created new
+   - What styling needs to change
 
-### COMPLEX Tasks (Full Research)
-- External integrations (APIs, SSO, payment)
-- Security-sensitive features
-- Architectural changes
-- Data migrations
-- Custom module development
-- Multi-component features
-
-**Result:** Research agents spawned, comprehensive plan created
+4. **Create detailed implementation plan** with:
+   - Component-by-component breakdown
+   - Field mappings
+   - CSS/Tailwind adjustments
+   - Testing checklist
 
 ---
 
 ## Post-Plan Options
 
-After the triage agent completes, it will present options:
+After creating the plan, offer:
 
 1. **Start `/work`** - Begin implementing
 2. **Run `/plan_review`** - Get feedback from reviewers
 3. **Create Issue** - Create in GitHub/Linear
-4. **Simplify** - Reduce detail level
-
----
-
-**IMPORTANT:** This command delegates ALL work to the plan-triage agent. Do not manually invoke research agents.
+4. **Refine** - Add more detail to specific sections

@@ -1,12 +1,12 @@
 ---
 name: review
-description: Perform exhaustive code reviews using multi-agent analysis, ultra-thinking, and worktrees
+description: Perform exhaustive code reviews using multi-agent analysis and parallel execution
 argument-hint: "[PR number, GitHub URL, branch name, or latest]"
 ---
 
 # Review Command
 
-<command_purpose> Perform exhaustive code reviews using multi-agent analysis, ultra-thinking, and Git worktrees for deep local inspection. </command_purpose>
+Perform exhaustive code reviews using multi-agent analysis with appropriate model tiers.
 
 ## Introduction
 
@@ -14,12 +14,9 @@ argument-hint: "[PR number, GitHub URL, branch name, or latest]"
 
 ## Prerequisites
 
-<requirements>
 - Git repository with GitHub CLI (`gh`) installed and authenticated
 - Clean main/master branch
-- Proper permissions to create worktrees and access the repository
-- For document reviews: Path to a markdown file or document
-</requirements>
+- Proper permissions to access the repository
 
 ## Main Tasks
 
@@ -27,364 +24,238 @@ argument-hint: "[PR number, GitHub URL, branch name, or latest]"
 
 <review_target> #$ARGUMENTS </review_target>
 
-<thinking>
-First, I need to determine the review target type and set up the code for analysis.
-</thinking>
+**Immediate Actions:**
 
-#### Immediate Actions:
-
-<task_list>
-
-- [ ] Determine review type: PR number (numeric), GitHub URL, file path (.md), or empty (current branch)
+- [ ] Determine review type: PR number (numeric), GitHub URL, branch name, or empty (current branch)
 - [ ] Check current git branch
 - [ ] If ALREADY on the PR branch → proceed with analysis on current branch
-- [ ] If DIFFERENT branch → offer to use worktree: "Use git-worktree skill for isolated Call `skill: git-worktree` with branch name
-- [ ] Fetch PR metadata using `gh pr view --json` for title, body, files, linked issues
-- [ ] Set up language-specific analysis tools
-- [ ] Prepare security scanning environment
-- [ ] Make sure we are on the branch we are reviewing. Use gh pr checkout to switch to the branch or manually checkout the branch.
+- [ ] If DIFFERENT branch → `gh pr checkout <number>` or ask about worktree
+- [ ] Fetch PR metadata: `gh pr view --json title,body,files,additions,deletions`
+- [ ] Identify changed files and scope of review
 
-Ensure that the code is ready for analysis (either in worktree or on current branch). ONLY then proceed to the next step.
+### 2. Parallel Agent Reviews
 
-</task_list>
+Run ALL relevant agents **in parallel** with **model="sonnet"**:
 
-#### Parallel Agents to review the PR:
+```
+# Core Drupal Review (ALWAYS)
+Task(subagent_type="adessocms-engineering:review:drupal-reviewer", model="sonnet", prompt="Review PR: {pr_context}")
+Task(subagent_type="adessocms-engineering:review:dries-drupal-reviewer", model="sonnet", prompt="Review PR: {pr_title}")
 
-<parallel_tasks>
+# Frontend (if Twig/CSS/JS changes)
+Task(subagent_type="adessocms-engineering:review:twig-template-reviewer", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:review:tailwind-reviewer", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:review:storybook-reviewer", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:review:accessibility-reviewer", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:review:drupal-theme-reviewer", model="sonnet", prompt="Review: {changes}")
 
-Run ALL or most of these agents at the same time:
+# Quality & Security (ALWAYS)
+Task(subagent_type="adessocms-engineering:review:security-sentinel", model="sonnet", prompt="Security scan: {changes}")
+Task(subagent_type="adessocms-engineering:review:test-coverage-reviewer", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:review:code-simplicity-reviewer", model="sonnet", prompt="Review: {changes}")
 
-1. Task drupal-reviewer(PR content)
-2. Task dries-drupal-reviewer(PR title)
-3. Task twig-template-reviewer(PR content)
-4. Task drupal-theme-reviewer(PR content)
-5. Task tailwind-reviewer(PR content)
-6. Task storybook-reviewer(PR content)
-7. Task accessibility-reviewer(PR content)
-8. Task composer-dependency-reviewer(PR content)
-9. Task test-coverage-reviewer(PR content)
-10. Task git-history-analyzer(PR content)
-11. Task pattern-recognition-specialist(PR content)
-12. Task architecture-strategist(PR content)
-13. Task security-sentinel(PR content)
-14. Task performance-oracle(PR content)
-15. Task data-integrity-guardian(PR content)
+# Architecture (for significant changes)
+Task(subagent_type="adessocms-engineering:review:architecture-strategist", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:review:performance-oracle", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:review:pattern-recognition-specialist", model="sonnet", prompt="Review: {changes}")
 
-</parallel_tasks>
+# Dependencies (if composer.json/package.json changed)
+Task(subagent_type="adessocms-engineering:review:composer-dependency-reviewer", model="sonnet", prompt="Review: {changes}")
 
-### 3b. Gemini Co-Author: Cross-Check Review Findings (Optional)
+# Data (if database/entity changes)
+Task(subagent_type="adessocms-engineering:review:data-integrity-guardian", model="sonnet", prompt="Review: {changes}")
 
-After parallel agents return findings, cross-check with Gemini to catch missed issues or validate findings:
-
-```bash
-# Check Gemini availability
-if which gemini >/dev/null 2>&1; then
-  echo "Gemini available - cross-checking review findings..."
-fi
+# History context
+Task(subagent_type="adessocms-engineering:research:git-history-analyzer", model="sonnet", prompt="Analyze: {pr_context}")
 ```
 
-**If available, invoke gemini-coauthor skill:**
-- Use `workflows/review-output.md` from gemini-coauthor skill
-- Collect all agent findings with severity levels
-- Send to Gemini for validation and cross-check
-- Identify:
-  - **Confirmed Issues**: Both Claude agents and Gemini agree
-  - **Disputed Issues**: Different severity or validity assessments
-  - **Additional Issues**: New findings from Gemini
-  - **False Positives**: Issues to dismiss or downgrade
+**Agent Selection Guide:**
 
-**Synthesis Results:**
-- Present consolidated findings with confidence levels
-- For disputed issues, present both perspectives
-- Remove or downgrade confirmed false positives
-- Add any additional issues found by Gemini
+| Change Type | Required Agents |
+|-------------|-----------------|
+| PHP/Module | drupal-reviewer, dries, security, test-coverage |
+| Twig/Theme | twig-template, drupal-theme, accessibility |
+| CSS/Tailwind | tailwind-reviewer, accessibility |
+| JS/Alpine | storybook-reviewer (if applicable) |
+| composer.json | composer-dependency-reviewer |
+| Database/Entity | data-integrity-guardian |
+| Large/Arch | architecture-strategist, performance-oracle |
 
-**If unavailable:** Continue with agent findings only.
+### 3. Optional: Gemini Cross-Check
 
-### 4. Ultra-Thinking Deep Dive Phases
+**Only if explicitly requested** OR for security-critical PRs:
 
-<ultrathink_instruction> For each phase below, spend maximum cognitive effort. Think step by step. Consider all angles. Question assumptions. And bring all reviews in a synthesis to the user.</ultrathink_instruction>
+```bash
+# Check availability
+which gemini >/dev/null 2>&1 || echo "Gemini not available - skipping"
+```
 
-<deliverable>
-Complete system context map with component interactions
-</deliverable>
+If available and requested:
 
-#### Phase 3: Stakeholder Perspective Analysis
+```
+Task(subagent_type="adessocms-engineering:review:gemini-reviewer",
+     model="sonnet",
+     prompt="Cross-check findings:
 
-<thinking_prompt> ULTRA-THINK: Put yourself in each stakeholder's shoes. What matters to them? What are their pain points? </thinking_prompt>
+     Findings Summary:
+     {synthesized_findings}
 
-<stakeholder_perspectives>
+     PR Context: {pr_title}")
+```
 
-1. **Developer Perspective** <questions>
+### 4. Findings Synthesis
 
-   - How easy is this to understand and modify?
-   - Are the APIs intuitive?
-   - Is debugging straightforward?
-   - Can I test this easily? </questions>
-
-2. **Operations Perspective** <questions>
-
-   - How do I deploy this safely?
-   - What metrics and logs are available?
-   - How do I troubleshoot issues?
-   - What are the resource requirements? </questions>
-
-3. **End User Perspective** <questions>
-
-   - Is the feature intuitive?
-   - Are error messages helpful?
-   - Is performance acceptable?
-   - Does it solve my problem? </questions>
-
-4. **Security Team Perspective** <questions>
-
-   - What's the attack surface?
-   - Are there compliance requirements?
-   - How is data protected?
-   - What are the audit capabilities? </questions>
-
-5. **Business Perspective** <questions>
-   - What's the ROI?
-   - Are there legal/compliance risks?
-   - How does this affect time-to-market?
-   - What's the total cost of ownership? </questions> </stakeholder_perspectives>
-
-#### Phase 4: Scenario Exploration
-
-<thinking_prompt> ULTRA-THINK: Explore edge cases and failure scenarios. What could go wrong? How does the system behave under stress? </thinking_prompt>
-
-<scenario_checklist>
-
-- [ ] **Happy Path**: Normal operation with valid inputs
-- [ ] **Invalid Inputs**: Null, empty, malformed data
-- [ ] **Boundary Conditions**: Min/max values, empty collections
-- [ ] **Concurrent Access**: Race conditions, deadlocks
-- [ ] **Scale Testing**: 10x, 100x, 1000x normal load
-- [ ] **Network Issues**: Timeouts, partial failures
-- [ ] **Resource Exhaustion**: Memory, disk, connections
-- [ ] **Security Attacks**: Injection, overflow, DoS
-- [ ] **Data Corruption**: Partial writes, inconsistency
-- [ ] **Cascading Failures**: Downstream service issues </scenario_checklist>
-
-### 6. Multi-Angle Review Perspectives
-
-#### Technical Excellence Angle
-
-- Code craftsmanship evaluation
-- Engineering best practices
-- Technical documentation quality
-- Tooling and automation assessment
-
-#### Business Value Angle
-
-- Feature completeness validation
-- Performance impact on users
-- Cost-benefit analysis
-- Time-to-market considerations
-
-#### Risk Management Angle
-
-- Security risk assessment
-- Operational risk evaluation
-- Compliance risk verification
-- Technical debt accumulation
-
-#### Team Dynamics Angle
-
-- Code review etiquette
-- Knowledge sharing effectiveness
-- Collaboration patterns
-- Mentoring opportunities
-
-### 4. Simplification and Minimalism Review
-
-Run the Task code-simplicity-reviewer() to see if we can simplify the code.
-
-### 5. Findings Synthesis and Bean Creation
-
-<critical_requirement> ALL findings MUST be stored as Beans using the beans-maintainer agent. Create beans immediately after synthesis - do NOT present findings for user approval first. </critical_requirement>
-
-#### Step 1: Synthesize All Findings
-
-<thinking>
-Consolidate all agent reports into a categorized list of findings.
-Remove duplicates, prioritize by severity and impact.
-</thinking>
-
-<synthesis_tasks>
+**Consolidate all agent reports:**
 
 - [ ] Collect findings from all parallel agents
-- [ ] Categorize by type: security, performance, architecture, quality, etc.
-- [ ] Assign severity levels: 🔴 CRITICAL (P1), 🟡 IMPORTANT (P2), 🔵 NICE-TO-HAVE (P3)
+- [ ] Categorize by type: security, performance, architecture, quality
+- [ ] Assign severity levels:
+  - **P1 CRITICAL** - Security vulnerabilities, data corruption, breaking changes
+  - **P2 IMPORTANT** - Performance issues, architectural concerns, reliability
+  - **P3 NICE-TO-HAVE** - Minor improvements, code cleanup, optimizations
 - [ ] Remove duplicate or overlapping findings
 - [ ] Estimate effort for each finding (Small/Medium/Large)
 
-</synthesis_tasks>
+### 5. Review Summary Report
 
-#### Step 2: Create Beans for Findings
+Present findings as markdown:
 
-<critical_instruction> Use the beans-maintainer agent to create Beans for ALL findings immediately. Create beans in parallel, then summarize results to user. </critical_instruction>
+```markdown
+## Code Review Complete
 
-**Implementation:**
+**Review Target:** PR #XXXX - [PR Title]
+**Branch:** [branch-name]
+**Files Changed:** [count]
 
-For each finding, use the beans-maintainer agent (runs on Haiku for speed):
+---
 
-```
-Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
-     model="haiku",
-     prompt="Transfer this finding to Beans:
-
-     Title: [P1/P2/P3] <finding title>
-     Type: bug
-     Priority: critical|high|normal|low
-
-     ## Problem
-     <what's wrong>
-
-     ## Location
-     <file:line references>
-
-     ## Proposed Solution
-     <how to fix>
-
-     ## Acceptance Criteria
-     - [ ] <testable criterion>")
-```
-
-**Parallel Execution Strategy:**
-
-1. Synthesize all findings into categories (P1/P2/P3)
-2. Launch beans-maintainer agents in parallel (one per finding or batch)
-3. Each agent creates its beans
-4. Consolidate results and present summary
-
-**Priority Mapping:**
-
-| Severity | Bean Priority | Bean Type |
-|----------|---------------|-----------|
-| 🔴 P1 CRITICAL | critical | bug |
-| 🟡 P2 IMPORTANT | high | bug or task |
-| 🔵 P3 NICE-TO-HAVE | normal or low | task |
-
-**Bean Structure:**
-
-Each finding bean includes:
-
-- **Title**: `[P1/P2/P3] <description>`
-- **Type**: `bug` (for issues) or `task` (for improvements)
-- **Priority**: Maps from severity level
-- **Description**:
-  - Problem Statement
-  - Location (file:line references)
-  - Proposed Solution
-  - Acceptance Criteria as checklist
-
-**Linking Findings:**
-
-For related findings, link them:
-```bash
-# If finding B blocks finding A
-beans update <finding-b-id> --link blocks:<finding-a-id>
-
-# If findings are related
-beans update <finding-a-id> --link related:<finding-b-id>
-```
-
-#### Step 3: Summary Report
-
-After creating all beans, present comprehensive summary:
-
-````markdown
-## ✅ Code Review Complete
-
-**Review Target:** PR #XXXX - [PR Title] **Branch:** [branch-name]
-
-### Findings Summary:
+### Findings Summary
 
 - **Total Findings:** [X]
-- **🔴 CRITICAL (P1):** [count] - BLOCKS MERGE
-- **🟡 IMPORTANT (P2):** [count] - Should Fix
-- **🔵 NICE-TO-HAVE (P3):** [count] - Enhancements
+- **P1 CRITICAL:** [count] - BLOCKS MERGE
+- **P2 IMPORTANT:** [count] - Should Fix
+- **P3 NICE-TO-HAVE:** [count] - Enhancements
 
-### Created Beans:
+---
 
-**P1 - Critical (BLOCKS MERGE):**
+### P1 - Critical (BLOCKS MERGE)
 
-- `adesso-cms-xxxx` - [P1] {description}
-- `adesso-cms-yyyy` - [P1] {description}
+#### [Finding Title]
+- **Location:** `file.php:42`
+- **Issue:** [Description]
+- **Fix:** [Proposed solution]
+- **Effort:** Small/Medium/Large
 
-**P2 - Important:**
+---
 
-- `adesso-cms-zzzz` - [P2] {description}
+### P2 - Important
 
-**P3 - Nice-to-Have:**
+#### [Finding Title]
+- **Location:** `file.php:78`
+- **Issue:** [Description]
+- **Fix:** [Proposed solution]
 
-- `adesso-cms-aaaa` - [P3] {description}
+---
 
-### Review Agents Used:
+### P3 - Nice-to-Have
+
+- [ ] [Finding 1]
+- [ ] [Finding 2]
+
+---
+
+### Review Agents Used
 
 - drupal-reviewer
 - dries-drupal-reviewer
-- twig-template-reviewer
-- drupal-theme-reviewer
-- tailwind-reviewer
-- accessibility-reviewer
 - security-sentinel
-- performance-oracle
-- [other agents]
+- [others...]
 
-### Next Steps:
+---
 
-1. **Address P1 Findings**: CRITICAL - must be fixed before merge
+### Merge Recommendation
 
-   - Review each P1 bean in detail
-   - Implement fixes or request exemption
-   - Mark beans as completed: `beans update <id> --status completed`
+[ ] **APPROVED** - No P1 findings, ready to merge
+[ ] **APPROVED WITH CONCERNS** - P2 findings should be addressed
+[ ] **REQUEST CHANGES** - P1 findings must be fixed before merge
+```
 
-2. **View All Findings**:
-   ```bash
-   beans list                           # View all beans
-   beans list --status todo --priority critical  # Only P1 findings
-   ```
-````
+### 6. Next Steps
 
-3. **Work on Findings**:
+After presenting findings, offer options:
 
-   ```bash
-   /work <bean-id>  # Fix a specific finding
-   ```
+1. **Fix P1 Issues** - Start `/work` to address critical findings
+2. **Create Issues** - Create GitHub issues for P2/P3 findings
+3. **Approve PR** - If no P1 findings, approve the PR
+4. **Request Gemini Review** - Get second opinion (if not already done)
 
-4. **Track Progress**:
-   - Update status: `beans update <id> --status in-progress|completed`
-   - View progress: `beans list --no-status completed`
-   - Commit beans: `git add .beans/ && git commit -m "refactor: add code review findings"`
+---
 
-### Severity Breakdown:
+## Model Selection
 
-**🔴 P1 (Critical - Blocks Merge):**
+**CRITICAL: Always use appropriate model tiers to save tokens**
 
-- Security vulnerabilities
-- Data corruption risks
-- Breaking changes
-- Critical architectural issues
+| Agent Category | Model | Reason |
+|----------------|-------|--------|
+| All review agents | sonnet | Capable for code review |
+| Research agents | sonnet | Fast, sufficient |
+| gemini-reviewer | sonnet | Orchestration only |
 
-**🟡 P2 (Important - Should Fix):**
+**NEVER use opus for review agents.** Sonnet is sufficient for code analysis.
 
-- Performance issues
-- Significant architectural concerns
-- Major code quality problems
-- Reliability issues
+## Parallel Execution
 
-**🔵 P3 (Nice-to-Have):**
+**CRITICAL: Run agents in parallel** to minimize review time.
 
-- Minor improvements
-- Code cleanup
-- Optimization opportunities
+Bad (sequential):
+```
+agent1 → wait → agent2 → wait → agent3
+```
+
+Good (parallel):
+```
+agent1 ┐
+agent2 ├→ all complete → synthesize
+agent3 ┘
+```
+
+## Severity Guidelines
+
+### P1 - CRITICAL (Blocks Merge)
+
+- SQL injection, XSS, authentication bypass
+- Data corruption or loss
+- Breaking changes without migration
+- Critical accessibility failures (keyboard traps)
+- Memory leaks or resource exhaustion
+
+### P2 - IMPORTANT (Should Fix)
+
+- Performance issues (N+1 queries, missing cache)
+- Missing error handling
+- Incomplete test coverage for new code
+- Accessibility issues (missing labels, contrast)
+- Code that violates Drupal standards
+
+### P3 - NICE-TO-HAVE (Enhancement)
+
+- Code style improvements
 - Documentation updates
+- Minor refactoring opportunities
+- Optimization suggestions
+- Nice-to-have tests
 
-```
+## When to Use Full Review
 
-### Important: P1 Findings Block Merge
+**Use full multi-agent review for:**
+- PRs with 10+ files changed
+- Security-sensitive changes
+- Architectural changes
+- New features
+- Changes by junior developers
 
-Any **🔴 P1 (CRITICAL)** findings must be addressed before merging the PR. Present these prominently and ensure they're resolved before accepting the PR.
-```
+**Use minimal review for:**
+- Documentation-only changes
+- Simple bug fixes
+- Config changes
+- Dependency updates (just composer-dependency-reviewer)

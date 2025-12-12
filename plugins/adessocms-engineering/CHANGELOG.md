@@ -1,5 +1,54 @@
 # Changelog
 
+## [1.7.0] - 2025-12-11
+
+### Added - dev-browser Skill
+
+**Migrated from Playwright MCP to dev-browser skill for persistent browser automation.**
+
+### Added
+
+- **dev-browser skill** - Browser automation with persistent page state
+  - Maintains browser state across script executions
+  - ARIA snapshot for element discovery (`getAISnapshot()`)
+  - Stable element refs for interactions (`selectSnapshotRef()`)
+  - Works with local/DDEV sites out of the box
+
+### Removed
+
+- **Playwright MCP server** - Replaced by dev-browser skill
+  - More reliable persistent state
+  - Better element discovery with ARIA snapshots
+  - Simpler script-based approach
+
+### Changed
+
+- Plugin now has 1 MCP server (context7) instead of 2
+- Browser automation via skill instead of MCP tools
+
+### Usage
+
+```bash
+# Set path variable
+export DEV_BROWSER_DIR="$HOME/.claude/plugins/marketplaces/adessocms-marketplace/plugins/adessocms-engineering/skills/dev-browser"
+
+# Start server
+$DEV_BROWSER_DIR/server.sh &
+
+# Run scripts
+cd $DEV_BROWSER_DIR && bun x tsx <<'EOF'
+import { connect, waitForPageLoad } from "@/client.js";
+const client = await connect("http://localhost:9222");
+const page = await client.page("main");
+await page.goto("https://eab.ddev.site");
+await waitForPageLoad(page);
+console.log({ title: await page.title(), url: page.url() });
+await client.disconnect();
+EOF
+```
+
+---
+
 ## [1.6.0] - 2025-12-11
 
 ### Added - Plan Triage Agent for Token Optimization

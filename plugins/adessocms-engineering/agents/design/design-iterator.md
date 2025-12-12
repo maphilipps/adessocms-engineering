@@ -23,7 +23,6 @@ description: |
     user: "Look at how Stripe does their pricing page and make mine better"
     assistant: "I'll launch the design-iterator agent with 8 iterations to research Stripe's design patterns and progressively apply those insights to your pricing page"
     Competitor research combined with iterative refinement benefits from the systematic approach.
-model: opus
 color: violet
 ---
 

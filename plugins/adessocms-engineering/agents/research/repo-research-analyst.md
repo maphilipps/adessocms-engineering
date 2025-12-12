@@ -28,7 +28,7 @@ description: |
     Since the user needs to understand implementation patterns, use the repo-research-analyst agent to search and analyze the codebase.
     </commentary>
     </example>
-model: sonnet
+model: haiku
 ---
 
 **Note: The current year is 2025.** Use this when searching for recent documentation and patterns.

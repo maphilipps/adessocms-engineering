@@ -36,68 +36,83 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 
 After installation, restart Claude Code. The plugin provides:
 
-- **27 Agents** - Available via `@agent-name` in conversations
-- **17 Commands** - Available via `/command-name`
-- **10 Skills** - Available via `Skill` tool
+- **28 Agents** - Available via `@agent-name` in conversations
+- **22 Commands** - Available via `/command-name`
+- **16 Skills** - Available via `Skill` tool
 - **2 MCP Servers** - Playwright + Context7 (auto-started)
 
 ## Components
 
 | Component | Count |
 |-----------|-------|
-| Agents | 27 |
-| Commands | 17 |
-| Skills | 10 |
+| Agents | 28 |
+| Commands | 22 |
+| Skills | 16 |
 | MCP Servers | 2 |
+
+## Model Tier Strategy
+
+**Intelligent model tiers (like EveryInc).**
+
+| Model | Use Case | Agents |
+|-------|----------|--------|
+| *(none)* | Critical analysis, design review - uses session model | 8 agents |
+| **sonnet** | Standard reviews, external research | 14 agents |
+| **haiku** | Local research, simple tasks, CLI | 6 agents |
+
+**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `dries-drupal-reviewer`, `pattern-recognition-specialist`, `bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
+
+**Haiku:** `lint`, `composer-dependency-reviewer`, `git-history-analyzer`, `repo-research-analyst`, `gemini-brainstorm`, `gemini-reviewer`
 
 ## Agents
 
 ### Review (17)
 
-| Agent | Description |
-|-------|-------------|
-| `drupal-reviewer` | Drupal coding standards, API usage, and best practices |
-| `dries-drupal-reviewer` | Brutally honest Drupal review from Dries Buytaert's perspective |
-| `twig-template-reviewer` | Twig templates, security, Drupal patterns, SDC |
-| `drupal-theme-reviewer` | Theme implementations, SDC, preprocess functions, libraries |
-| `tailwind-reviewer` | Tailwind CSS v4 syntax, Vite integration, Drupal theming |
-| `storybook-reviewer` | Storybook stories, SDC integration, interaction tests |
-| `accessibility-reviewer` | WCAG 2.1 Level AA, ARIA, semantic HTML, keyboard nav |
-| `composer-dependency-reviewer` | Composer dependencies, security, Drupal contrib |
-| `test-coverage-reviewer` | PHPUnit, Kernel, Functional, Playwright, Vitest coverage |
-| `architecture-strategist` | Analyze architectural decisions and compliance |
-| `code-simplicity-reviewer` | Final pass for simplicity and minimalism |
-| `data-integrity-guardian` | Database migrations and data integrity |
-| `pattern-recognition-specialist` | Analyze code for patterns and anti-patterns |
-| `performance-oracle` | Performance analysis and optimization |
-| `security-sentinel` | Security audits and vulnerability assessments |
+| Agent | Model | Description |
+|-------|-------|-------------|
+| `drupal-reviewer` | sonnet | Drupal coding standards, API usage, and best practices |
+| `dries-drupal-reviewer` | - | Brutally honest Drupal review from Dries Buytaert's perspective |
+| `twig-template-reviewer` | sonnet | Twig templates, security, Drupal patterns, SDC |
+| `drupal-theme-reviewer` | sonnet | Theme implementations, SDC, preprocess functions, libraries |
+| `tailwind-reviewer` | sonnet | Tailwind CSS v4 syntax, Vite integration, Drupal theming |
+| `storybook-reviewer` | sonnet | Storybook stories, SDC integration, interaction tests |
+| `accessibility-reviewer` | sonnet | WCAG 2.1 Level AA, ARIA, semantic HTML, keyboard nav |
+| `composer-dependency-reviewer` | haiku | Composer dependencies, security, Drupal contrib |
+| `test-coverage-reviewer` | sonnet | PHPUnit, Kernel, Functional, Playwright, Vitest coverage |
+| `architecture-strategist` | - | Analyze architectural decisions and compliance |
+| `code-simplicity-reviewer` | sonnet | Final pass for simplicity and minimalism |
+| `data-integrity-guardian` | sonnet | Database migrations and data integrity |
+| `pattern-recognition-specialist` | - | Analyze code for patterns and anti-patterns |
+| `performance-oracle` | - | Performance analysis and optimization |
+| `security-sentinel` | - | Security audits and vulnerability assessments |
+| `gemini-reviewer` | haiku | Cross-check findings with Gemini (optional) |
 
-### Research (4)
+### Research (5)
 
-| Agent | Description |
-|-------|-------------|
-| `best-practices-researcher` | Gather external best practices and examples |
-| `framework-docs-researcher` | Research framework documentation and best practices |
-| `git-history-analyzer` | Analyze git history and code evolution |
-| `repo-research-analyst` | Research repository structure and conventions |
+| Agent | Model | Description |
+|-------|-------|-------------|
+| `best-practices-researcher` | sonnet | Gather external best practices and examples |
+| `framework-docs-researcher` | sonnet | Research framework documentation and best practices |
+| `git-history-analyzer` | haiku | Analyze git history and code evolution |
+| `repo-research-analyst` | haiku | Research repository structure and conventions |
+| `gemini-brainstorm` | haiku | Architecture brainstorming with Gemini (optional) |
 
 ### Design (3)
 
-| Agent | Description |
-|-------|-------------|
-| `design-implementation-reviewer` | Verify UI implementations match Figma designs |
-| `design-iterator` | Iteratively refine UI through systematic design iterations |
-| `figma-design-sync` | Synchronize web implementations with Figma designs |
+| Agent | Model | Description |
+|-------|-------|-------------|
+| `design-implementation-reviewer` | - | Verify UI implementations match Figma designs |
+| `design-iterator` | - | Iteratively refine UI through systematic design iterations |
+| `figma-design-sync` | sonnet | Synchronize web implementations with Figma designs |
 
-### Workflow (5)
+### Workflow (4)
 
-| Agent | Description |
-|-------|-------------|
-| `beans-maintainer` | Transfer finished plans into Beans (runs on Haiku) |
-| `bug-reproduction-validator` | Systematically reproduce and validate bug reports |
-| `lint` | Run linting and code quality checks (PHP, Twig, JS, CSS) |
-| `pr-comment-resolver` | Address PR comments and implement fixes |
-| `spec-flow-analyzer` | Analyze user flows and identify gaps in specifications |
+| Agent | Model | Description |
+|-------|-------|-------------|
+| `bug-reproduction-validator` | - | Systematically reproduce and validate bug reports |
+| `lint` | haiku | Run linting and code quality checks (PHP, Twig, JS, CSS) |
+| `pr-comment-resolver` | sonnet | Address PR comments and implement fixes |
+| `spec-flow-analyzer` | sonnet | Analyze user flows and identify gaps in specifications |
 
 ## Commands
 
@@ -105,9 +120,9 @@ After installation, restart Claude Code. The plugin provides:
 
 | Command | Description |
 |---------|-------------|
-| `/plan` | Create implementation plans |
-| `/review` | Run comprehensive code reviews |
-| `/work` | Execute work items systematically |
+| `/plan` | Create implementation plans (parallel research agents) |
+| `/review` | Run comprehensive code reviews (~15 parallel agents) |
+| `/work` | Execute work items systematically (TodoWrite tracking) |
 | `/compound` | Document solved problems to compound team knowledge |
 
 ### Utility Commands
@@ -124,6 +139,7 @@ After installation, restart Claude Code. The plugin provides:
 | `/resolve_parallel` | Resolve TODO comments in parallel |
 | `/resolve_pr_parallel` | Resolve PR comments in parallel |
 | `/triage` | Triage and prioritize issues |
+| `/plan-from-jira` | Create plan from Jira ticket |
 
 ## Skills
 
@@ -144,6 +160,7 @@ After installation, restart Claude Code. The plugin provides:
 | `compound-docs` | Capture solved problems as categorized documentation |
 | `create-agent-skills` | Expert guidance for creating Claude Code skills |
 | `frontend-design` | Create production-grade frontend interfaces |
+| `adesso-styleguide` | adesso Corporate Design compliance |
 | `skill-creator` | Guide for creating effective Claude Code skills |
 
 ### Workflow
@@ -152,6 +169,22 @@ After installation, restart Claude Code. The plugin provides:
 |-------|-------------|
 | `file-todos` | File-based todo tracking system |
 | `git-worktree` | Manage Git worktrees for parallel development |
+| `plan-from-jira` | Create implementation plans from Jira tickets |
+| `project-ownership` | Product ownership patterns |
+
+## Gemini Integration (Optional)
+
+Gemini CLI integration is **optional and non-blocking**:
+
+- `gemini-brainstorm` agent: Architecture brainstorming on request
+- `gemini-reviewer` agent: Cross-check review findings on request
+
+**Gemini is NOT required.** All workflows work without it.
+
+```bash
+# Check if Gemini is available
+which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not installed"
+```
 
 ## MCP Servers
 
@@ -170,17 +203,23 @@ MCP servers start automatically when the plugin is enabled.
 /review
 ```
 
+Runs ~15 parallel agents with **model="sonnet"** for token efficiency.
+
 ### Create Implementation Plan
 
 ```
 /plan "Add new paragraph type for testimonials"
 ```
 
+Runs 3 research agents in parallel, creates plan in `plans/` folder.
+
 ### Document a Solution
 
 ```
 /compound
 ```
+
+Captures solved problems to `docs/solutions/` with YAML frontmatter.
 
 ### Review Combinations
 
@@ -192,32 +231,6 @@ MCP servers start automatically when the plugin is enabled.
 **Drupal Theme PR:**
 ```
 @drupal-theme-reviewer @twig-template-reviewer @tailwind-reviewer @accessibility-reviewer @storybook-reviewer
-```
-
-### Beans Integration
-
-After `/plan` creates a plan, transfer it to Beans using the `beans-maintainer` agent:
-
-```
-Task(subagent_type="adessocms-engineering:workflow:beans-maintainer",
-     prompt="Transfer this plan to Beans: <plan content>")
-```
-
-The agent runs on **Haiku** for speed - it only formats and writes, no planning.
-
-**Setup Beans hooks** in `~/.claude/settings.json`:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      { "matcher": "", "hooks": [{ "type": "command", "command": "beans prompt" }] }
-    ],
-    "PreCompact": [
-      { "matcher": "", "hooks": [{ "type": "command", "command": "beans prompt" }] }
-    ]
-  }
-}
 ```
 
 ## Requirements

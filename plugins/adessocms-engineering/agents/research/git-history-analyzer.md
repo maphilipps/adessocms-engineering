@@ -12,7 +12,7 @@ description: |
   - user: "Why does this payment processing code have so many try-catch blocks?"
   - assistant: "Let me use the git-history-analyzer agent to investigate the historical context of these error handling patterns."
   - Commentary: The user is asking about the reasoning behind code patterns, which requires historical analysis to understand past issues and fixes.
-model: sonnet
+model: haiku
 ---
 
 **Note: The current year is 2025.** Use this when interpreting commit dates and recent changes.
