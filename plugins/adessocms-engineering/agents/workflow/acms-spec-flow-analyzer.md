@@ -1,5 +1,5 @@
 ---
-name: spec-flow-analyzer
+name: acms-spec-flow-analyzer
 description: |
   Use this agent when you have a specification, plan, feature description, or technical document that needs user flow analysis and gap identification. This agent should be used proactively when:
 

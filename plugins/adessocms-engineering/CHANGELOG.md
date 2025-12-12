@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.1] - 2025-12-12
+
+### Changed - Workflow Agents Renamed with acms- Prefix
+
+**Renamed workflow agents to avoid naming conflicts with other plugins.**
+
+- `bug-reproduction-validator` → `acms-bug-reproduction-validator`
+- `lint` → `acms-lint`
+- `pr-comment-resolver` → `acms-pr-comment-resolver`
+- `spec-flow-analyzer` → `acms-spec-flow-analyzer`
+
+---
+
 ## [1.8.0] - 2025-12-12
 
 ### Removed - Triage and Duplicated dev-browser

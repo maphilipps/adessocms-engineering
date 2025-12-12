@@ -1,5 +1,5 @@
 ---
-name: lint
+name: acms-lint
 description: |
   Use this agent when you need to run linting and code quality checks on PHP, Twig, CSS, and JavaScript files. Run before pushing to origin.
 model: haiku

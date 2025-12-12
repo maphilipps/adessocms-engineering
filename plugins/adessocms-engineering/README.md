@@ -111,10 +111,10 @@ After installation, restart Claude Code. The plugin provides:
 
 | Agent | Model | Description |
 |-------|-------|-------------|
-| `bug-reproduction-validator` | - | Systematically reproduce and validate bug reports |
-| `lint` | haiku | Run linting and code quality checks (PHP, Twig, JS, CSS) |
-| `pr-comment-resolver` | sonnet | Address PR comments and implement fixes |
-| `spec-flow-analyzer` | sonnet | Analyze user flows and identify gaps in specifications |
+| `acms-bug-reproduction-validator` | - | Systematically reproduce and validate bug reports |
+| `acms-lint` | haiku | Run linting and code quality checks (PHP, Twig, JS, CSS) |
+| `acms-pr-comment-resolver` | sonnet | Address PR comments and implement fixes |
+| `acms-spec-flow-analyzer` | sonnet | Analyze user flows and identify gaps in specifications |
 
 ## Commands
 

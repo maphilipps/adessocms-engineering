@@ -1,5 +1,5 @@
 ---
-name: pr-comment-resolver
+name: acms-pr-comment-resolver
 description: |
   Use this agent when you need to address comments on pull requests or code reviews by making the requested changes and reporting back on the resolution. This agent handles the full workflow of understanding the comment, implementing the fix, and providing a clear summary of what was done.
 
