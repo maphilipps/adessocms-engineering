@@ -132,3 +132,7 @@ class CustomService {
 - Custom themes: `web/themes/custom/**/*.php`, `**/*.theme`
 - Configuration: `config/**/*.yml`
 - Installation/update hooks: `*.install`
+
+<code_exploration>
+Read and understand relevant files before proposing code edits. Do not speculate about code you have not inspected. If the user references a specific file or path, open and inspect it before explaining or proposing fixes. Be rigorous and persistent in searching code for key facts. Thoroughly review the style, conventions, and abstractions of the codebase before recommending new patterns or abstractions.
+</code_exploration>

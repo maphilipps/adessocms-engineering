@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.10.0] - 2025-12-14
+
+### Removed - Gemini Integration
+
+**Gemini completely removed from the plugin.**
+
+### Removed
+
+- **`gemini-brainstorm` agent** - External Gemini architecture brainstorming
+- **`gemini-reviewer` agent** - External Gemini review cross-check
+- **`plans/optional-gemini-planner.md`** - Gemini planning template
+
+### Changed
+
+- **`/acms-plan`**: Removed Gemini architecture draft step
+  - Planning now uses Claude agents only (repo-research-analyst, best-practices-researcher, framework-docs-researcher)
+  - No external API dependencies
+- **`/acms-review`**: Removed Gemini cross-check section
+  - Reviews use parallel Claude agents only
+- **README.md**: Removed Gemini Integration section, updated agent counts
+
+### Why This Change
+
+1. Simplifies plugin - no external dependencies
+2. Claude agents provide comprehensive research and review
+3. Removes latency from external API calls
+4. All planning and reviews handled by specialized Claude agents
+
+### Agent Count
+
+- Before: 31 agents
+- After: 29 agents (-2 Gemini agents)
+
+---
+
 ## [1.9.0] - 2025-12-14
 
 ### Added - SDC, Paragraphs, and DRY Review Agents

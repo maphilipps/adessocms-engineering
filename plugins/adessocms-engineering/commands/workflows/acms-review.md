@@ -90,29 +90,7 @@ Task(subagent_type="adessocms-engineering:research:git-history-analyzer", model=
 | Database/Entity | data-integrity-guardian |
 | Large/Arch | architecture-strategist, performance-oracle |
 
-### 3. Optional: Gemini Cross-Check
-
-**Only if explicitly requested** OR for security-critical PRs:
-
-```bash
-# Check availability
-which gemini >/dev/null 2>&1 || echo "Gemini not available - skipping"
-```
-
-If available and requested:
-
-```
-Task(subagent_type="adessocms-engineering:review:gemini-reviewer",
-     model="sonnet",
-     prompt="Cross-check findings:
-
-     Findings Summary:
-     {synthesized_findings}
-
-     PR Context: {pr_title}")
-```
-
-### 4. Findings Synthesis
+### 3. Findings Synthesis
 
 **Consolidate all agent reports:**
 
@@ -125,7 +103,7 @@ Task(subagent_type="adessocms-engineering:review:gemini-reviewer",
 - [ ] Remove duplicate or overlapping findings
 - [ ] Estimate effort for each finding (Small/Medium/Large)
 
-### 5. Review Summary Report
+### 4. Review Summary Report
 
 Present findings as markdown:
 
@@ -189,14 +167,13 @@ Present findings as markdown:
 [ ] **REQUEST CHANGES** - P1 findings must be fixed before merge
 ```
 
-### 6. Next Steps
+### 5. Next Steps
 
 After presenting findings, offer options:
 
 1. **Fix P1 Issues** - Start `/work` to address critical findings
 2. **Create Issues** - Create GitHub issues for P2/P3 findings
 3. **Approve PR** - If no P1 findings, approve the PR
-4. **Request Gemini Review** - Get second opinion (if not already done)
 
 ---
 
@@ -208,7 +185,6 @@ After presenting findings, offer options:
 |----------------|-------|--------|
 | All review agents | sonnet | Capable for code review |
 | Research agents | sonnet | Fast, sufficient |
-| gemini-reviewer | sonnet | Orchestration only |
 
 **NEVER use opus for review agents.** Sonnet is sufficient for code analysis.
 

@@ -36,7 +36,7 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 
 After installation, restart Claude Code. The plugin provides:
 
-- **28 Agents** - Available via `@agent-name` in conversations
+- **29 Agents** - Available via `@agent-name` in conversations
 - **21 Commands** - Available via `/command-name`
 - **16 Skills** - Available via `Skill` tool
 - **1 MCP Server** - Context7 (auto-started)
@@ -47,10 +47,10 @@ After installation, restart Claude Code. The plugin provides:
 
 | Component | Count |
 |-----------|-------|
-| Agents | 28 |
+| Agents | 29 |
 | Commands | 21 |
 | Skills | 16 |
-| MCP Servers | 1 |
+| MCP Servers | 2 |
 
 ## Model Tier Strategy
 
@@ -59,16 +59,16 @@ After installation, restart Claude Code. The plugin provides:
 | Model | Use Case | Agents |
 |-------|----------|--------|
 | *(none)* | Critical analysis, design review - uses session model | 8 agents |
-| **sonnet** | Standard reviews, external research | 14 agents |
-| **haiku** | Local research, simple tasks, CLI | 6 agents |
+| **sonnet** | Standard reviews, external research | 17 agents |
+| **haiku** | Local research, simple tasks | 4 agents |
 
-**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `dries-drupal-reviewer`, `pattern-recognition-specialist`, `bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
+**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `dries-drupal-reviewer`, `pattern-recognition-specialist`, `acms-bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
 
-**Haiku:** `lint`, `composer-dependency-reviewer`, `git-history-analyzer`, `repo-research-analyst`, `gemini-brainstorm`, `gemini-reviewer`
+**Haiku:** `acms-lint`, `composer-dependency-reviewer`, `git-history-analyzer`, `repo-research-analyst`
 
 ## Agents
 
-### Review (17)
+### Review (18)
 
 | Agent | Model | Description |
 |-------|-------|-------------|
@@ -87,9 +87,11 @@ After installation, restart Claude Code. The plugin provides:
 | `pattern-recognition-specialist` | - | Analyze code for patterns and anti-patterns |
 | `performance-oracle` | - | Performance analysis and optimization |
 | `security-sentinel` | - | Security audits and vulnerability assessments |
-| `gemini-reviewer` | haiku | Cross-check findings with Gemini (optional) |
+| `sdc-best-practices-reviewer` | sonnet | SDC props/slots, component.yml schema, cache patterns |
+| `paragraphs-best-practices-reviewer` | sonnet | Field templates, SDC integration, cache metadata |
+| `dry-component-reuse-reviewer` | sonnet | DRY principle, component reuse, atomic design |
 
-### Research (5)
+### Research (4)
 
 | Agent | Model | Description |
 |-------|-------|-------------|
@@ -97,7 +99,6 @@ After installation, restart Claude Code. The plugin provides:
 | `framework-docs-researcher` | sonnet | Research framework documentation and best practices |
 | `git-history-analyzer` | haiku | Analyze git history and code evolution |
 | `repo-research-analyst` | haiku | Research repository structure and conventions |
-| `gemini-brainstorm` | haiku | Architecture brainstorming with Gemini (optional) |
 
 ### Design (3)
 
@@ -172,20 +173,6 @@ After installation, restart Claude Code. The plugin provides:
 | `git-worktree` | Manage Git worktrees for parallel development |
 | `plan-from-jira` | Create implementation plans from Jira tickets |
 | `project-ownership` | Product ownership patterns |
-
-## Gemini Integration (Optional)
-
-Gemini CLI integration is **optional and non-blocking**:
-
-- `gemini-brainstorm` agent: Architecture brainstorming on request
-- `gemini-reviewer` agent: Cross-check review findings on request
-
-**Gemini is NOT required.** All workflows work without it.
-
-```bash
-# Check if Gemini is available
-which gemini >/dev/null 2>&1 && echo "Gemini available" || echo "Gemini not installed"
-```
 
 ## MCP Servers
 

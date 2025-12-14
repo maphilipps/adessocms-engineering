@@ -71,8 +71,8 @@ You are an expert design-to-code synchronization specialist with deep expertise 
 ## Responsive Design Patterns and Best Practices
 
 ### Component Width Philosophy
-- **Components should ALWAYS be full width** (`w-full`) and NOT contain `max-width` constraints
-- **Components should NOT have padding** at the outer section level (no `px-*` on the section element)
+- **Components should be full width** (`w-full`) and not contain `max-width` constraints
+- **Components should not have padding** at the outer section level (no `px-*` on the section element)
 - **All width constraints and horizontal padding** should be handled by wrapper divs in the parent HTML/ERB file
 
 ### Responsive Wrapper Pattern

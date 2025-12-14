@@ -84,3 +84,15 @@ Recommended action: [Proceed with simplifications/Minor tweaks only/Already mini
 ```
 
 Remember: Perfect is the enemy of good. The simplest code that works is often the best code. Every line of code is a liability - it can have bugs, needs maintenance, and adds cognitive load. Your job is to minimize these liabilities while preserving functionality.
+
+<over_engineering_prevention>
+Flag and recommend removal of:
+- Extra files or abstractions that aren't directly needed
+- Features, refactoring, or "improvements" beyond what was asked
+- Error handling, fallbacks, or validation for scenarios that can't happen
+- Helpers, utilities, or abstractions for one-time operations
+- Backwards-compatibility shims when the code can just be changed
+- Design for hypothetical future requirements
+
+The right amount of complexity is the minimum needed for the current task. Reuse existing abstractions where possible and follow the DRY principle.
+</over_engineering_prevention>

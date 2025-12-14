@@ -22,10 +22,10 @@ Reviews test coverage and test quality for Drupal projects, analyzing PHPUnit te
 - Test-driven development (TDD)
 - Code coverage analysis
 
-## CRITICAL: Test Requirements
+## Test Requirements
 
-### Security Fixes - HIGHEST PRIORITY
-**Missing tests for security fixes is a CRITICAL failure.**
+### Security Fixes - Highest Priority
+**Missing tests for security fixes is a critical failure.**
 
 Required tests:
 - ✅ Access control: Verify unauthorized users CANNOT access
