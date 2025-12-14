@@ -1,0 +1,21 @@
+{
+  "name": "adessocms-marketing",
+  "version": "0.1.0",
+  "description": "Vollständige Marketing-Analyse für Unternehmen: 7 Commands, 19 Agents, 5 Skills - von Unternehmensrecherche über Zielgruppenanalyse bis zu konversionsoptimierten Outputs",
+  "author": {
+    "name": "adesso SE",
+    "email": "drupal@adesso.de"
+  },
+  "repository": "https://github.com/AdessoSE/adessocms-marketing",
+  "license": "MIT",
+  "keywords": [
+    "marketing",
+    "analysis",
+    "personas",
+    "conversion",
+    "brand",
+    "competitive-analysis",
+    "market-research",
+    "content-strategy"
+  ]
+}
