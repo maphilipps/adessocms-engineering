@@ -68,6 +68,19 @@ Reviews Drupal Paragraphs implementations for proper field template usage, SDC i
 <paragraph_field_templates>
 ## 2. Paragraph Field Templates
 
+### When to Use Field Templates
+
+**IMPORTANT**: With SDC, field templates are often NOT needed. Handle everything in the paragraph template instead.
+
+**Use field templates ONLY when:**
+- You need field-level customization that can't be done in paragraph template
+- Multiple paragraph types share the same field rendering logic
+- You're NOT using SDC for that specific field
+
+**Prefer paragraph templates when:**
+- Using SDC components (paragraph template delegates to SDC)
+- Field renders as slot content in SDC
+
 ### Template Naming Convention
 ```
 field--paragraph--{field-name}--{paragraph-type}.html.twig
@@ -75,29 +88,44 @@ field--paragraph--{field-name}.html.twig
 field--{field-name}.html.twig
 ```
 
-### Example: Hero Image Field
+### ❌ BAD: Field Template with Hardcoded Markup (SDC Duplication)
 ```twig
-{# field--paragraph--field-image--hero.html.twig #}
+{# field--paragraph--field-title--hero.html.twig #}
+{# WRONG: <h2> should be in SDC, not here! #}
 {% for item in items %}
-  <figure class="hero__figure">
-    {{ item.content }}
-    {% if item.content['#item'].alt %}
-      <figcaption class="hero__caption visually-hidden">
-        {{ item.content['#item'].alt }}
-      </figcaption>
-    {% endif %}
-  </figure>
+  <h2 class="hero__title">{{ item.content }}</h2>
 {% endfor %}
 ```
 
-### Example: Reference Field with Custom Markup
+### ✅ GOOD: Field Template Delegates to SDC
 ```twig
-{# field--paragraph--field-cta--teaser.html.twig #}
+{# field--paragraph--field-title--hero.html.twig #}
 {% for item in items %}
-  <div class="teaser__cta">
-    {{ item.content }}
-  </div>
+  {{ include('my_theme:heading', {
+    heading_html_tag: 'h2',
+    heading_utility_classes: ['hero__title'],
+    content: item.content
+  }, with_context = false) }}
 {% endfor %}
+```
+
+### ✅ BEST: No Field Template - Handle in Paragraph Template
+```twig
+{# paragraph--hero.html.twig #}
+{# SDC controls ALL markup including <h2> #}
+{% embed 'my_theme:hero' only %}
+  {% block title %}
+    {{ content.field_title }}
+  {% endblock %}
+{% endembed %}
+```
+
+With SDC handling the heading:
+```twig
+{# hero.twig (SDC) #}
+<section class="hero">
+  <h2 class="hero__title">{% block title %}{% endblock %}</h2>
+</section>
 ```
 </paragraph_field_templates>
 
@@ -268,15 +296,18 @@ Select view mode per paragraph instance in content editing.
 <h2 class="hero__title">{{ title }}</h2>
 ```
 
-### ✅ Override Field Template
+### ✅ Let SDC Handle Semantic HTML
 ```twig
-{# field--paragraph--field-title--hero.html.twig #}
-{% for item in items %}
-  <h2 class="hero__title">{{ item.content }}</h2>
-{% endfor %}
-
 {# paragraph--hero.html.twig #}
-{{ content.field_title }}
+{# SDC controls the <h2>, not the template #}
+{% embed 'my_theme:hero' only %}
+  {% block title %}
+    {{ content.field_title }}
+  {% endblock %}
+{% endembed %}
+
+{# hero.twig (SDC) #}
+<h2 class="hero__title">{% block title %}{% endblock %}</h2>
 ```
 
 ---
@@ -328,7 +359,8 @@ function my_theme_preprocess_paragraph__hero(&$variables) {
 - [ ] No `.value` access in templates
 - [ ] No render array destructuring
 - [ ] Fields rendered via `{{ content.field_name }}`
-- [ ] Field templates created for custom markup
+- [ ] Semantic HTML (`<h2>`, `<figure>`, etc.) in SDC, NOT field templates
+- [ ] Field templates delegate to SDC (if used at all)
 
 ### SDC Integration
 - [ ] Uses `{% embed %}` for slot-based components

@@ -1,5 +1,55 @@
 # Changelog
 
+## [1.10.1] - 2025-12-14
+
+### Fixed - SDC Documentation Accuracy
+
+**Corrected SDC patterns based on official Drupal.org documentation research.**
+
+### Fixed
+
+- **`paragraphs-best-practices-reviewer`**: Corrected field template patterns
+  - Field templates should delegate to SDC, not duplicate markup
+  - Added "When to Use Field Templates" guidance
+  - Showed correct pattern: SDC controls `<h2>`, not field template
+  - Added "No Field Template - Handle in Paragraph Template" as BEST approach
+
+- **`sdc-best-practices-reviewer`**: Added heading component pattern
+  - New section: "6. Heading Component Pattern"
+  - Shows `heading_html_tag` prop pattern for semantic heading levels
+  - Added `only` keyword guidance for embed
+  - Updated checklist: "Semantic HTML only in SDC, NOT Drupal templates"
+
+- **`drupal-theme-reviewer`**: Fixed prop drilling anti-pattern in examples
+  - Changed `image.url`/`image.alt` props → `image` slot
+  - Added `heading_html_tag` prop to card example
+  - Added "Using the Component" section with embed + only pattern
+
+- **`twig-template-reviewer`**: Updated SDC examples
+  - Added Props vs Slots distinction in component docblock
+  - Added Key SDC Principles section
+  - Updated component.yml with proper slots
+
+### Key Corrections
+
+1. **Semantic HTML Ownership**: `<h1>`-`<h6>`, `<figure>`, `<blockquote>` etc. should ONLY exist in SDC components, never in Drupal templates or field templates
+
+2. **Prop Drilling Anti-Pattern**: Image URL/alt as separate props is wrong - use slot for rendered field that preserves cache metadata
+
+3. **embed with only**: Always use `{% embed 'theme:component' with {...} only %}` to prevent context leaking
+
+4. **Field Templates with SDC**: If using SDC, field templates should either:
+   - Delegate to SDC component (call include/embed)
+   - Or not be used at all (handle in paragraph template)
+
+### Sources
+
+- [Drupal.org SDC Documentation](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components)
+- [Props and Slots Guide](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components/what-are-props-and-slots-in-drupal-sdc-theming)
+- [ChromaticHQ SDC + Paragraphs](https://chromatichq.com/insights/dynamic-duo-sdc-paragraphs/)
+
+---
+
 ## [1.10.0] - 2025-12-14
 
 ### Removed - Gemini Integration

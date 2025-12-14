@@ -151,36 +151,30 @@ props:
       type: string
       title: Title
       description: Card title text
-    content:
+    heading_html_tag:
       type: string
-      title: Content
-      description: Card body content
-    image:
-      type: object
-      title: Image
-      properties:
-        url:
-          type: string
-        alt:
-          type: string
+      title: Heading Level
+      description: Semantic heading level
+      enum: [h2, h3, h4, h5, h6]
+      default: h3
     variant:
       type: string
       title: Variant
-      enum:
-        - default
-        - highlight
-        - compact
+      enum: [default, highlight, compact]
       default: default
-    link:
-      type: object
-      title: Link
-      properties:
-        url:
-          type: string
-        text:
-          type: string
+    link_url:
+      type: string
+      title: Link URL
+      description: CTA link URL
+    link_text:
+      type: string
+      title: Link Text
+      description: CTA link text
 
 slots:
+  image:
+    title: Image
+    description: Rendered image (preserves cache metadata)
   content:
     title: Content Slot
     description: Override default content area
@@ -193,17 +187,20 @@ slots:
   'card',
   variant ? 'card--' ~ variant : 'card--default',
 ] %}
+{% set tag = heading_html_tag|default('h3') %}
 
 <article {{ attributes.addClass(classes) }}>
-  {% if image.url %}
+  {# Image as SLOT - preserves cache metadata #}
+  {% if image %}
     <div class="card__image">
-      <img src="{{ image.url }}" alt="{{ image.alt|default('') }}" loading="lazy">
+      {{ image }}
     </div>
   {% endif %}
 
   <div class="card__body">
+    {# Heading level as PROP - SDC controls the HTML tag #}
     {% if title %}
-      <h3 class="card__title">{{ title }}</h3>
+      <{{ tag }} class="card__title">{{ title }}</{{ tag }}>
     {% endif %}
 
     {% block content %}
@@ -212,13 +209,32 @@ slots:
       {% endif %}
     {% endblock %}
 
-    {% if link.url %}
-      <a href="{{ link.url }}" class="card__link">
-        {{ link.text|default('Read more'|t) }}
+    {% if link_url %}
+      <a href="{{ link_url }}" class="card__link">
+        {{ link_text|default('Read more'|t) }}
       </a>
     {% endif %}
   </div>
 </article>
+```
+
+#### Using the Component (from paragraph template)
+```twig
+{# paragraph--card.html.twig #}
+{% embed 'adesso_cms_theme:card' with {
+  title: content.field_title|render|striptags|trim,
+  heading_html_tag: 'h3',
+  variant: content.field_variant|render|trim,
+  link_url: content.field_link.0['#url']|render,
+  link_text: content.field_link.0['#title'],
+} only %}
+  {% block image %}
+    {{ content.field_image }}
+  {% endblock %}
+  {% block content %}
+    {{ content.field_body }}
+  {% endblock %}
+{% endembed %}
 ```
 
 ## Common Issues & Solutions

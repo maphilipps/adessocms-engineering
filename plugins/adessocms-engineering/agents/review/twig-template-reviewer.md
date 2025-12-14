@@ -123,19 +123,25 @@ Reviews Twig templates for Drupal themes, ensuring security, performance, access
  * @file
  * Component: Card
  *
- * Available variables:
- * - title: Card title
+ * Props (structured data):
+ * - title: Card title (string)
+ * - heading_html_tag: Heading level h2-h6 (string, default: h3)
+ * - variant: Card style variant (string)
+ *
+ * Slots (render arrays/HTML):
+ * - image: Rendered image element
  * - content: Card body content
- * - image: Card image
- * - link: CTA link
+ * - link: CTA link element
  */
 #}
 {% set classes = [
   'card',
   variant ? 'card--' ~ variant,
 ] %}
+{% set tag = heading_html_tag|default('h3') %}
 
 <article{{ attributes.addClass(classes) }}>
+  {# SLOT: Image render array preserves cache metadata #}
   {% if image %}
     <div class="card__image">
       {{ image }}
@@ -144,18 +150,26 @@ Reviews Twig templates for Drupal themes, ensuring security, performance, access
 
   {% block content %}
     <div class="card__content">
+      {# PROP: Heading level - SDC controls the HTML tag #}
       {% if title %}
-        <h3 class="card__title">{{ title }}</h3>
+        <{{ tag }} class="card__title">{{ title }}</{{ tag }}>
       {% endif %}
       {{ content }}
     </div>
   {% endblock %}
 
+  {# SLOT: Link render array #}
   {% if link %}
     {{ link }}
   {% endif %}
 </article>
 ```
+
+### Key SDC Principles
+1. **Props for primitives** (strings, numbers, booleans, enums)
+2. **Slots for render arrays** (fields, nested components, HTML)
+3. **Semantic HTML only in SDC** - never in Drupal templates
+4. **Use `only` or `with_context = false`** - prevent context leaking
 
 ### Component Props (component.yml)
 ```yaml
@@ -168,20 +182,26 @@ props:
     title:
       type: string
       title: Title
-    content:
+    heading_html_tag:
       type: string
-      title: Content
+      title: Heading Level
+      enum: [h2, h3, h4, h5, h6]
+      default: h3
     variant:
       type: string
       title: Variant
-      enum:
-        - default
-        - highlight
-        - compact
+      enum: [default, highlight, compact]
+      default: default
 slots:
+  image:
+    title: Image
+    description: Rendered image element (preserves cache metadata)
   content:
     title: Content
     description: Main card content
+  link:
+    title: Link
+    description: CTA link element
 ```
 
 ## Template Debugging

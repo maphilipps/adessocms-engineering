@@ -211,7 +211,7 @@ return [
 ];
 ```
 
-### Using SDC from Twig (include)
+### Using SDC from Twig (include) - Props Only
 ```twig
 {# Use with_context = false to avoid variable leaking #}
 {{ include('my_theme:button', {
@@ -220,18 +220,105 @@ return [
 }, with_context = false) }}
 ```
 
-### Using SDC from Twig (embed for slots)
+### Using SDC from Twig (include) - With Slot as Variable
 ```twig
+{# Slots can be passed as variables with include #}
+{{ include('my_theme:heading', {
+  heading_html_tag: 'h2',
+  heading_utility_classes: ['hero__title'],
+  content: content.field_title
+}, with_context = false) }}
+```
+
+### Using SDC from Twig (embed for block slots)
+```twig
+{# Use embed when you need Twig blocks to populate slots #}
+{# IMPORTANT: Use 'only' to prevent context leaking #}
 {% embed 'my_theme:card' with {
-  title: node.label,
   variant: 'default',
-} %}
+} only %}
+  {% block media %}
+    {{ content.field_image }}
+  {% endblock %}
   {% block content %}
     {{ content.body }}
   {% endblock %}
 {% endembed %}
 ```
+
+### Accessing Parent Variables in embed with 'only'
+```twig
+{# Pass needed variables explicitly when using 'only' #}
+{% embed 'my_theme:hero' with {
+  layout: 'centered',
+  _content: content
+} only %}
+  {% block title %}
+    {{ _content.field_title }}
+  {% endblock %}
+{% endembed %}
+```
 </integration_patterns>
+
+<heading_component_pattern>
+## 6. Heading Component Pattern
+
+### The Heading Level Prop Pattern
+
+For semantic headings where the level needs to be dynamic:
+
+**Component Schema (heading.component.yml):**
+```yaml
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Heading
+props:
+  type: object
+  properties:
+    heading_html_tag:
+      type: string
+      title: HTML tag
+      description: Semantic heading level
+      default: h2
+      enum: [h1, h2, h3, h4, h5, h6]
+    heading_utility_classes:
+      type: array
+      title: Utility classes
+      items:
+        type: string
+slots:
+  content:
+    title: Heading content
+    required: true
+```
+
+**Component Template (heading.twig):**
+```twig
+{% set tag = heading_html_tag|default('h2') %}
+{% set classes = heading_utility_classes|default([]) %}
+<{{ tag }}{{ attributes.addClass(classes) }}>
+  {{ content }}
+</{{ tag }}>
+```
+
+### ❌ BAD: Heading Markup in Drupal Template
+```twig
+{# paragraph--hero.html.twig #}
+<h2 class="hero__title">{{ content.field_title }}</h2>
+```
+
+### ✅ GOOD: SDC Controls Heading Markup
+```twig
+{# paragraph--hero.html.twig #}
+{{ include('my_theme:heading', {
+  heading_html_tag: 'h2',
+  heading_utility_classes: ['hero__title'],
+  content: content.field_title
+}, with_context = false) }}
+```
+
+### Key Principle
+**Semantic HTML tags (`<h1>`-`<h6>`, `<figure>`, `<blockquote>`, etc.) should ONLY exist in SDC components, NOT in Drupal templates or field templates.**
+</heading_component_pattern>
 
 </review_focus_areas>
 
@@ -329,7 +416,9 @@ slots:
 - [ ] Sets defaults for mandatory props
 - [ ] Never destructures render arrays
 - [ ] Uses `with_context = false` for includes
-- [ ] Uses `{% embed %}` when overriding slot blocks
+- [ ] Uses `{% embed %}` with `only` when overriding slot blocks
+- [ ] Semantic HTML (`<h1>`-`<h6>`, `<figure>`, etc.) in SDC, NOT Drupal templates
+- [ ] Heading level passed as prop (e.g., `heading_html_tag: 'h2'`)
 
 ### Integration
 - [ ] PHP integration uses `#type => 'component'` render element
