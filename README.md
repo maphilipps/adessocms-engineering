@@ -59,6 +59,34 @@ Based on [compound-engineering](https://github.com/EveryInc/compound-engineering
 - Node.js 20+ (for MCP servers)
 - DDEV (recommended)
 
+## Marketplace Management
+
+### Creating New Plugins
+
+For detailed instructions on creating and registering new plugins in this marketplace:
+
+- **Quick Start:** See [New Plugin Creation Checklist](docs/new-plugin-creation-checklist.md)
+- **Prevention Strategies:** See [Prevention Strategies Guide](docs/prevention-strategies-marketplace-registration.md)
+- **Summary:** See [Prevention Summary](docs/PREVENTION-SUMMARY.md)
+
+### Plugin Validation
+
+This marketplace includes automated validation to ensure all plugins are properly registered:
+
+```bash
+# Validate plugin registration
+./scripts/validate-marketplace.sh
+```
+
+The validation script checks:
+- All plugin directories are registered in marketplace.json
+- All marketplace.json entries have corresponding directories
+- Plugin metadata files exist and are valid
+- Plugin names are consistent across all files
+- No duplicate entries
+
+A pre-commit hook also prevents commits with unregistered plugins.
+
 ## Documentation
 
 See [plugins/adessocms-engineering/README.md](plugins/adessocms-engineering/README.md) for full documentation.
