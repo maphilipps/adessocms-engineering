@@ -42,6 +42,13 @@ Run ALL relevant agents **in parallel** with **model="sonnet"**:
 Task(subagent_type="adessocms-engineering:review:drupal-reviewer", model="sonnet", prompt="Review PR: {pr_context}")
 Task(subagent_type="adessocms-engineering:review:dries-drupal-reviewer", model="sonnet", prompt="Review PR: {pr_title}")
 
+# SDC & Paragraphs (if component changes)
+Task(subagent_type="adessocms-engineering:review:sdc-best-practices-reviewer", model="sonnet", prompt="Review SDC: {changes}")
+Task(subagent_type="adessocms-engineering:review:paragraphs-best-practices-reviewer", model="sonnet", prompt="Review Paragraphs: {changes}")
+
+# DRY & Component Reuse (ALWAYS for frontend)
+Task(subagent_type="adessocms-engineering:review:dry-component-reuse-reviewer", model="sonnet", prompt="Review DRY: {changes}")
+
 # Frontend (if Twig/CSS/JS changes)
 Task(subagent_type="adessocms-engineering:review:twig-template-reviewer", model="sonnet", prompt="Review: {changes}")
 Task(subagent_type="adessocms-engineering:review:tailwind-reviewer", model="sonnet", prompt="Review: {changes}")
@@ -74,8 +81,10 @@ Task(subagent_type="adessocms-engineering:research:git-history-analyzer", model=
 | Change Type | Required Agents |
 |-------------|-----------------|
 | PHP/Module | drupal-reviewer, dries, security, test-coverage |
-| Twig/Theme | twig-template, drupal-theme, accessibility |
-| CSS/Tailwind | tailwind-reviewer, accessibility |
+| Twig/Theme | twig-template, drupal-theme, accessibility, dry-component-reuse |
+| SDC Components | sdc-best-practices, dry-component-reuse, storybook |
+| Paragraphs | paragraphs-best-practices, sdc-best-practices |
+| CSS/Tailwind | tailwind-reviewer, accessibility, dry-component-reuse |
 | JS/Alpine | storybook-reviewer (if applicable) |
 | composer.json | composer-dependency-reviewer |
 | Database/Entity | data-integrity-guardian |

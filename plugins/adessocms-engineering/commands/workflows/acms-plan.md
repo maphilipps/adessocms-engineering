@@ -28,6 +28,27 @@ First, understand what's being asked:
 - Are there external systems or integrations?
 - What files/modules need to be modified?
 
+### 1b. DRY Analysis (ALWAYS)
+
+**Before designing new components or abstractions, search for existing solutions:**
+
+```bash
+# Find existing SDC components
+find web/themes/custom -name "*.component.yml" -exec basename {} .component.yml \;
+
+# Search by keyword
+grep -rl "button\|heading\|card" web/themes/custom/*/components/
+
+# Check component usage
+grep -r "include('my_theme:" web/themes/custom/*/templates/
+```
+
+**DRY Questions:**
+- Does an existing component handle this? → Use it, add variant if needed
+- Can we extend an existing pattern? → Prefer variants over new components
+- Will this be used 3+ times? → Only then consider new abstraction
+- Is there duplicate code that should be extracted? → Note for refactoring
+
 ### 2. Get Gemini Architecture Draft (REQUIRED)
 
 **Before any implementation planning, get Gemini's architecture perspective:**
@@ -119,6 +140,20 @@ feature: [Short feature name]
 
 ## Technical Approach
 [How we will implement this - based on Gemini draft + research findings]
+
+## Component Reuse Analysis (DRY)
+
+### Existing Components to Leverage
+- `my_theme:button` - [usage notes]
+- `my_theme:heading` - [add variant if needed]
+- `my_theme:card` - [base for new cards]
+
+### New Components Required (with justification)
+- `my_theme:feature-icon` - [why existing components insufficient, 3+ uses expected]
+
+### Variants to Add to Existing Components
+- `heading`: 'feature' variant - [description]
+- `button`: 'outline' variant - [description]
 
 ## Implementation Steps
 

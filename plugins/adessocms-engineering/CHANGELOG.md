@@ -1,5 +1,101 @@
 # Changelog
 
+## [1.9.0] - 2025-12-14
+
+### Added - SDC, Paragraphs, and DRY Review Agents
+
+**3 new specialized review agents for frontend best practices.**
+
+### New Agents
+
+- **`sdc-best-practices-reviewer`** - Reviews Single Directory Components
+  - Props vs Slots design decisions
+  - component.yml schema validation
+  - JSON Schema best practices
+  - Cache-safe integration patterns
+  - Component replacement requirements
+
+- **`paragraphs-best-practices-reviewer`** - Reviews Paragraphs implementations
+  - Field template overrides vs `.value` access (CRITICAL)
+  - SDC integration with `{% embed %}` / `{% include %}`
+  - Cache metadata preservation
+  - Preprocess function usage
+  - Paragraph View Modes
+
+- **`dry-component-reuse-reviewer`** - Reviews DRY principle adherence
+  - Component reuse analysis
+  - Atomic Design violations
+  - CSS/Tailwind duplication
+  - PHP preprocess duplication
+  - "3 occurrences before abstraction" rule
+
+### Changed
+
+- **`/acms-review`**: Added 3 new agents to review workflow
+  - SDC Components → sdc-best-practices, dry-component-reuse, storybook
+  - Paragraphs → paragraphs-best-practices, sdc-best-practices
+  - All frontend → dry-component-reuse (DRY always checked)
+
+- **`/acms-plan`**: Added DRY Analysis section
+  - Step 1b: Search existing components before designing new
+  - "Component Reuse Analysis" section in plan template
+  - DRY questions checklist
+
+### Why These Agents
+
+**SDC Best Practices**: Props vs Slots is a critical design decision that affects caching, maintainability, and composition. This reviewer ensures components follow Drupal's SDC patterns.
+
+**Paragraphs Best Practices**: The `.value` anti-pattern breaks Drupal's render caching. This reviewer enforces field template overrides and proper render array handling.
+
+**DRY Component Reuse**: Before creating new components, always check if existing ones can be extended. This reviewer prevents unnecessary duplication and enforces atomic design principles.
+
+### Sources
+
+- [Drupal SDC Documentation](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components)
+- [UI Patterns Best Practices](https://project.pages.drupalcode.org/ui_patterns/2-authors/2-best-practices)
+- [Paragraphs + SDC Integration](https://chromatichq.com/insights/dynamic-duo-sdc-paragraphs/)
+- [Claude Opus 4.5 Migration Skill](https://github.com/claude-code-plugins) - Prompt engineering patterns
+
+---
+
+## [1.8.4] - 2025-12-12
+
+### Changed - Restore 3 Claude Agents, Gemini Optional, Playwright MCP
+
+**`/acms-plan` now uses 3 parallel Claude agents as primary research, with Gemini as optional.**
+
+This reverts the v1.8.3 change that made Gemini required.
+
+### Changed
+
+- **`/acms-plan` workflow**: Restored 3 parallel Claude agents as Step 2
+  - `repo-research-analyst` - Analyzes codebase for patterns
+  - `best-practices-researcher` - Finds Drupal best practices
+  - `framework-docs-researcher` - Gathers framework documentation
+- **Gemini moved to Step 2b (Optional)**
+  - Use for complex architectural decisions
+  - Non-blocking if unavailable
+- **Plan template updated**:
+  - "Research Findings" section with 3 agent subsections
+  - "Gemini Architecture Draft" marked as optional
+
+### Added
+
+- **Playwright MCP server** re-added for browser automation
+  - Now 2 MCP servers: Playwright + Context7
+  - Complements dev-browser skill for different use cases
+
+### Why This Change
+
+1. Not everyone has Gemini CLI installed
+2. 3 parallel Claude agents provide comprehensive multi-perspective research
+3. Gemini adds latency (external API call)
+4. Multi-agent synthesis often better than single-AI perspective
+5. Gemini remains available as enhancement for complex decisions
+6. Playwright MCP provides additional browser automation capabilities
+
+---
+
 ## [1.8.3] - 2025-12-12
 
 ### Changed - Gemini as Primary Architecture Source

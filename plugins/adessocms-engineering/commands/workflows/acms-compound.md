@@ -201,6 +201,18 @@ Based on problem type, these agents can enhance documentation:
 - **Auto-triggered** (optional): Agents can run post-documentation for enhancement
 - **Manual trigger**: User can invoke agents after /compound completes for deeper review
 
+## Maintenance Tasks
+
+When documenting solutions that involve **new components**, update these files:
+
+| New Component Type | Update These Files |
+|-------------------|-------------------|
+| New SDC Atom/Molecule/Organism | `agents/review/dry-component-reuse-reviewer.md` - Add to component tables |
+| New Paragraph Type | `agents/review/paragraphs-best-practices-reviewer.md` - Add patterns |
+| New Drupal Pattern | `agents/review/drupal-reviewer.md` - Document pattern |
+
+This ensures the DRY reviewer knows about all available components for future reviews.
+
 ## Related Commands
 
 - `/research [topic]` - Deep investigation (searches docs/solutions/ for patterns)

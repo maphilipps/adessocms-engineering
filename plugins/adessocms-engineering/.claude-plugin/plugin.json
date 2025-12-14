@@ -1,7 +1,7 @@
 {
   "name": "adessocms-engineering",
-  "version": "1.8.3",
-  "description": "AI-powered Drupal development tools. 28 agents, 21 commands, 16 skills, 1 MCP server. Requires dev-browser skill (install separately).",
+  "version": "1.9.0",
+  "description": "AI-powered Drupal development tools. 31 agents, 21 commands, 16 skills, 2 MCP servers (Playwright, Context7).",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",
@@ -27,6 +27,12 @@
     "browser-automation"
   ],
   "mcpServers": {
+    "pw": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
