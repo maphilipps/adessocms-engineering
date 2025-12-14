@@ -38,7 +38,7 @@ After installation, restart Claude Code. The plugin provides:
 
 - **29 Agents** - Available via `@agent-name` in conversations
 - **21 Commands** - Available via `/command-name`
-- **16 Skills** - Available via `Skill` tool
+- **17 Skills** - Available via `Skill` tool
 - **1 MCP Server** - Context7 (auto-started)
 
 **Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
@@ -49,7 +49,7 @@ After installation, restart Claude Code. The plugin provides:
 |-----------|-------|
 | Agents | 29 |
 | Commands | 21 |
-| Skills | 16 |
+| Skills | 17 |
 | MCP Servers | 2 |
 
 ## Model Tier Strategy
@@ -173,6 +173,7 @@ After installation, restart Claude Code. The plugin provides:
 | `git-worktree` | Manage Git worktrees for parallel development |
 | `plan-from-jira` | Create implementation plans from Jira tickets |
 | `project-ownership` | Product ownership patterns |
+| `landing-page-optimizer` | Plan and optimize landing pages for conversion (AIDA framework) |
 
 ## MCP Servers
 

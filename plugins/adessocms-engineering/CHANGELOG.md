@@ -1,5 +1,38 @@
 # Changelog
 
+## [1.11.0] - 2025-12-14
+
+### Added - Landing Page Optimizer Skill
+
+**New skill for planning and optimizing landing pages in Drupal/adesso CMS.**
+
+### Added
+
+- **`landing-page-optimizer` skill** - Plan and build high-converting landing pages
+  - AIDA framework (Attention → Interest → Desire → Action) for page structure
+  - Page type detection: Homepage, Service, Product, Category
+  - B2B/B2C audience analysis
+  - adesso CMS paragraph type mapping (hero, card_group, sidebyside, statistic, etc.)
+  - Conversion checklist for optimization
+  - Reference files:
+    - `references/adesso-cms-components.md` - Paragraph types and field mappings
+    - `references/section-templates.md` - Detailed section templates
+    - `references/conversion-patterns.md` - Proven conversion patterns
+
+### Use Cases
+
+- Creating new landing pages from scratch
+- Analyzing and optimizing existing pages
+- Planning content structure for sales pages
+- Building homepage or category layouts
+
+### Skill Count
+
+- Before: 16 skills
+- After: 17 skills (+1 landing-page-optimizer)
+
+---
+
 ## [1.10.1] - 2025-12-14
 
 ### Fixed - SDC Documentation Accuracy
