@@ -66,7 +66,34 @@ This command takes a work document (plan file or task description) and executes 
 
 ### Phase 2: Execute
 
-1. **Task Execution Loop**
+1. **Consult Specialists for Complex Tasks**
+
+   **Before implementing complex functionality**, get guidance from specialists:
+
+   ```
+   # For Drupal module/service implementation:
+   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist",
+        model="sonnet",
+        prompt="How should I implement: {task description}? Provide correct patterns.")
+
+   # For SDC components:
+   Task(subagent_type="adessocms-engineering:specialists:sdc-specialist",
+        model="sonnet",
+        prompt="How should I build this component: {component description}?")
+
+   # For security-sensitive code:
+   Task(subagent_type="adessocms-engineering:specialists:security-sentinel",
+        model="sonnet",
+        prompt="What security patterns should I follow for: {task}?")
+   ```
+
+   **When to consult specialists:**
+   - Unsure about correct API usage
+   - Implementing new patterns not in codebase
+   - Security-sensitive functionality
+   - Complex Drupal integrations
+
+2. **Task Execution Loop**
 
    For each task in priority order:
 
@@ -74,14 +101,15 @@ This command takes a work document (plan file or task description) and executes 
    while (tasks remain):
      - Mark task as in_progress in TodoWrite
      - Read any referenced files from the plan
+     - Consult specialist if needed (see above)
      - Look for similar patterns in codebase
-     - Implement following existing conventions
+     - Implement following specialist guidance + existing conventions
      - Write tests for new functionality
      - Run tests after changes
      - Mark task as completed in TodoWrite
    ```
 
-2. **Follow Existing Patterns**
+4. **Follow Existing Patterns**
 
    - The plan should reference similar code - read those files first
    - Match naming conventions exactly
@@ -89,14 +117,14 @@ This command takes a work document (plan file or task description) and executes 
    - Follow project coding standards (see CLAUDE.md)
    - When in doubt, grep for similar implementations
 
-3. **Test Continuously**
+5. **Test Continuously**
 
    - Run relevant tests after each significant change
    - Don't wait until the end to test
    - Fix failures immediately
    - Add new tests for new functionality
 
-4. **Figma Design Sync** (if applicable)
+6. **Figma Design Sync** (if applicable)
 
    For UI work with Figma designs:
 
@@ -124,22 +152,22 @@ This command takes a work document (plan file or task description) and executes 
    ddev theme lint:css             # CSS/Tailwind linting
    ```
 
-2. **Use Reviewer Agents for Complex Changes** (Optional)
+2. **Use Specialists for Code Review** (Optional)
 
    **Only for complex, risky, or large changes.** Run in parallel with correct models:
 
    ```
    # For Drupal code changes:
-   Task(subagent_type="adessocms-engineering:review:drupal-reviewer", model="sonnet", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:review:security-sentinel", model="sonnet", prompt="Security scan: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", model="sonnet", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:security-sentinel", model="sonnet", prompt="Security scan: {changes}")
 
    # For frontend changes:
-   Task(subagent_type="adessocms-engineering:review:twig-template-reviewer", model="sonnet", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:review:tailwind-reviewer", model="sonnet", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:review:accessibility-reviewer", model="sonnet", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:twig-specialist", model="sonnet", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", model="sonnet", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", model="sonnet", prompt="Review: {changes}")
 
    # For architecture concerns:
-   Task(subagent_type="adessocms-engineering:review:architecture-strategist", model="sonnet", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", model="sonnet", prompt="Review: {changes}")
    ```
 
 3. **Final Validation**
@@ -261,9 +289,19 @@ Before creating PR, verify:
 - [ ] Commit messages follow conventional format
 - [ ] PR description includes summary and testing notes
 
-## When to Use Reviewer Agents
+## When to Use Specialists
 
-**Don't use by default.** Use reviewer agents only when:
+### For Implementation Guidance (RECOMMENDED)
+
+Use specialists **before** implementing complex functionality:
+- Drupal API patterns → `drupal-specialist`
+- SDC component design → `sdc-specialist`
+- Security patterns → `security-sentinel`
+- Accessibility compliance → `accessibility-specialist`
+
+### For Code Review (OPTIONAL)
+
+**Don't review by default.** Use specialists for review only when:
 
 - Large refactor affecting many files (10+)
 - Security-sensitive changes (authentication, permissions, data access)
@@ -279,9 +317,9 @@ For most features: **tests + linting + following patterns is sufficient.**
 
 | Agent Type | Model | Reason |
 |------------|-------|--------|
+| Implementation guidance | sonnet | Complex patterns need good reasoning |
+| Code review | sonnet | Standard reviews |
 | Research agents | sonnet | Fast, sufficient for research |
-| Review agents | sonnet | Standard reviews |
-| Security/Performance | sonnet | Deep analysis but sonnet is capable |
 | Simple tasks | haiku | Fast, cheap |
 
 **NEVER use opus for agents unless explicitly required for complex reasoning.**
@@ -294,5 +332,6 @@ For most features: **tests + linting + following patterns is sufficient.**
 - **Testing at the end** - Test continuously or suffer later
 - **Forgetting TodoWrite** - Track progress or lose track of what's done
 - **80% done syndrome** - Finish the feature, don't move on early
-- **Over-reviewing simple changes** - Save reviewer agents for complex work
+- **Over-reviewing simple changes** - Save specialists for complex work
+- **Not consulting specialists** - Ask for guidance before implementing complex patterns
 - **Using opus everywhere** - Use appropriate model tiers

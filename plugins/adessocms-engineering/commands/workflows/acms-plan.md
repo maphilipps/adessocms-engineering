@@ -49,7 +49,28 @@ grep -r "include('my_theme:" web/themes/custom/*/templates/
 - Will this be used 3+ times? → Only then consider new abstraction
 - Is there duplicate code that should be extracted? → Note for refactoring
 
-### 2. Use Appropriate Research Tools
+### 2. Consult Specialists for Guidance
+
+**For complex tasks, consult the relevant specialists to get correct patterns BEFORE implementing:**
+
+| Task Type | Specialist | Usage |
+|-----------|------------|-------|
+| Drupal modules/services | `drupal-specialist` | API patterns, DI, caching |
+| SDC components | `sdc-specialist` | Props vs slots, schemas |
+| Twig templates | `twig-specialist` | Attributes, translations |
+| Tailwind styling | `tailwind-specialist` | v4 syntax, responsive |
+| Accessibility | `accessibility-specialist` | WCAG compliance |
+| Security-sensitive | `security-sentinel` | Auth, input handling |
+| Paragraphs | `paragraphs-specialist` | Field templates, SDC integration |
+
+```
+# Example: Get guidance before implementing
+Task(subagent_type="adessocms-engineering:specialists:sdc-specialist",
+     model="sonnet",
+     prompt="How should I implement a card component with image slot and variant prop?")
+```
+
+### 3. Use Research Tools
 
 **For web-based research (analyzing live websites, comparing designs, extracting HTML/CSS):**
 
@@ -73,7 +94,7 @@ The dev-browser skill provides browser automation for:
 - Use Context7 MCP for up-to-date Drupal docs
 - Check contrib module documentation
 
-### 3. Create the Plan
+### 4. Create the Plan
 
 Write a comprehensive plan to `plans/<slug>.md` with this structure:
 
@@ -98,6 +119,13 @@ feature: [Short feature name]
 
 ## Technical Approach
 [How we will implement this - based on research findings]
+
+## Specialist Guidance Required
+[Which specialists should be consulted during implementation]
+
+| Phase | Specialist | Purpose |
+|-------|------------|---------|
+| [Phase] | [specialist-name] | [Why needed] |
 
 ## Component Reuse Analysis (DRY)
 
@@ -135,7 +163,7 @@ feature: [Short feature name]
 - [Relevant links]
 ```
 
-### 4. Open in Typora
+### 5. Open in Typora
 
 After writing the plan:
 

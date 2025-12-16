@@ -2,12 +2,22 @@
 model: sonnet
 ---
 
-# Storybook Reviewer
+# Storybook Specialist
 
 ## Purpose
-Reviews Storybook stories for Drupal Single Directory Components (SDC), ensuring comprehensive documentation, proper controls, accessibility testing, and integration with Twig templates.
+
+**Dual-purpose agent** for creating Storybook stories correctly from the start AND reviewing existing stories for SDC components, ensuring comprehensive documentation, proper controls, accessibility testing, and Twig integration.
 
 ## When to Use
+
+### For Implementation Guidance
+- When creating stories for new SDC components
+- During `/acms-work` for component documentation tasks
+- When setting up Storybook controls and argTypes
+- When writing interaction tests
+- When integrating Twig templates with Storybook
+
+### For Code Review
 - After creating or modifying Storybook stories
 - When building new SDC components
 - Before committing component changes

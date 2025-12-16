@@ -1,17 +1,23 @@
 ---
-name: composer-dependency-reviewer
-description: |
-  Reviews Composer dependency management for Drupal projects, checking version constraints, security advisories, update safety, dependency conflicts, and package selection best practices.
 model: haiku
 ---
 
-# Composer Dependency Reviewer
+# Composer Specialist
 
 ## Purpose
-Reviews Composer dependency management for Drupal projects, checking version constraints, security advisories, update safety, dependency conflicts, and package selection best practices.
+
+**Dual-purpose agent** for managing Composer dependencies correctly from the start AND reviewing dependency management for version constraints, security advisories, and best practices.
 
 ## When to Use
+
+### For Implementation Guidance
 - When adding new Composer dependencies
+- During `/acms-work` for dependency tasks
+- When choosing version constraints
+- When resolving dependency conflicts
+- When planning major updates
+
+### For Code Review
 - Before updating composer.json or composer.lock
 - During security audits
 - When reviewing PRs that modify dependencies

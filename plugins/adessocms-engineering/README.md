@@ -62,34 +62,38 @@ After installation, restart Claude Code. The plugin provides:
 | **sonnet** | Standard reviews, external research | 17 agents |
 | **haiku** | Local research, simple tasks | 4 agents |
 
-**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `dries-drupal-reviewer`, `pattern-recognition-specialist`, `acms-bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
+**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `dries-drupal-specialist`, `pattern-recognition-specialist`, `acms-bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
 
-**Haiku:** `acms-lint`, `composer-dependency-reviewer`, `git-history-analyzer`, `repo-research-analyst`
+**Haiku:** `acms-lint`, `composer-specialist`, `git-history-analyzer`, `repo-research-analyst`
 
 ## Agents
 
-### Review (18)
+### Specialists (18) - Dual-Purpose Agents
+
+**Specialists provide both implementation guidance AND code review.** Use them:
+- **Before implementing**: Get correct patterns with `Task(subagent_type="...:specialists:drupal-specialist", prompt="How should I implement X?")`
+- **After implementing**: Review code with `Task(subagent_type="...:specialists:drupal-specialist", prompt="Review: {changes}")`
 
 | Agent | Model | Description |
 |-------|-------|-------------|
-| `drupal-reviewer` | sonnet | Drupal coding standards, API usage, and best practices |
-| `dries-drupal-reviewer` | - | Brutally honest Drupal review from Dries Buytaert's perspective |
-| `twig-template-reviewer` | sonnet | Twig templates, security, Drupal patterns, SDC |
-| `drupal-theme-reviewer` | sonnet | Theme implementations, SDC, preprocess functions, libraries |
-| `tailwind-reviewer` | sonnet | Tailwind CSS v4 syntax, Vite integration, Drupal theming |
-| `storybook-reviewer` | sonnet | Storybook stories, SDC integration, interaction tests |
-| `accessibility-reviewer` | sonnet | WCAG 2.1 Level AA, ARIA, semantic HTML, keyboard nav |
-| `composer-dependency-reviewer` | haiku | Composer dependencies, security, Drupal contrib |
-| `test-coverage-reviewer` | sonnet | PHPUnit, Kernel, Functional, Playwright, Vitest coverage |
-| `architecture-strategist` | - | Analyze architectural decisions and compliance |
-| `code-simplicity-reviewer` | sonnet | Final pass for simplicity and minimalism |
+| `drupal-specialist` | sonnet | Drupal coding standards, API usage, DI patterns, Entity Query |
+| `dries-drupal-specialist` | - | The Drupal Way - philosophy, contrib vs custom decisions |
+| `twig-specialist` | sonnet | Twig templates, security, SDC embed patterns, attributes |
+| `drupal-theme-specialist` | sonnet | Theme implementations, SDC, preprocess functions, libraries |
+| `tailwind-specialist` | sonnet | Tailwind CSS v4 syntax, @theme, responsive patterns |
+| `storybook-specialist` | sonnet | Storybook stories, SDC integration, interaction tests |
+| `accessibility-specialist` | sonnet | WCAG 2.1 Level AA, ARIA, semantic HTML, keyboard nav |
+| `composer-specialist` | haiku | Composer dependencies, security, Drupal contrib |
+| `test-coverage-specialist` | sonnet | PHPUnit, Kernel, Functional, Playwright, Vitest coverage |
+| `architecture-strategist` | - | Architectural decisions and compliance |
+| `code-quality-specialist` | sonnet | Simplicity, minimalism, code quality |
 | `data-integrity-guardian` | sonnet | Database migrations and data integrity |
-| `pattern-recognition-specialist` | - | Analyze code for patterns and anti-patterns |
+| `pattern-recognition-specialist` | - | Code patterns and anti-patterns |
 | `performance-oracle` | - | Performance analysis and optimization |
-| `security-sentinel` | - | Security audits and vulnerability assessments |
-| `sdc-best-practices-reviewer` | sonnet | SDC props/slots, component.yml schema, cache patterns |
-| `paragraphs-best-practices-reviewer` | sonnet | Field templates, SDC integration, cache metadata |
-| `dry-component-reuse-reviewer` | sonnet | DRY principle, component reuse, atomic design |
+| `security-sentinel` | - | Security implementation and audits (OWASP) |
+| `sdc-specialist` | sonnet | SDC props/slots, component.yml schema, cache patterns |
+| `paragraphs-specialist` | sonnet | Field templates, SDC integration, cache metadata |
+| `component-reuse-specialist` | sonnet | DRY principle, component reuse, atomic design |
 
 ### Research (4)
 
@@ -228,16 +232,21 @@ Runs 3 research agents in parallel, creates plan in `plans/` folder.
 
 Captures solved problems to `docs/solutions/` with YAML frontmatter.
 
-### Review Combinations
+### Specialist Combinations
 
 **Drupal Module PR:**
 ```
-@drupal-reviewer @security-sentinel @test-coverage-reviewer @composer-dependency-reviewer
+@drupal-specialist @security-sentinel @test-coverage-specialist @composer-specialist
 ```
 
 **Drupal Theme PR:**
 ```
-@drupal-theme-reviewer @twig-template-reviewer @tailwind-reviewer @accessibility-reviewer @storybook-reviewer
+@drupal-theme-specialist @twig-specialist @tailwind-specialist @accessibility-specialist @storybook-specialist
+```
+
+**SDC Components:**
+```
+@sdc-specialist @component-reuse-specialist @storybook-specialist @accessibility-specialist
 ```
 
 ## Requirements

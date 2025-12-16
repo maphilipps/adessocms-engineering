@@ -2,19 +2,26 @@
 model: sonnet
 ---
 
-# DRY & Component Reuse Reviewer
+# Component Reuse Specialist (DRY)
 
-<purpose>
-Reviews code for adherence to DRY (Don't Repeat Yourself) principles. Identifies duplicate patterns, missed opportunities for component reuse, and unnecessary new abstractions. Ensures existing components, utilities, and patterns are leveraged before creating new ones.
-</purpose>
+## Purpose
 
-<when_to_use>
+**Dual-purpose agent** for leveraging existing components from the start AND reviewing code for DRY adherence, identifying duplicate patterns and ensuring existing components are used before creating new ones.
+
+## When to Use
+
+### For Implementation Guidance
+- Before creating new SDC components
+- During `/acms-work` for component tasks
+- When deciding whether to reuse or create
+- When looking for existing patterns to leverage
+- When planning component architecture
+
+### For Code Review
 - After implementing new features or components
 - When reviewing PRs with new UI elements
-- Before creating new SDC components
 - When patterns seem to repeat across files
 - During architecture reviews
-</when_to_use>
 
 <expertise>
 - Atomic Design principles (atoms, molecules, organisms)

@@ -1,5 +1,102 @@
 # Changelog
 
+## [1.12.0] - 2025-12-16
+
+### BREAKING CHANGE - Review Agents → Dual-Purpose Specialists
+
+**All 18 review agents renamed and enhanced to serve as dual-purpose specialists.**
+
+Specialists can now be used for:
+1. **Implementation Guidance** - Get correct patterns BEFORE implementing code
+2. **Code Review** - Review code AFTER implementation
+
+### Breaking Changes
+
+- **Directory renamed**: `agents/review/` → `agents/specialists/`
+- **Agent references changed**: `adessocms-engineering:review:*-reviewer` → `adessocms-engineering:specialists:*-specialist`
+
+### Agent Renames
+
+| Old Name | New Name |
+|----------|----------|
+| `drupal-reviewer` | `drupal-specialist` |
+| `twig-template-reviewer` | `twig-specialist` |
+| `drupal-theme-reviewer` | `drupal-theme-specialist` |
+| `tailwind-reviewer` | `tailwind-specialist` |
+| `storybook-reviewer` | `storybook-specialist` |
+| `accessibility-reviewer` | `accessibility-specialist` |
+| `composer-dependency-reviewer` | `composer-specialist` |
+| `test-coverage-reviewer` | `test-coverage-specialist` |
+| `sdc-best-practices-reviewer` | `sdc-specialist` |
+| `paragraphs-best-practices-reviewer` | `paragraphs-specialist` |
+| `dry-component-reuse-reviewer` | `component-reuse-specialist` |
+| `architecture-strategist` | `architecture-strategist` (unchanged) |
+| `code-simplicity-reviewer` | `code-quality-specialist` |
+| `data-integrity-guardian` | `data-integrity-guardian` (unchanged) |
+| `pattern-recognition-specialist` | `pattern-recognition-specialist` (unchanged) |
+| `performance-oracle` | `performance-oracle` (unchanged) |
+| `security-sentinel` | `security-sentinel` (unchanged) |
+| `dries-drupal-reviewer` | `dries-drupal-specialist` |
+
+### Agent Enhancements
+
+Each specialist now has:
+- **Dual-purpose structure**: "For Implementation Guidance" + "For Code Review" sections
+- **Implementation Guidelines**: Code examples and patterns for correct implementation
+- **Integration with `/acms-work`**: Consult specialists before implementing complex tasks
+
+### Workflow Updates
+
+**`/acms-plan`**:
+- Added "Consult Specialists for Guidance" section
+- Specialist table showing which specialist to use for each task type
+- Plan template includes "Specialist Guidance Required" section
+
+**`/acms-work`**:
+- Added Phase 2 specialist consultation step
+- Consult specialists BEFORE implementing complex functionality
+- Updated agent references to use new specialist paths
+
+**`/acms-review`**:
+- Updated all agent paths to use specialists
+- Same parallel review capabilities with new naming
+
+### Why This Change
+
+1. **Proactive guidance**: Get correct patterns BEFORE writing code, not just review AFTER
+2. **Consistent naming**: "Specialist" better reflects dual-purpose nature
+3. **Reduced rework**: Implementing correctly from the start saves iteration cycles
+4. **Better integration**: Specialists now integral part of plan → work → review flow
+
+### Migration
+
+Update any custom scripts or hooks that reference agents:
+
+```bash
+# Old
+Task(subagent_type="adessocms-engineering:review:drupal-reviewer", ...)
+
+# New
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", ...)
+```
+
+---
+
+## [1.11.1] - 2025-12-14
+
+### Changed - Playwright MCP Isolation
+
+**Added `--isolated` flag to Playwright MCP server configuration.**
+
+### Changed
+
+- **Playwright MCP**: Added `--isolated` flag for isolated browser contexts
+  - Each browser session runs in complete isolation
+  - No shared cookies, storage, or state between sessions
+  - Improves security and test reliability
+
+---
+
 ## [1.11.0] - 2025-12-14
 
 ### Added - Landing Page Optimizer Skill

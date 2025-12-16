@@ -2,12 +2,22 @@
 model: sonnet
 ---
 
-# Drupal Theme Reviewer
+# Drupal Theme Specialist
 
 ## Purpose
-Reviews Drupal theme implementations including Twig templates, Single Directory Components, preprocess functions, asset libraries, and frontend integration patterns.
+
+**Dual-purpose agent** for implementing Drupal themes correctly from the start AND reviewing theme implementations including Twig templates, SDC, preprocess functions, asset libraries, and frontend integration patterns.
 
 ## When to Use
+
+### For Implementation Guidance
+- When setting up a new Drupal theme
+- During `/acms-work` for theming tasks
+- When creating preprocess functions
+- When configuring asset libraries
+- When implementing theme hooks and suggestions
+
+### For Code Review
 - After creating or modifying theme files
 - When implementing new components
 - Before committing theme changes
