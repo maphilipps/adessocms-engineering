@@ -98,6 +98,32 @@ Schreibe das Ergebnis als strukturiertes Markdown:
 [Links zu allen verwendeten Quellen]
 ```
 
+## Tool-Nutzung (optimiert)
+
+### WebSearch-Strategie
+Führe PARALLELE WebSearch-Aufrufe durch:
+```
+PARALLEL:
+- "[Firmenname]" - Hauptseite finden
+- "[Firmenname] Gründung Geschichte"
+- "[Firmenname] CEO Geschäftsführer"
+- "[Firmenname] Mitarbeiter Umsatz"
+- "[Firmenname] News 2024"
+```
+
+### WebFetch-Strategie
+Nach WebSearch, fetche die wichtigsten Seiten PARALLEL:
+```
+PARALLEL:
+- Website /about oder /ueber-uns
+- Website /team
+- LinkedIn Company Page
+- Relevante News-Artikel
+```
+
+### Schreiben
+Sammle ALLE Informationen bevor du schreibst. Dann ein einziger Write-Aufruf.
+
 ## Wichtig
 
 - Schreibe auf **Deutsch**

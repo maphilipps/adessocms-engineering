@@ -28,6 +28,15 @@ Starte mit dem Task-Tool:
 2. **product-analyst** (`adessocms-marketing:research:product-analyst`)
    - Prompt: "Analysiere Produkte/Services von [Firmenname] ([URL]). Schreibe nach ./analysis/[slug]/02-products.md"
 
+## Opus 4.5 Parallelisierung
+
+**KRITISCH**: Starte BEIDE Agents GLEICHZEITIG in einem Response:
+```
+Task(company-researcher) + Task(product-analyst)
+```
+
+Warte dann mit `TaskOutput` auf beide Agents bevor du fortfährst.
+
 ## Nach Abschluss
 
 1. Fasse die wichtigsten Erkenntnisse zusammen

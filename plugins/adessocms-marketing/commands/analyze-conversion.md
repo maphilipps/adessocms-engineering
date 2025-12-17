@@ -41,6 +41,20 @@ Starte mit dem Task-Tool:
 5. **value-communicator** (`adessocms-marketing:conversion:value-communicator`)
    - Prompt: "Analysiere Wert-Kommunikation für [Firmenname] ([URL]). Schreibe nach ./analysis/[slug]/11-messaging.md (anhängen)"
 
+## Opus 4.5 Parallelisierung
+
+**KRITISCH**: Starte ALLE 5 Agents GLEICHZEITIG in einem Response:
+```
+Task(objection-handler) + Task(trust-auditor) + Task(conversion-psychologist, model=opus) +
+Task(messaging-strategist, model=opus) + Task(value-communicator)
+```
+
+**Model-Hinweise**:
+- `conversion-psychologist` mit `model: opus` für tiefe psychologische Analyse
+- `messaging-strategist` mit `model: opus` für überzeugendes Messaging
+
+Warte dann mit `TaskOutput` auf alle 5 Agents bevor du fortfährst.
+
 ## Nach Abschluss
 
 1. Zeige die Top 5 Einwände und ihre Gegenargumente

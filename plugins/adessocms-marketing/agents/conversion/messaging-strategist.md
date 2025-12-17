@@ -1,7 +1,7 @@
 ---
 name: messaging-strategist
 description: Entwickelt das Messaging Framework - Primary Message, Value Propositions, Headlines, Taglines. Grundlage für alle Kommunikation.
-model: sonnet
+model: opus
 tools: ["WebSearch", "WebFetch", "Write", "Read"]
 whenToUse: |
   Dieser Agent wird eingesetzt wenn:

@@ -21,6 +21,15 @@ Falls nur ein Argument angegeben wurde, versuche die Website zu finden oder frag
 
 Erstelle das Verzeichnis `./analysis/[firmenname-slug]/` (kebab-case, lowercase).
 
+## Opus 4.5 Parallelisierungs-Strategie
+
+**KRITISCH**: Starte ALLE Agents einer Welle in EINEM Tool-Aufruf. Nutze mehrere Task-Tool-Aufrufe im selben Response für maximale Parallelität.
+
+```
+FALSCH: Task → warten → Task → warten → Task
+RICHTIG: Task + Task + Task + Task + Task (alle gleichzeitig)
+```
+
 ## Analyse-Workflow
 
 Starte die Analyse in **5 parallelen Wellen**:
@@ -50,18 +59,34 @@ Starte diese Agents gleichzeitig mit dem Task-Tool:
 1. `brand-analyst` - Markenanalyse
 2. `tone-of-voice-expert` - Voice Guidelines
 3. `content-strategist` - Content-Strategie
+4. `design-system-analyst` - Technische Design-Spezifikationen
+5. `corporate-communications-analyst` - PR, IR, Stakeholder-Komm.
+6. `brand-consistency-auditor` - Multi-Channel Konsistenz-Check
 
 ### Welle 5: Synthese (nach allen anderen)
 1. `analysis-synthesizer` - Alles zusammenführen
 2. `context-generator` - AI-Kontext erstellen
 
-## Agent-Aufruf Format
+## Agent-Aufruf Format (Opus 4.5 optimiert)
 
-Für jeden Agent-Aufruf:
+**Pro Welle**: Starte ALLE Agents der Welle in einem einzigen Response mit mehreren parallelen Task-Aufrufen:
+
 ```
-Task mit subagent_type="adessocms-marketing:[kategorie]:[agent-name]"
-Prompt: "Analysiere [Firmenname] ([URL]). Schreibe das Ergebnis nach ./analysis/[slug]/[XX-filename].md"
+// Welle 1 - ALLE 5 Agents GLEICHZEITIG starten:
+Task(subagent_type="adessocms-marketing:research:company-researcher", prompt="...")
+Task(subagent_type="adessocms-marketing:research:product-analyst", prompt="...")
+Task(subagent_type="adessocms-marketing:research:market-researcher", prompt="...")
+Task(subagent_type="adessocms-marketing:research:competitor-analyst", prompt="...")
+Task(subagent_type="adessocms-marketing:research:industry-analyst", prompt="...")
 ```
+
+**Prompt-Template:**
+```
+"Analysiere [Firmenname] ([URL]). Schreibe das Ergebnis nach ./analysis/[slug]/[XX-filename].md"
+```
+
+**Warten zwischen Wellen:**
+Warte mit `TaskOutput` bis ALLE Agents einer Welle fertig sind, bevor die nächste Welle startet (wegen Datenabhängigkeiten).
 
 ## Nach Abschluss
 
@@ -75,3 +100,20 @@ Prompt: "Analysiere [Firmenname] ([URL]). Schreibe das Ergebnis nach ./analysis/
 - Nutze **WebSearch** und **WebFetch** intensiv für aktuelle Daten
 - Speichere Zwischenergebnisse sofort (nicht alles am Ende)
 - Bei Fehlern: Dokumentiere was gefunden wurde und was nicht
+
+## Performance-Tipps (Opus 4.5)
+
+1. **Maximale Parallelität**: Starte alle Agents einer Welle gleichzeitig
+2. **Batch-Warten**: Warte auf alle Agents einer Welle mit mehreren TaskOutput-Aufrufen
+3. **Fehlertoleranz**: Wenn ein Agent fehlschlägt, dokumentiere es und fahre fort
+4. **Progress-Tracking**: Nutze TodoWrite um den Fortschritt zu tracken
+
+## Model-Verteilung
+
+| Welle | Agents | Model | Begründung |
+|-------|--------|-------|------------|
+| 1 | Research (5) | sonnet | Strukturierte Extraktion |
+| 2 | Audience (4) | opus/sonnet | Persona: opus, Rest: sonnet |
+| 3 | Conversion (5) | opus/sonnet | messaging-strategist, conversion-psychologist: opus |
+| 4 | Brand (6) | opus/sonnet | content-strategist: opus |
+| 5 | Output (2) | opus | Komplexe Synthese |

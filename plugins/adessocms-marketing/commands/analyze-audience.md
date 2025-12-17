@@ -38,6 +38,17 @@ Starte mit dem Task-Tool:
 4. **decision-analyst** (`adessocms-marketing:audience:decision-analyst`)
    - Prompt: "Analysiere Kaufentscheidungsprozesse für [Firmenname] ([URL]). Schreibe nach ./analysis/[slug]/07-customer-journey.md (anhängen)"
 
+## Opus 4.5 Parallelisierung
+
+**KRITISCH**: Starte ALLE 4 Agents GLEICHZEITIG in einem Response:
+```
+Task(persona-builder, model=opus) + Task(journey-mapper) + Task(voice-of-customer-analyst) + Task(decision-analyst)
+```
+
+**Model-Hinweis**: `persona-builder` mit `model: opus` starten für bessere Persona-Tiefe.
+
+Warte dann mit `TaskOutput` auf alle 4 Agents bevor du fortfährst.
+
 ## Nach Abschluss
 
 1. Zeige die wichtigsten Personas als Kurzübersicht

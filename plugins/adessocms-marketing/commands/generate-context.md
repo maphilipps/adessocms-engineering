@@ -32,13 +32,28 @@ Lies alle vorhandenen Analyse-Dateien:
 ./analysis/[slug]/13-tone-of-voice.md
 ```
 
-## Agents starten
+## Agents starten (parallel)
+
+Starte mit dem Task-Tool:
 
 1. **context-generator** (`adessocms-marketing:output:context-generator`)
-   - Prompt: "Erstelle AI-Kontext-Dokument für [Firmenname] aus den Analysen in ./analysis/[slug]/. Schreibe nach ./analysis/[slug]/15-ai-context.md"
+   - Prompt: "Erstelle AI-Kontext-Dokument für [Firmenname] aus den Analysen in ./analysis/[slug]/. Schreibe nach ./analysis/[slug]/99-ai-context.md"
+   - **Model**: opus (für nuancierte Verdichtung)
 
 2. **analysis-synthesizer** (`adessocms-marketing:output:analysis-synthesizer`)
    - Prompt: "Erstelle Executive Summary für [Firmenname] aus allen Analysen in ./analysis/[slug]/. Schreibe nach ./analysis/[slug]/00-overview.md"
+   - **Model**: opus (für komplexe Synthese)
+
+## Opus 4.5 Parallelisierung
+
+**KRITISCH**: Starte BEIDE Agents GLEICHZEITIG in einem Response:
+```
+Task(context-generator, model=opus) + Task(analysis-synthesizer, model=opus)
+```
+
+Beide Agents lesen die gleichen Analyse-Dateien, schreiben aber in unterschiedliche Output-Dateien. Perfekt für parallele Ausführung.
+
+Warte dann mit `TaskOutput` auf beide Agents bevor du fortfährst.
 
 ## AI-Kontext Format
 

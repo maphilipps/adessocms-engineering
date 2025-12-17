@@ -1,7 +1,7 @@
 ---
 name: content-strategist
 description: Entwickelt Content-Strategie - Themen, Formate, Kanäle, Frequenz, Content-Kalender. Für systematische Content-Erstellung.
-model: sonnet
+model: opus
 tools: ["WebSearch", "WebFetch", "Write", "Read"]
 whenToUse: |
   Dieser Agent wird eingesetzt wenn:

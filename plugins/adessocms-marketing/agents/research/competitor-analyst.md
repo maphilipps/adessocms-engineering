@@ -156,6 +156,38 @@ Spezialist─┼───────────Generalist
 [Links]
 ```
 
+## Tool-Nutzung (optimiert)
+
+### Phase 1: Wettbewerber identifizieren (PARALLEL)
+```
+WebSearch PARALLEL:
+- "[Firmenname] Wettbewerber Konkurrenz"
+- "[Firmenname] Alternative"
+- "[Firmenname] vs"
+- "[Branche] Anbieter Deutschland"
+- "[Produkt/Service] Vergleich"
+```
+
+### Phase 2: Wettbewerber analysieren (PARALLEL pro Wettbewerber)
+Für jeden identifizierten Wettbewerber:
+```
+WebFetch PARALLEL:
+- [Wettbewerber] Homepage
+- [Wettbewerber] /pricing
+- [Wettbewerber] /about
+```
+
+### Phase 3: Reviews & Vergleiche (PARALLEL)
+```
+WebSearch PARALLEL:
+- "[Wettbewerber 1] Erfahrungen Bewertungen"
+- "[Wettbewerber 2] Erfahrungen Bewertungen"
+- "[Wettbewerber 1] vs [Wettbewerber 2]"
+```
+
+### Schreiben
+Sammle ALLE Wettbewerber-Infos, dann ein einziger Write-Aufruf.
+
 ## Wichtig
 
 - Sei **objektiv** - auch Schwächen der analysierten Firma benennen

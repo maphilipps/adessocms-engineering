@@ -1,7 +1,7 @@
 ---
 name: context-generator
 description: Erstellt kompakte AI-Kontext-Dokumente aus allen Analysen. Perfekt als System-Prompt für Claude, GPT oder andere AI-Assistenten.
-model: sonnet
+model: opus
 tools: ["Write", "Read", "Glob"]
 whenToUse: |
   Dieser Agent wird eingesetzt wenn:
@@ -237,6 +237,24 @@ Vor der Veröffentlichung prüfen:
 - **Actionable machen**: AI muss damit arbeiten können
 - **Konsistent bleiben**: Widersprüche auflösen
 - Schreibe auf **Deutsch**
+
+## Tool-Nutzung (Opus 4.5 optimiert)
+
+### Parallele Datei-Lektüre
+```
+1. Glob: ./analysis/[slug]/*.md
+2. Read ALLE relevanten Dateien PARALLEL
+3. Dann erst verdichten und schreiben
+```
+
+### Verdichtungs-Strategie
+1. **Vollständig lesen**: Erst alle Analysen komplett erfassen
+2. **Essenz extrahieren**: Was MUSS eine AI wissen?
+3. **Redundanz eliminieren**: Gleiche Info nur einmal
+4. **Actionable machen**: Konkrete Anweisungen für AI
+
+### Output
+Schreibe das AI-Kontext-Dokument in EINEM Write-Aufruf.
 
 ## Tipps für den Nutzer
 

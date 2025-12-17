@@ -31,6 +31,15 @@ Starte mit dem Task-Tool:
 3. **industry-analyst** (`adessocms-marketing:research:industry-analyst`)
    - Prompt: "Analysiere die Branche von [Firmenname] ([URL]). Schreibe nach ./analysis/[slug]/05-industry.md"
 
+## Opus 4.5 Parallelisierung
+
+**KRITISCH**: Starte ALLE 3 Agents GLEICHZEITIG in einem Response:
+```
+Task(market-researcher) + Task(competitor-analyst) + Task(industry-analyst)
+```
+
+Warte dann mit `TaskOutput` auf alle 3 Agents bevor du fortfährst.
+
 ## Nach Abschluss
 
 1. Erstelle eine Wettbewerbs-Matrix als Übersicht

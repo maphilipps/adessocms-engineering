@@ -1,7 +1,7 @@
 {
   "name": "adessocms-marketing",
-  "version": "0.1.0",
-  "description": "Vollständige Marketing-Analyse für Unternehmen: 7 Commands, 19 Agents, 5 Skills - von Unternehmensrecherche über Zielgruppenanalyse bis zu konversionsoptimierten Outputs",
+  "version": "0.3.0",
+  "description": "Vollständige Marketing-Analyse für Unternehmen: 7 Commands, 22 Agents, 5 Skills - Opus 4.5 optimiert mit paralleler Agenten-Ausführung",
   "author": {
     "name": "adesso SE",
     "email": "drupal@adesso.de"

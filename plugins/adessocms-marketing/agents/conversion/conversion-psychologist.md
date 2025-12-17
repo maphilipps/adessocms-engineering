@@ -1,7 +1,7 @@
 ---
 name: conversion-psychologist
 description: Analysiert welche psychologischen Trigger und Überzeugungsprinzipien bei der Zielgruppe funktionieren. Für optimierte Conversion.
-model: sonnet
+model: opus
 tools: ["WebSearch", "WebFetch", "Write", "Read"]
 whenToUse: |
   Dieser Agent wird eingesetzt wenn:

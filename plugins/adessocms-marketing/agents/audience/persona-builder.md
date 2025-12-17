@@ -1,7 +1,7 @@
 ---
 name: persona-builder
 description: Erstellt detaillierte Buyer Personas mit Demographics, Psychographics, Pain Points, Goals und Kaufverhalten. Kernagent für Zielgruppenanalyse.
-model: sonnet
+model: opus
 tools: ["WebSearch", "WebFetch", "Write", "Read"]
 whenToUse: |
   Dieser Agent wird eingesetzt wenn:
