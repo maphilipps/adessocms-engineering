@@ -1,5 +1,72 @@
 # Changelog
 
+## [1.13.1] - 2025-12-17
+
+### Fixed - Explicit EnterPlanMode Prohibition
+
+**Added explicit instruction to NEVER use Claude's `EnterPlanMode` tool.**
+
+### Fixed
+
+- **`/acms-plan` command**: Added critical warning against using `EnterPlanMode` tool
+  - Clear blockquote warning: "DO NOT use `EnterPlanMode` tool!"
+  - Instruction to always write plan to `plans/<slug>.md` using Write tool
+  - Updated note about command output being a Markdown file
+
+### Why This Fix
+
+Claude Code has a built-in `EnterPlanMode` tool that switches to a read-only mode. The `/acms-plan` command is designed to write a Markdown plan file, not enter this mode. This explicit prohibition prevents confusion between:
+
+1. **Claude's EnterPlanMode** - Read-only mode, no file creation
+2. **`/acms-plan`** - Writes `plans/<slug>.md` file through collaboration
+
+---
+
+## [1.13.0] - 2025-12-17
+
+### Changed - Interactive `/acms-plan` Command
+
+**`/acms-plan` now uses iterative user feedback at each planning phase.**
+
+Instead of generating a complete plan in one go, the command now:
+1. Presents each phase for review
+2. Asks for user feedback using `AskUserQuestion`
+3. Allows adjustments before proceeding
+4. Only writes the final plan after all phases are approved
+
+### Changed
+
+- **`/acms-plan` workflow**: Now interactive with 7 phases
+  - Phase 1: Understand Task → GET FEEDBACK
+  - Phase 2: Research & DRY Analysis → GET FEEDBACK
+  - Phase 3: Technical Approach → GET FEEDBACK
+  - Phase 4: Implementation Steps → GET FEEDBACK
+  - Phase 5: Acceptance Criteria → GET FEEDBACK
+  - Phase 6: Write Final Plan (only after all approvals)
+  - Phase 7: Open in Typora + Offer Next Steps
+
+- **Clear distinction from native Plan Mode**:
+  - Native Plan Mode (`--permission-mode plan`) = Read-only, blocks writes
+  - `/acms-plan` = Collaborative planning that WRITES a plan document
+  - Added explanation in command header
+
+- **Visual flow diagram**: Added ASCII flowchart showing the interactive process
+
+- **Specialist table**: Combined selection guide with recommended model tier
+
+### Why This Change
+
+1. **User control**: Each phase can be adjusted before proceeding
+2. **Prevents wasted effort**: Catch misunderstandings early, not after full plan
+3. **Better collaboration**: Plan is co-created, not just generated
+4. **Opus 4.5 optimized**: Prompt structure improved for latest model
+
+### Migration
+
+No breaking changes. The command now asks for confirmation at each step.
+
+---
+
 ## [1.12.0] - 2025-12-16
 
 ### BREAKING CHANGE - Review Agents → Dual-Purpose Specialists
