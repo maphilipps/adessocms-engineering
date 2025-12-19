@@ -22,26 +22,21 @@ Determine what to review:
 Based on the files changed, select appropriate agents:
 
 ### Always Include
-- `architecture-strategist` - Overall architecture review
-- `code-simplicity-reviewer` - Complexity analysis
+- `code-simplicity-reviewer` - YAGNI, KISS, complexity analysis
 
 ### For PHP/Laravel Files (*.php)
-- `laravel-reviewer` - Laravel best practices
+- `taylor-otwell-reviewer` - Laravel philosophy & best practices
+- `laravel-reviewer` - Laravel conventions
 - `laravel-security-sentinel` - Security vulnerabilities
-- `laravel-performance-oracle` - Performance issues
-- `eloquent-data-guardian` - Database integrity
 
 ### For TypeScript/React Files (*.tsx, *.ts)
 - `typescript-react-reviewer` - TypeScript/React patterns
 - `react-inertia-reviewer` - Inertia.js patterns
 
-### For Migrations
-- `laravel-migration-expert` - Migration safety
+### For Spatie Data DTOs (app/Data/*.php)
+- `spatie-data-reviewer` - DTO patterns & transformations
 
-### For Spatie Data DTOs
-- `spatie-data-reviewer` - DTO patterns
-
-### For shadcn Components
+### For shadcn Components (components/ui/*)
 - `shadcn-implementation-reviewer` - UI implementation
 
 ## Execution
