@@ -32,6 +32,17 @@
       },
       "tags": ["marketing", "analysis", "personas", "conversion", "brand", "competitive-analysis", "market-research"],
       "source": "./plugins/adessocms-marketing"
+    },
+    {
+      "name": "bd-app-engineering",
+      "description": "AI-powered development toolkit for BD-App (Laravel 12 + React 19 + Inertia.js + shadcn/ui). 13 agents, 4 commands, 5 skills for audit automation platform development.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Marc Philipps",
+        "email": "marc.philipps@adesso.de"
+      },
+      "tags": ["laravel", "react", "inertia", "shadcn-ui", "claude-agent-sdk", "audit-automation", "typescript"],
+      "source": "./plugins/bd-app-engineering"
     }
   ]
 }

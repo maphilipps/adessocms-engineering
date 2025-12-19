@@ -1,0 +1,39 @@
+{
+  "name": "bd-app-engineering",
+  "version": "0.1.0",
+  "description": "AI-powered development toolkit for BD-App (Laravel 12 + React 19 + Inertia.js + shadcn/ui). 30 agents, 19 commands, 15 skills, 4 MCP servers for code review, research, and workflow automation.",
+  "author": {
+    "name": "Marc Philipps",
+    "email": "marc.philipps@adesso.de",
+    "url": "https://github.com/marcphilipps"
+  },
+  "repository": "https://github.com/adesso-se/adessocms-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "bd-app",
+    "laravel",
+    "react",
+    "inertia",
+    "shadcn-ui",
+    "audit-agents",
+    "claude-agent-sdk",
+    "code-review",
+    "workflow-automation"
+  ],
+  "mcpServers": {
+    "pw": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "shadcn": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  }
+}
