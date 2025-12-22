@@ -1,6 +1,6 @@
 {
   "name": "bd-app-engineering",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "AI-powered development toolkit for BD-App (Laravel 12 + React 19 + Inertia.js + shadcn/ui). 30 agents, 19 commands, 15 skills, 4 MCP servers for code review, research, and workflow automation.",
   "author": {
     "name": "Marc Philipps",

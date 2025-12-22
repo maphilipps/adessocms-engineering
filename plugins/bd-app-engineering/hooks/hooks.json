@@ -1,0 +1,25 @@
+{
+  "description": "BD-App hooks for automatic learning documentation and quality checks",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/compound-on-milestone.py"
+          }
+        ]
+      },
+      {
+        "matcher": "TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/compound-on-todo-complete.py"
+          }
+        ]
+      }
+    ]
+  }
+}
