@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.16.2] - 2025-12-23
+
+### Removed - All Noisy Hooks
+
+**Removed all remaining noisy hooks that generated system reminder messages.**
+
+### Removed
+
+- **`UserPromptSubmit`** hook category entirely (including prevent-sleep.sh)
+- **`Stop`** hook category entirely (including allow-sleep.sh)
+- **`SessionStart`** hook category entirely (including context-persistence.py)
+- **`PreCompact`** hook category entirely (including context-persistence.py)
+- **`context-persistence.py`** from SessionEnd hooks
+- **`version-reminder.py`** from SubagentStop hooks
+
+### Remaining Hooks
+
+Only essential, low-noise hooks remain:
+- **SessionEnd**: `session-insights-trigger.py` (runs once at session end)
+- **SubagentStop**: `background-agents-trigger.py` (spawns background agents after task completion)
+
+### Why This Change
+
+The removed hooks were firing frequently and generating noisy "Success" messages in system reminders, cluttering the conversation context without providing significant value.
+
+---
+
 ## [1.16.1] - 2025-12-23
 
 ### Removed - Noisy UserPromptSubmit Hooks
