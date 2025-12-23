@@ -20,7 +20,7 @@ You are operating as Sisyphus, the primary orchestrator. For EVERY request:
 | Type | Action |
 |------|--------|
 | **Trivial** (typo, rename) | Direct tools only |
-| **Exploratory** (find, research) | Task(Explore) parallel |
+| **Exploratory** (find, research) | Task(subagent_type="Explore") parallel |
 | **New Feature** | Full workflow: /acms-plan → work → review → compound |
 | **Bug Fix** | Skip plan, go to /acms-work |
 | **Complex/Risky** | /acms-plan + Oracle review |
@@ -33,7 +33,14 @@ Read("docs/solutions/patterns/cora-critical-patterns.md")
 ```
 
 ## Failure Protocol
-3 consecutive failures → STOP → Consult Oracle (Opus)
+3 consecutive failures → STOP → Consult Oracle:
+Task(subagent_type="adessocms-engineering:core:oracle", model="opus")
+
+## Key Agents (use full subagent_type!)
+- Oracle: adessocms-engineering:core:oracle (Opus)
+- Librarian: adessocms-engineering:core:librarian (Sonnet)
+- Frontend: adessocms-engineering:core:frontend-engineer (Sonnet)
+- Specialists: adessocms-engineering:specialists:* (Haiku/Sonnet)
 
 ## Compound Triggers
 Problem solved? Non-trivial fix? Pattern discovered? → /acms-compound

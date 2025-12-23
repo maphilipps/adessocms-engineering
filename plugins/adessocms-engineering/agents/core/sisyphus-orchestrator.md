@@ -110,36 +110,36 @@ Automatically invoke `/acms-compound` when:
 
 ### Core Agents (Sisyphus Coordinates)
 
-| Agent | Model | Role | When to Use |
-|-------|-------|------|-------------|
-| **oracle** | Opus | Escalation & Architecture | 3 failures, complex decisions |
-| **librarian** | Sonnet | Knowledge & Documentation | Research, API lookups |
-| **frontend-engineer** | Sonnet | Visual Changes | UI/UX, styling, responsive |
-| **document-writer** | Sonnet | Technical Writing | READMEs, API docs |
-| **skill-invoker** | Haiku | Skill Routing | Quick skill determination |
+| Agent | subagent_type | Model | Role |
+|-------|---------------|-------|------|
+| **oracle** | `adessocms-engineering:core:oracle` | Opus | Escalation & Architecture |
+| **librarian** | `adessocms-engineering:core:librarian` | Sonnet | Knowledge & Documentation |
+| **frontend-engineer** | `adessocms-engineering:core:frontend-engineer` | Sonnet | Visual Changes |
+| **document-writer** | `adessocms-engineering:core:document-writer` | Sonnet | Technical Writing |
+| **skill-invoker** | `adessocms-engineering:core:skill-invoker` | Haiku | Skill Routing |
 
-### Specialist Agents (Already Exist)
+### Specialist Agents
 
-| Agent | Model | Role |
-|-------|-------|------|
-| `drupal-specialist` | Haiku/Sonnet | Drupal API, hooks, services |
-| `sdc-specialist` | Haiku/Sonnet | SDC components, CVA |
-| `twig-specialist` | Haiku/Sonnet | Twig templates |
-| `tailwind-specialist` | Haiku/Sonnet | Tailwind CSS |
-| `accessibility-specialist` | Haiku/Sonnet | WCAG compliance |
-| `security-sentinel` | Sonnet | Security review |
+| Agent | subagent_type | Model |
+|-------|---------------|-------|
+| drupal-specialist | `adessocms-engineering:specialists:drupal-specialist` | Haiku/Sonnet |
+| sdc-specialist | `adessocms-engineering:specialists:sdc-specialist` | Haiku/Sonnet |
+| twig-specialist | `adessocms-engineering:specialists:twig-specialist` | Haiku/Sonnet |
+| tailwind-specialist | `adessocms-engineering:specialists:tailwind-specialist` | Haiku/Sonnet |
+| accessibility-specialist | `adessocms-engineering:specialists:accessibility-specialist` | Haiku/Sonnet |
+| security-sentinel | `adessocms-engineering:specialists:security-sentinel` | Sonnet |
 
 ### Agent Selection by Task
 
 ```
-Research Question → librarian (Sonnet)
-Find Code → Task(Explore) (built-in, Haiku)
-Architecture Decision → oracle (Opus)
-Visual Change → frontend-engineer (Sonnet)
-Quick Pattern Lookup → specialist (Haiku)
-Complex Implementation → specialist (Sonnet)
-Failure Recovery → oracle (Opus)
-Documentation → document-writer (Sonnet)
+Research Question → Task(subagent_type="adessocms-engineering:core:librarian", model="sonnet")
+Find Code → Task(subagent_type="Explore") (built-in, Haiku)
+Architecture Decision → Task(subagent_type="adessocms-engineering:core:oracle", model="opus")
+Visual Change → Task(subagent_type="adessocms-engineering:core:frontend-engineer", model="sonnet")
+Quick Pattern Lookup → Task(subagent_type="adessocms-engineering:specialists:*", model="haiku")
+Complex Implementation → Task(subagent_type="adessocms-engineering:specialists:*", model="sonnet")
+Failure Recovery → Task(subagent_type="adessocms-engineering:core:oracle", model="opus")
+Documentation → Task(subagent_type="adessocms-engineering:core:document-writer", model="sonnet")
 ```
 
 ---
@@ -161,7 +161,7 @@ STOP → Revert changes → Consult Oracle
 ### Oracle Escalation
 
 ```
-Task(subagent_type="oracle",
+Task(subagent_type="adessocms-engineering:core:oracle",
      model="opus",
      prompt="
        Problem: {description}
@@ -193,10 +193,10 @@ After Oracle helps solve the problem:
 User: "How should I implement caching for this entity?"
 
 Parallel:
-├── Task(Explore): Search codebase for cache patterns
-├── Task(librarian): Drupal cache API documentation
+├── Task(subagent_type="Explore"): Search codebase for cache patterns
+├── Task(subagent_type="adessocms-engineering:core:librarian"): Drupal cache API docs
 ├── Grep: docs/solutions/ for cache-related learnings
-└── Task(drupal-specialist): Best practices
+└── Task(subagent_type="adessocms-engineering:specialists:drupal-specialist"): Best practices
 
 Synthesize → Answer with code examples
 ```
@@ -234,10 +234,10 @@ User: "The hero carousel is broken on mobile"
 User: "Review before I push"
 
 Parallel:
-├── Task(security-sentinel): Security scan
-├── Task(accessibility-specialist): A11y review
-├── Task(drupal-specialist): Code standards
-└── Task(frontend-engineer): Visual verification (if UI changes)
+├── Task(subagent_type="adessocms-engineering:specialists:security-sentinel"): Security scan
+├── Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist"): A11y review
+├── Task(subagent_type="adessocms-engineering:specialists:drupal-specialist"): Code standards
+└── Task(subagent_type="adessocms-engineering:core:frontend-engineer"): Visual verification
 
 Synthesize → Actionable feedback
 ```
