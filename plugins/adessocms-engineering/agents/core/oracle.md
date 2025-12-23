@@ -7,7 +7,7 @@ description: |
   ALWAYS checks docs/solutions/ for existing learnings before analysis. Solutions from
   Oracle consultations MUST be documented via /acms-compound. Replaces architecture-strategist
   for escalation scenarios. Returns one primary recommendation with effort estimates.
-tools: ["Read", "Glob", "Grep", "WebFetch", "WebSearch"]
+tools: Read, Glob, Grep, WebFetch, WebSearch
 ---
 
 # The Oracle

@@ -2,7 +2,7 @@
 name: skill-invoker
 model: haiku
 description: Analyzes user requests and invokes appropriate skills from the adesso CMS Engineering plugin. Use this agent when determining which skill best fits a user's task. Triggers on ambiguous requests that could benefit from specialized skills.
-tools: ["Read", "Glob", "Grep"]
+tools: Read, Glob, Grep
 ---
 
 # Skill Invoker Agent

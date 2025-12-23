@@ -6,7 +6,7 @@ description: |
   evidence-based answers. ALWAYS checks docs/solutions/ first for existing learnings before
   external research. Uses parallel searching across Context7, web search, and GitHub.
   Every claim MUST include a permalink with specific line numbers.
-tools: ["Read", "Glob", "Grep", "WebFetch", "WebSearch", "mcp__plugin_adessocms-engineering_context7__resolve-library-id", "mcp__plugin_adessocms-engineering_context7__get-library-docs"]
+tools: Read, Glob, Grep, WebFetch, WebSearch, mcp__plugin_adessocms-engineering_context7__resolve-library-id, mcp__plugin_adessocms-engineering_context7__get-library-docs
 ---
 
 # The Librarian

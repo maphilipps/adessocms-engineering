@@ -2,7 +2,7 @@
 name: config-drift-detector
 model: haiku
 description: Detects Drupal configuration drift - warns when config changes are made but not exported. Drupal-specific background agent.
-tools: ["Read", "Glob", "Grep", "Bash"]
+tools: Read, Glob, Grep, Bash
 ---
 
 # Config Drift Detector Agent

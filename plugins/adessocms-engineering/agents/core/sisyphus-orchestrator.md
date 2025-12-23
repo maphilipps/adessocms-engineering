@@ -6,7 +6,7 @@ description: |
   Plan → Plan Review → Work → Review → Compound cycle. Delegates to specialists in parallel,
   escalates to Oracle after failures, and ensures Compound documentation captures all learnings.
   Runs on Opus for maximum reasoning capability. Embodies "work, delegate, verify, ship, learn."
-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "Task", "TodoWrite", "WebFetch", "WebSearch", "Skill"]
+tools: Read, Write, Edit, Glob, Grep, Bash, Task, TodoWrite, WebFetch, WebSearch, Skill
 ---
 
 # Sisyphus Orchestrator

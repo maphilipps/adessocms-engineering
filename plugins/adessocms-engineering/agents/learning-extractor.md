@@ -2,7 +2,7 @@
 name: learning-extractor
 model: haiku
 description: Extracts learnings from error messages and stacktraces. Links errors to existing solutions.
-tools: ["Read", "Glob", "Grep"]
+tools: Read, Glob, Grep
 ---
 
 # Learning Extractor Agent

@@ -2,7 +2,7 @@
 name: session-insights
 model: haiku
 description: Generates meta-analytics about the session - hot spots, failure patterns, productivity insights.
-tools: ["Read", "Write", "Glob", "Grep"]
+tools: Read, Write, Glob, Grep
 ---
 
 # Session Insights Agent

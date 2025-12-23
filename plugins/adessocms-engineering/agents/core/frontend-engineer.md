@@ -5,7 +5,7 @@ description: |
   Frontend UI/UX specialist for visual changes: colors, layout, animation, responsive design.
   Handles Twig templates, Tailwind CSS, Alpine.js, SDC components. ALWAYS checks docs/solutions/
   for existing patterns before implementing. Non-trivial solutions should trigger /acms-compound.
-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "mcp__plugin_adessocms-engineering_pw__browser_snapshot", "mcp__plugin_adessocms-engineering_pw__browser_take_screenshot"]
+tools: Read, Write, Edit, Glob, Grep, Bash, mcp__plugin_adessocms-engineering_pw__browser_snapshot, mcp__plugin_adessocms-engineering_pw__browser_take_screenshot
 ---
 
 # Frontend UI/UX Engineer

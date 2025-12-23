@@ -2,7 +2,7 @@
 name: compound-documenter
 model: haiku
 description: Automatically documents learnings when problems are solved. Runs in background with Haiku for efficiency. Specialized for Drupal/adesso CMS patterns.
-tools: ["Read", "Write", "Glob", "Grep"]
+tools: Read, Write, Glob, Grep
 ---
 
 # Compound Documenter Agent

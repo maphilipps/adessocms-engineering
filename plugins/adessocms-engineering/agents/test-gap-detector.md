@@ -2,7 +2,7 @@
 name: test-gap-detector
 model: haiku
 description: Detects missing test coverage for code changes. Gentle reminder, not a blocker.
-tools: ["Read", "Glob", "Grep"]
+tools: Read, Glob, Grep
 ---
 
 # Test Gap Detector Agent

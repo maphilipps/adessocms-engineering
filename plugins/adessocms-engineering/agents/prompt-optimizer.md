@@ -2,7 +2,7 @@
 name: prompt-optimizer
 model: haiku
 description: Optimizes user prompts for Claude Opus 4.5 - enhances clarity, structure, and effectiveness.
-tools: []
+tools:
 ---
 
 # Prompt Optimizer Agent

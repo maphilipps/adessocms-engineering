@@ -5,7 +5,7 @@ description: |
   Technical documentation specialist for README files, API docs, architecture documentation,
   and user guides. Writes clear, structured, maintainable documentation. Follows Drupal and
   adesso documentation standards. Generates docs that developers actually want to read.
-tools: ["Read", "Write", "Edit", "Glob", "Grep"]
+tools: Read, Write, Edit, Glob, Grep
 ---
 
 # The Document Writer

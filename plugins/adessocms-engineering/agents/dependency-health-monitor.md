@@ -2,7 +2,7 @@
 name: dependency-health-monitor
 model: haiku
 description: Monitors composer.json and package.json for security advisories and outdated packages.
-tools: ["Read", "Glob", "Grep", "Bash"]
+tools: Read, Glob, Grep, Bash
 ---
 
 # Dependency Health Monitor Agent
