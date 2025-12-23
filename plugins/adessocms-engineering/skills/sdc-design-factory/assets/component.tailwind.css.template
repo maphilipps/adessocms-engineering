@@ -1,0 +1,91 @@
+/**
+ * {{COMPONENT_NAME}} component styles.
+ *
+ * Only add styles here that cannot be expressed with Tailwind utilities.
+ * Prefer CVA variants and utility classes in the Twig template.
+ *
+ * Use cases for this file:
+ * - Complex animations/keyframes
+ * - Pseudo-element styling (::before, ::after)
+ * - Complex selectors that require nesting
+ * - Browser-specific fixes
+ */
+
+@layer components;
+
+/* ===========================================
+   COMPONENT-SPECIFIC STYLES
+   =========================================== */
+
+/**
+ * Example: State-based styling that requires nesting
+ */
+.{{COMPONENT_NAME}}--menu:not(.{{COMPONENT_NAME}}--menu--open) {
+  @apply hidden md:flex;
+}
+
+.{{COMPONENT_NAME}}--menu--open {
+  @apply fixed inset-0 z-50 flex flex-col bg-background;
+}
+
+/**
+ * Example: Smooth expand/collapse animation
+ */
+.{{COMPONENT_NAME}}--expandable {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease-out;
+}
+
+.{{COMPONENT_NAME}}--expandable[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.{{COMPONENT_NAME}}--expandable > div {
+  overflow: hidden;
+}
+
+/**
+ * Example: Custom animation keyframes
+ */
+.{{COMPONENT_NAME}}--animate-in {
+  animation: {{COMPONENT_NAME}}-fade-in 300ms ease-out;
+}
+
+@keyframes {{COMPONENT_NAME}}-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/**
+ * Example: Reduced motion support
+ */
+@media (prefers-reduced-motion: reduce) {
+  .{{COMPONENT_NAME}}--animate-in {
+    animation: none;
+  }
+
+  .{{COMPONENT_NAME}}--expandable {
+    transition: none;
+  }
+}
+
+/**
+ * Example: Focus-within styling
+ */
+.{{COMPONENT_NAME}}--interactive:focus-within {
+  @apply ring-2 ring-ring ring-offset-2;
+}
+
+/**
+ * Example: Complex hover with child elements
+ */
+.{{COMPONENT_NAME}}--card:hover .{{COMPONENT_NAME}}--card-icon {
+  @apply scale-110 text-primary;
+}

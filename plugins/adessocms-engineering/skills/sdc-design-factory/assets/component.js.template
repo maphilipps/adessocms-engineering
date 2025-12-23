@@ -1,0 +1,161 @@
+/**
+ * @file
+ * {{COMPONENT_NAME}} component JavaScript.
+ *
+ * ES6 Module using ComponentInstance pattern for Drupal integration.
+ * Auto-instantiates on elements matching the selector.
+ */
+
+import { ComponentType, ComponentInstance } from "../../lib/component.js";
+
+/**
+ * {{COMPONENT_NAME}} component class.
+ *
+ * @extends ComponentInstance
+ */
+class {{COMPONENT_CLASS_NAME}} extends ComponentInstance {
+  /**
+   * Initialize the component.
+   *
+   * Called automatically when component is instantiated.
+   * Use this.el to reference the component's root element.
+   */
+  init() {
+    // Cache DOM elements
+    this.trigger = this.el.querySelector('[data-{{COMPONENT_NAME}}-trigger]');
+    this.content = this.el.querySelector('[data-{{COMPONENT_NAME}}-content]');
+
+    // Initialize state
+    this.isOpen = this.el.dataset.defaultOpen === 'true';
+
+    // Bind event listeners
+    this.bindEvents();
+
+    // Set initial ARIA state
+    this.updateAriaState();
+  }
+
+  /**
+   * Bind all event listeners.
+   */
+  bindEvents() {
+    if (this.trigger) {
+      // Click handler
+      this.trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.toggle();
+      });
+
+      // Keyboard handler for accessibility
+      this.trigger.addEventListener('keydown', (e) => {
+        this.handleKeydown(e);
+      });
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) {
+        this.close();
+      }
+    });
+  }
+
+  /**
+   * Handle keyboard navigation.
+   *
+   * @param {KeyboardEvent} e - The keyboard event.
+   */
+  handleKeydown(e) {
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        this.toggle();
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        this.open();
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        this.close();
+        break;
+    }
+  }
+
+  /**
+   * Toggle open/closed state.
+   */
+  toggle() {
+    this.isOpen = !this.isOpen;
+    this.updateAriaState();
+    this.updateVisualState();
+  }
+
+  /**
+   * Open the component.
+   */
+  open() {
+    if (!this.isOpen) {
+      this.isOpen = true;
+      this.updateAriaState();
+      this.updateVisualState();
+    }
+  }
+
+  /**
+   * Close the component.
+   */
+  close() {
+    if (this.isOpen) {
+      this.isOpen = false;
+      this.updateAriaState();
+      this.updateVisualState();
+    }
+  }
+
+  /**
+   * Update ARIA attributes for accessibility.
+   */
+  updateAriaState() {
+    if (this.trigger) {
+      this.trigger.setAttribute('aria-expanded', this.isOpen.toString());
+    }
+
+    if (this.content) {
+      this.content.hidden = !this.isOpen;
+    }
+  }
+
+  /**
+   * Update visual state classes.
+   */
+  updateVisualState() {
+    this.el.classList.toggle('{{COMPONENT_NAME}}--open', this.isOpen);
+
+    if (this.content) {
+      this.content.dataset.open = this.isOpen.toString();
+    }
+  }
+
+  /**
+   * Clean up when component is destroyed.
+   *
+   * Called automatically when element is removed from DOM.
+   */
+  destroy() {
+    // Remove event listeners if needed
+    // Clean up any intervals/timeouts
+  }
+}
+
+// Auto-instantiate on matching elements
+// The third parameter is the CSS selector to match
+new ComponentType(
+  {{COMPONENT_CLASS_NAME}},
+  "{{COMPONENT_NAME}}",
+  "[data-{{COMPONENT_NAME}}]"
+);
+
+// Make available globally for debugging
+// Access via: window.mercuryComponents.{{COMPONENT_NAME}}.instances

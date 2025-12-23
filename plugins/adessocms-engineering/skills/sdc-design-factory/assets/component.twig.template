@@ -1,0 +1,127 @@
+{#
+/**
+ * @file
+ * {{COMPONENT_NAME}} component.
+ *
+ * {{COMPONENT_DESCRIPTION}}
+ *
+ * Props:
+ *   - variant: Style variant (primary|secondary|ghost)
+ *   - size: Component size (sm|md|lg)
+ *
+ * Slots:
+ *   - default: Main content
+ */
+#}
+
+{# ============================================
+   PROPS NORMALIZATION
+   Always provide defaults matching component.yml
+   ============================================ #}
+{% set component_variant = variant|default('primary') %}
+{% set component_size = size|default('md') %}
+
+{# ============================================
+   CVA DEFINITION
+   Define all styling variants here
+   ============================================ #}
+{% set component = html_cva(
+  base: [
+    {# Layout #}
+    'relative flex',
+
+    {# Typography #}
+    'font-medium',
+
+    {# Transitions #}
+    'transition-all duration-200 ease-out',
+
+    {# Focus states (accessibility) #}
+    'focus-visible:outline-none',
+    'focus-visible:ring-2',
+    'focus-visible:ring-ring',
+    'focus-visible:ring-offset-2',
+    'focus-visible:ring-offset-background'
+  ],
+  variants: {
+    variant: {
+      primary: [
+        'bg-primary text-primary-foreground',
+        'hover:bg-primary/90',
+        'active:bg-primary/80'
+      ]|join(' '),
+      secondary: [
+        'bg-secondary text-secondary-foreground',
+        'hover:bg-secondary/80',
+        'active:bg-secondary/70'
+      ]|join(' '),
+      ghost: [
+        'bg-transparent text-foreground',
+        'hover:bg-accent hover:text-accent-foreground',
+        'active:bg-accent/80'
+      ]|join(' ')
+    },
+    size: {
+      sm: 'p-3 text-sm rounded-md gap-2',
+      md: 'p-4 text-base rounded-lg gap-3',
+      lg: 'p-6 text-lg rounded-xl gap-4'
+    }
+  },
+  compound_variants: [
+    {# Example: Large primary gets shadow #}
+    {
+      variant: ['primary'],
+      size: ['lg'],
+      class: 'shadow-lg hover:shadow-xl'
+    }
+  ]
+) %}
+
+{# ============================================
+   ACCESSIBILITY SETUP
+   Generate unique IDs for ARIA relationships
+   ============================================ #}
+{% set component_id = '{{COMPONENT_NAME}}'|clean_unique_id %}
+
+{# ============================================
+   SLOT CAPTURE
+   Capture slots for conditional rendering
+   ============================================ #}
+{% set header_content %}
+  {% block header %}{% endblock %}
+{% endset %}
+
+{% set footer_content %}
+  {% block footer %}{% endblock %}
+{% endset %}
+
+{# ============================================
+   COMPONENT MARKUP
+   ============================================ #}
+<div
+  class="{{ component.apply({
+    variant: component_variant,
+    size: component_size
+  }) }}"
+  id="{{ component_id }}"
+  {# Add ARIA attributes as needed #}
+>
+  {# Optional: Header slot #}
+  {% if header_content|trim is not empty %}
+    <header class="{{COMPONENT_NAME}}--header">
+      {{ header_content }}
+    </header>
+  {% endif %}
+
+  {# Main content slot #}
+  <div class="{{COMPONENT_NAME}}--content">
+    {% block default %}{% endblock %}
+  </div>
+
+  {# Optional: Footer slot #}
+  {% if footer_content|trim is not empty %}
+    <footer class="{{COMPONENT_NAME}}--footer">
+      {{ footer_content }}
+    </footer>
+  {% endif %}
+</div>

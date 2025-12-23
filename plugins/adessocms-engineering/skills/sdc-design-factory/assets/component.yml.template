@@ -1,0 +1,112 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: {{COMPONENT_NAME}}
+group: {{GROUP}}
+status: stable
+description: |
+  {{COMPONENT_DESCRIPTION}}
+
+props:
+  type: object
+  required:
+    - variant
+  properties:
+    variant:
+      type: string
+      title: Style Variant
+      description: "Visual style of the component"
+      enum:
+        - primary
+        - secondary
+        - ghost
+      default: primary
+      examples:
+        - primary
+      meta:enum:
+        primary: "Primary - Main emphasis"
+        secondary: "Secondary - Supporting"
+        ghost: "Ghost - Minimal styling"
+
+    size:
+      type: string
+      title: Size
+      description: "Component size"
+      enum:
+        - sm
+        - md
+        - lg
+      default: md
+      examples:
+        - md
+      meta:enum:
+        sm: "Small"
+        md: "Medium (default)"
+        lg: "Large"
+
+    # Add more props as needed:
+    #
+    # String with validation:
+    # title:
+    #   type: string
+    #   title: Title
+    #   description: "Main heading text"
+    #   examples:
+    #     - "Welcome to our site"
+    #
+    # Boolean:
+    # disabled:
+    #   type: boolean
+    #   title: Disabled
+    #   default: false
+    #
+    # Integer:
+    # columns:
+    #   type: integer
+    #   title: Columns
+    #   minimum: 1
+    #   maximum: 12
+    #   default: 3
+    #
+    # Image reference (Canvas):
+    # image:
+    #   $ref: json-schema-definitions://canvas.module/image
+    #   title: Image
+    #   type: object
+    #   examples:
+    #     - src: "assets/example.jpg"
+    #       width: 1200
+    #       height: 800
+    #       alt: "Example image"
+    #
+    # URL:
+    # url:
+    #   type: string
+    #   title: Link URL
+    #   format: uri
+    #   examples:
+    #     - "https://example.com"
+
+slots:
+  default:
+    title: Content
+    description: "Main content area"
+
+  # Add more slots as needed:
+  #
+  # header:
+  #   title: Header
+  #   description: "Optional header content"
+  #
+  # footer:
+  #   title: Footer
+  #   description: "Optional footer with actions"
+  #
+  # media:
+  #   title: Media
+  #   description: "Image or video content"
+
+# Uncomment if component has JavaScript:
+# libraryOverrides:
+#   js:
+#     {{COMPONENT_NAME}}.js:
+#       attributes:
+#         type: module

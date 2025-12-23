@@ -1,7 +1,7 @@
 {
   "name": "adessocms-engineering",
-  "version": "1.13.1",
-  "description": "AI-powered Drupal development tools with dual-purpose specialists. 29 agents, 21 commands, 17 skills, 2 MCP servers (Playwright, Context7).",
+  "version": "1.14.0",
+  "description": "AI-powered Drupal development tools with Sisyphus-style orchestration. 31 agents, 21 commands, 18 skills, 2 MCP servers (Playwright, Context7).",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",

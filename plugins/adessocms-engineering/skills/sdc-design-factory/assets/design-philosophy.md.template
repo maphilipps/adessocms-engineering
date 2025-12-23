@@ -1,0 +1,133 @@
+# {{COMPONENT_NAME}} Design Philosophy
+
+## Visual Essence
+
+[Write 1 paragraph describing the core visual idea and emotional quality of this component.
+What feeling should it evoke? What is its fundamental purpose in the visual hierarchy?
+Reference design traditions where appropriate (Swiss typography, Bauhaus, Material Design, etc.)]
+
+Example:
+> The button embodies confident action—a clear invitation to engage. It communicates importance
+> through visual weight while remaining approachable through subtle softness. Like a well-crafted
+> door handle, it promises satisfying interaction before touch.
+
+---
+
+## Form & Space
+
+[Write 1 paragraph describing shapes, proportions, and negative space usage.
+How does the component use space? What are the proportional relationships?
+How does padding and margin create breathing room?]
+
+Example:
+> Generous horizontal padding creates breathing room for text, preventing the cramped feeling
+> of hurried design. The border radius varies by context: smaller for utilitarian actions (md),
+> larger for primary calls-to-action (xl). Height remains consistent within size variants,
+> creating reliable alignment in button groups.
+
+---
+
+## Color & Material
+
+[Write 1 paragraph describing color relationships, surface qualities, and visual depth.
+How do colors communicate meaning? What material qualities does the component suggest?
+How does it handle light/dark themes?]
+
+Example:
+> Primary buttons command attention with saturated fills that lift slightly from the page.
+> Secondary buttons step back with subtle backgrounds that complement rather than compete.
+> The ghost variant disappears until needed, revealing itself on hover like a whispered
+> suggestion. All variants maintain WCAG AA contrast ratios without exception.
+
+---
+
+## Motion & Interaction
+
+[Write 1 paragraph describing hover states, transitions, and interactive feedback.
+How does the component respond to user interaction? What timing feels right?
+What feedback does it provide?]
+
+Example:
+> Hover states arrive with purposeful timing—200ms for color transitions, quick enough
+> to feel responsive, slow enough to appear smooth. Active states provide immediate
+> tactile feedback through subtle scale reduction (98%). Disabled states communicate
+> unavailability through reduced opacity while maintaining visible structure.
+
+---
+
+## Craftsmanship Standard
+
+[Write 1 paragraph emphasizing quality expectations and attention to detail.
+What makes this component feel hand-crafted? What details demonstrate mastery?
+Use phrases like "meticulously calibrated", "painstakingly refined", "master-level execution".]
+
+Example:
+> Every button must appear as if hand-crafted by a master interface designer. Focus rings
+> are precisely calibrated with consistent offset. Text sits optically centered, accounting
+> for font metrics. Icons align perfectly with text baselines. The result should feel
+> inevitable—as if no other design were possible.
+
+---
+
+## Design Tokens Extracted
+
+Based on the philosophy above, these specific values should be used:
+
+### Spacing
+| Element | Value | Tailwind Class |
+|---------|-------|----------------|
+| Padding X (sm) | 12px | `px-3` |
+| Padding X (md) | 16px | `px-4` |
+| Padding X (lg) | 24px | `px-6` |
+
+### Border Radius
+| Variant | Value | Tailwind Class |
+|---------|-------|----------------|
+| Small | 6px | `rounded-md` |
+| Medium | 8px | `rounded-lg` |
+| Large | 12px | `rounded-xl` |
+
+### Transitions
+| Property | Duration | Easing | Tailwind Class |
+|----------|----------|--------|----------------|
+| Color | 200ms | ease-out | `transition-colors duration-200` |
+| All | 200ms | ease-out | `transition-all duration-200` |
+
+### Shadows
+| State | Value | Tailwind Class |
+|-------|-------|----------------|
+| Default | none | - |
+| Hover | subtle | `hover:shadow-md` |
+| Active | none | - |
+
+---
+
+## CVA Variant Mapping
+
+```yaml
+variants:
+  variant:
+    primary: "bg-primary text-primary-foreground hover:bg-primary/90"
+    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+    ghost: "bg-transparent hover:bg-accent hover:text-accent-foreground"
+
+  size:
+    sm: "h-8 px-3 text-sm rounded-md"
+    md: "h-10 px-4 text-base rounded-lg"
+    lg: "h-12 px-6 text-lg rounded-xl"
+```
+
+---
+
+## Anti-Patterns to Avoid
+
+Based on this philosophy, the following should NEVER appear:
+
+- [ ] Generic centered layout without intention
+- [ ] Purple gradients (use purposeful palette)
+- [ ] Uniform rounded corners (vary by context)
+- [ ] Generic Inter font (select with intention)
+- [ ] Missing hover/focus states
+- [ ] Hardcoded color values
+- [ ] Inconsistent padding/spacing
+- [ ] Overlooked accessibility states
