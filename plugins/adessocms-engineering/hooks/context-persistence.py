@@ -64,12 +64,9 @@ def handle_session_start(data: dict) -> dict:
     last_context = read_last_context(context_file)
 
     if last_context:
+        # SessionStart hooks use ONLY hookSpecificOutput with additionalContext
+        # No "continue" or "systemMessage" needed
         return {
-            "continue": True,
-            "systemMessage": (
-                "Previous session context restored. "
-                "Use this context to continue where we left off."
-            ),
             "hookSpecificOutput": {
                 "hookEventName": "SessionStart",
                 "additionalContext": (
@@ -80,7 +77,8 @@ def handle_session_start(data: dict) -> dict:
             }
         }
 
-    return {"continue": True}
+    # Return empty dict if no context to restore
+    return {}
 
 
 def handle_pre_compact(data: dict) -> dict:
