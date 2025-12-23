@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.16.1] - 2025-12-23
+
+### Removed - Noisy UserPromptSubmit Hooks
+
+**Removed sisyphus-orchestrator-trigger and prompt-optimizer-trigger from UserPromptSubmit hooks.**
+
+### Removed
+
+- **`sisyphus-orchestrator-trigger.py`** from UserPromptSubmit hooks
+- **`prompt-optimizer-trigger.py`** from UserPromptSubmit hooks
+
+### Why This Change
+
+These hooks fired on every user prompt and generated noisy "Success" messages in the system reminders. The prevent-sleep hook remains active for Mac sleep prevention during sessions.
+
+---
+
 ## [1.13.1] - 2025-12-17
 
 ### Fixed - Explicit EnterPlanMode Prohibition
