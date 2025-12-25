@@ -43,6 +43,17 @@
       },
       "tags": ["laravel", "react", "inertia", "shadcn-ui", "claude-agent-sdk", "audit-automation", "typescript"],
       "source": "./plugins/bd-app-engineering"
+    },
+    {
+      "name": "bd-audit",
+      "description": "Vollständige Website & Marketing Audits für Business Developer. 50 Agenten, 12 Commands, VitePress Reports, Netlify Deploy. EIN Befehl: /bd example.com",
+      "version": "1.0.0",
+      "author": {
+        "name": "adesso SE",
+        "email": "drupal@adesso.de"
+      },
+      "tags": ["audit", "website-analysis", "cms-evaluation", "business-development", "lead-qualification", "vitepress", "performance", "accessibility", "seo"],
+      "source": "./plugins/bd-audit"
     }
   ]
 }

@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "wappalyzer": {
+      "command": "node",
+      "args": ["$CLAUDE_PLUGIN_ROOT/mcp-servers/wappalyzer/index.js"],
+      "env": {
+        "WAPPALYZER_API_KEY": "${WAPPALYZER_API_KEY}"
+      }
+    },
+    "lighthouse": {
+      "command": "npx",
+      "args": ["@anthropic-ai/mcp-server-lighthouse"]
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    }
+  }
+}

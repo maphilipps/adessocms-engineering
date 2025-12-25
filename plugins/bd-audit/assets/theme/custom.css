@@ -1,0 +1,613 @@
+/**
+ * adesso VitePress Theme
+ * Custom styles for BD-Audit Reports
+ */
+
+/* ============================================
+   CSS Variables - adesso Brand Colors
+   ============================================ */
+:root {
+  /* Primary Colors */
+  --adesso-blue: #006EC7;
+  --adesso-blue-dark: #005299;
+  --adesso-blue-light: #4D9FE0;
+  --adesso-blue-soft: rgba(0, 110, 199, 0.14);
+
+  /* Secondary Colors */
+  --adesso-gray: #887D75;
+  --adesso-gray-light: #B3AAA3;
+  --adesso-gray-dark: #5C534C;
+
+  /* Status Colors */
+  --adesso-green: #00A651;
+  --adesso-red: #E31937;
+  --adesso-orange: #F7941D;
+  --adesso-yellow: #FFC72C;
+
+  /* Backgrounds */
+  --adesso-bg-light: #F5F4F3;
+  --adesso-bg-dark: #1A1A1A;
+
+  /* Text */
+  --adesso-text: #333333;
+  --adesso-text-light: #666666;
+  --adesso-text-muted: #999999;
+
+  /* VitePress Overrides */
+  --vp-c-brand-1: var(--adesso-blue);
+  --vp-c-brand-2: var(--adesso-blue-dark);
+  --vp-c-brand-3: var(--adesso-blue-light);
+  --vp-c-brand-soft: var(--adesso-blue-soft);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, var(--adesso-blue) 30%, var(--adesso-blue-light));
+
+  --vp-c-tip-1: var(--adesso-blue);
+  --vp-c-tip-2: var(--adesso-blue-light);
+  --vp-c-tip-3: var(--adesso-blue-soft);
+  --vp-c-tip-soft: var(--adesso-blue-soft);
+
+  --vp-c-warning-1: var(--adesso-orange);
+  --vp-c-warning-2: #FFB347;
+  --vp-c-warning-soft: rgba(247, 148, 29, 0.14);
+
+  --vp-c-danger-1: var(--adesso-red);
+  --vp-c-danger-2: #FF5252;
+  --vp-c-danger-soft: rgba(227, 25, 55, 0.14);
+}
+
+/* Dark mode */
+.dark {
+  --vp-c-bg: #1a1a1a;
+  --vp-c-bg-soft: #242424;
+  --vp-c-bg-mute: #2e2e2e;
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  --vp-font-family-base: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --vp-font-family-mono: 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+}
+
+body {
+  font-family: var(--vp-font-family-base);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.vp-doc h1 {
+  font-size: 2.25rem;
+  border-bottom: 3px solid var(--adesso-blue);
+  padding-bottom: 0.75rem;
+}
+
+.vp-doc h2 {
+  font-size: 1.5rem;
+  border-bottom: 2px solid var(--vp-c-divider);
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+.vp-doc h3 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+}
+
+/* ============================================
+   Score Cards
+   ============================================ */
+.score-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  margin: 1rem 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.score-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.score-card.critical {
+  border-left: 4px solid var(--adesso-red);
+}
+
+.score-card.warning {
+  border-left: 4px solid var(--adesso-orange);
+}
+
+.score-card.success {
+  border-left: 4px solid var(--adesso-green);
+}
+
+.score-card.info {
+  border-left: 4px solid var(--adesso-blue);
+}
+
+.score-card .score {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--adesso-blue);
+}
+
+.score-card.critical .score {
+  color: var(--adesso-red);
+}
+
+.score-card.warning .score {
+  color: var(--adesso-orange);
+}
+
+.score-card.success .score {
+  color: var(--adesso-green);
+}
+
+.score-card .label {
+  font-weight: 500;
+  color: var(--vp-c-text-1);
+}
+
+.score-card .status {
+  margin-left: auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.score-card.critical .status {
+  background: var(--vp-c-danger-soft);
+  color: var(--adesso-red);
+}
+
+.score-card.warning .status {
+  background: var(--vp-c-warning-soft);
+  color: var(--adesso-orange);
+}
+
+.score-card.success .status {
+  background: rgba(0, 166, 81, 0.14);
+  color: var(--adesso-green);
+}
+
+/* ============================================
+   Score Dashboard Grid
+   ============================================ */
+.score-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.score-dashboard .metric {
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.score-dashboard .metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--adesso-blue);
+}
+
+.score-dashboard .metric-label {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+  margin-top: 0.25rem;
+}
+
+.score-dashboard .metric.red .metric-value { color: var(--adesso-red); }
+.score-dashboard .metric.orange .metric-value { color: var(--adesso-orange); }
+.score-dashboard .metric.green .metric-value { color: var(--adesso-green); }
+
+/* ============================================
+   Tables
+   ============================================ */
+.vp-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.vp-doc th {
+  background: var(--adesso-blue);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+}
+
+.vp-doc th:first-child {
+  border-radius: 8px 0 0 0;
+}
+
+.vp-doc th:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+.vp-doc td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc tr:hover td {
+  background: var(--vp-c-bg-soft);
+}
+
+.vp-doc tr:last-child td:first-child {
+  border-radius: 0 0 0 8px;
+}
+
+.vp-doc tr:last-child td:last-child {
+  border-radius: 0 0 8px 0;
+}
+
+/* ============================================
+   Status Badges
+   ============================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-critical {
+  background: var(--vp-c-danger-soft);
+  color: var(--adesso-red);
+}
+
+.badge-warning {
+  background: var(--vp-c-warning-soft);
+  color: var(--adesso-orange);
+}
+
+.badge-success {
+  background: rgba(0, 166, 81, 0.14);
+  color: var(--adesso-green);
+}
+
+.badge-info {
+  background: var(--adesso-blue-soft);
+  color: var(--adesso-blue);
+}
+
+/* ============================================
+   Custom Containers / Callouts
+   ============================================ */
+.custom-block.tip {
+  border-color: var(--adesso-blue);
+}
+
+.custom-block.tip .custom-block-title {
+  color: var(--adesso-blue);
+}
+
+.custom-block.warning {
+  border-color: var(--adesso-orange);
+}
+
+.custom-block.warning .custom-block-title {
+  color: var(--adesso-orange);
+}
+
+.custom-block.danger {
+  border-color: var(--adesso-red);
+}
+
+.custom-block.danger .custom-block-title {
+  color: var(--adesso-red);
+}
+
+/* ============================================
+   Timeline Component
+   ============================================ */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin: 1.5rem 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--vp-c-divider);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.625rem;
+  top: 0.25rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--adesso-blue);
+  border: 2px solid var(--vp-c-bg);
+}
+
+.timeline-item.completed::before {
+  background: var(--adesso-green);
+}
+
+.timeline-item.current::before {
+  background: var(--adesso-orange);
+  box-shadow: 0 0 0 4px rgba(247, 148, 29, 0.2);
+}
+
+.timeline-item .date {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-2);
+  margin-bottom: 0.25rem;
+}
+
+.timeline-item .title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-item .description {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+}
+
+/* ============================================
+   Comparison Table
+   ============================================ */
+.comparison-table {
+  overflow-x: auto;
+}
+
+.comparison-table th:first-child {
+  position: sticky;
+  left: 0;
+  background: var(--adesso-blue);
+  z-index: 1;
+}
+
+.comparison-table td:first-child {
+  position: sticky;
+  left: 0;
+  background: var(--vp-c-bg);
+  font-weight: 500;
+  z-index: 1;
+}
+
+.comparison-table .check {
+  color: var(--adesso-green);
+  font-size: 1.25rem;
+}
+
+.comparison-table .cross {
+  color: var(--adesso-red);
+  font-size: 1.25rem;
+}
+
+.comparison-table .partial {
+  color: var(--adesso-orange);
+  font-size: 1.25rem;
+}
+
+/* ============================================
+   Progress Bar
+   ============================================ */
+.progress-bar {
+  height: 8px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-bar .fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar .fill.critical { background: var(--adesso-red); }
+.progress-bar .fill.warning { background: var(--adesso-orange); }
+.progress-bar .fill.success { background: var(--adesso-green); }
+.progress-bar .fill.info { background: var(--adesso-blue); }
+
+/* ============================================
+   Feature Grid
+   ============================================ */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.feature-card {
+  background: var(--vp-c-bg-soft);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card .title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card .description {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+}
+
+/* ============================================
+   Quote / Testimonial
+   ============================================ */
+.testimonial {
+  background: var(--vp-c-bg-soft);
+  border-left: 4px solid var(--adesso-blue);
+  padding: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1.5rem 0;
+}
+
+.testimonial .quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--vp-c-text-1);
+  margin-bottom: 1rem;
+}
+
+.testimonial .author {
+  font-weight: 600;
+}
+
+.testimonial .role {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+}
+
+/* ============================================
+   Header / Logo
+   ============================================ */
+.VPNavBarTitle .title {
+  font-weight: 600;
+  color: var(--adesso-blue);
+}
+
+.VPNavBarTitle .logo {
+  height: 32px;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+.VPFooter {
+  border-top: 2px solid var(--adesso-blue);
+}
+
+.VPFooter .message {
+  color: var(--vp-c-text-2);
+}
+
+.VPFooter .copyright {
+  color: var(--vp-c-text-3);
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  .VPNav,
+  .VPSidebar,
+  .VPFooter,
+  .VPLocalNav,
+  .VPDocAsideOutline {
+    display: none !important;
+  }
+
+  .VPContent {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .VPDoc {
+    padding: 0 !important;
+  }
+
+  .vp-doc {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  body {
+    font-size: 10pt;
+  }
+
+  h1 { font-size: 18pt; }
+  h2 { font-size: 14pt; }
+  h3 { font-size: 12pt; }
+
+  .score-card {
+    break-inside: avoid;
+  }
+
+  table {
+    break-inside: avoid;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: var(--vp-c-text-2);
+  }
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 768px) {
+  .score-dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vp-doc h1 {
+    font-size: 1.75rem;
+  }
+
+  .vp-doc h2 {
+    font-size: 1.25rem;
+  }
+
+  .score-card .score {
+    font-size: 2rem;
+  }
+}

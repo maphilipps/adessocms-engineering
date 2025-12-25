@@ -1,0 +1,123 @@
+# ============================================
+# BD-Audit: GitHub Actions Workflow
+# Auto-deploys VitePress reports to Netlify
+# ============================================
+#
+# Copy this file to: .github/workflows/deploy.yml
+# in the bd-audit-reports repository
+#
+
+name: Deploy BD-Audit Reports
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'customers/**'
+      - 'shared/**'
+  workflow_dispatch:
+    inputs:
+      customer:
+        description: 'Customer slug to deploy (leave empty for all)'
+        required: false
+        default: ''
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      customers: ${{ steps.detect.outputs.customers }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed customers
+        id: detect
+        run: |
+          if [ -n "${{ github.event.inputs.customer }}" ]; then
+            # Manual trigger with specific customer
+            echo "customers=[\"${{ github.event.inputs.customer }}\"]" >> $GITHUB_OUTPUT
+          else
+            # Detect from changed files
+            CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^customers/[^/]+/' | cut -d'/' -f2 | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')
+
+            # If shared changed, deploy all
+            if git diff --name-only HEAD~1 HEAD | grep -q '^shared/'; then
+              CHANGED=$(ls -d customers/*/ | xargs -n1 basename | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            fi
+
+            echo "customers=$CHANGED" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-deploy:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.customers != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        customer: ${{ fromJson(needs.detect-changes.outputs.customers) }}
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'customers/${{ matrix.customer }}/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: customers/${{ matrix.customer }}
+        run: npm ci
+
+      - name: Build VitePress
+        working-directory: customers/${{ matrix.customer }}
+        run: npm run build
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.1
+        with:
+          publish-dir: 'customers/${{ matrix.customer }}/.vitepress/dist'
+          production-deploy: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy ${{ matrix.customer }} from GitHub Actions"
+          alias: ${{ matrix.customer }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Comment on commit
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: `✅ Deployed **${{ matrix.customer }}** to https://audits.adessocms.de/${{ matrix.customer }}`
+            })
+
+  notify:
+    needs: [detect-changes, build-and-deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify on success
+        if: needs.build-and-deploy.result == 'success'
+        run: |
+          echo "✅ All reports deployed successfully!"
+          echo "Deployed customers: ${{ needs.detect-changes.outputs.customers }}"
+
+      - name: Notify on failure
+        if: needs.build-and-deploy.result == 'failure'
+        run: |
+          echo "❌ Some deployments failed!"
+          exit 1

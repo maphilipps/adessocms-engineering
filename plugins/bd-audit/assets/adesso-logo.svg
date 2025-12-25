@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 40">
+  <defs>
+    <style>
+      .logo-text { fill: #006EC7; font-family: 'Fira Sans', Arial, sans-serif; font-weight: 600; }
+    </style>
+  </defs>
+  <!-- adesso logo mark -->
+  <circle cx="20" cy="20" r="16" fill="#006EC7"/>
+  <path d="M12 20 L20 12 L28 20 L20 28 Z" fill="white"/>
+  <!-- adesso text -->
+  <text x="45" y="27" class="logo-text" font-size="22">adesso</text>
+</svg>

@@ -1,0 +1,25 @@
+{
+  "name": "bd-audit",
+  "version": "1.0.0",
+  "description": "Vollständige Website & Marketing Audits für Business Developer. 50 Agenten, 12 Commands, VitePress Reports, Netlify Deploy. EIN Befehl: /bd example.com",
+  "author": {
+    "name": "adesso SE",
+    "email": "drupal@adesso.de"
+  },
+  "repository": "https://github.com/maphilipps/bd-audit",
+  "license": "MIT",
+  "keywords": [
+    "audit",
+    "website-analysis",
+    "cms-evaluation",
+    "business-development",
+    "lead-qualification",
+    "vitepress",
+    "netlify",
+    "performance",
+    "accessibility",
+    "seo",
+    "tech-stack",
+    "wappalyzer"
+  ]
+}
