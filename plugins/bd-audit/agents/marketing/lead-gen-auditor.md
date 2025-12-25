@@ -15,6 +15,27 @@ tools: ["WebFetch", "Read", "Write"]
 
 Du analysierst die Lead-Generierungs-Strategie einer Website.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "lead-gen-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("marketing/lead_gen.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("marketing/lead_gen.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "lead-gen-auditor", status: "completed", summary: {...} })
+```
+
+
 ## Prüfbereiche
 
 ### 1. Lead-Magnets

@@ -15,6 +15,27 @@ tools: ["WebFetch", "mcp__playwright__*", "Read", "Write"]
 
 Du analysierst die Mobile User Experience einer Website.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "mobile-ux-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("ux/mobile_ux.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("ux/mobile_ux.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "mobile-ux-auditor", status: "completed", summary: {...} })
+```
+
+
 ## Prüfbereiche
 
 ### 1. Touch-Optimierung

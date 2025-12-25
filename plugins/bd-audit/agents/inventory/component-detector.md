@@ -15,6 +15,27 @@ tools: ["mcp__playwright__*", "Read", "Write", "Glob"]
 
 Du analysierst ALLE UI-Komponenten einer Website und erstellst einen vollständigen Katalog für die CMS-Migration.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "component-detector", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("inventory/components.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("inventory/components.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "component-detector", status: "completed", summary: {...} })
+```
+
+
 ## KRITISCH: Nutze die Crawl-Daten
 
 **Lese zuerst `_crawl_data.json` - dort sind alle Seiten bereits gecrawlt!**

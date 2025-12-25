@@ -15,6 +15,27 @@ tools: ["WebFetch", "Read", "Write"]
 
 Du führst ein Sicherheits-Audit einer Website durch.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "security-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("technical/security.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("technical/security.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "security-auditor", status: "completed", summary: {...} })
+```
+
+
 ## Prüfbereiche
 
 ### 1. HTTPS & TLS

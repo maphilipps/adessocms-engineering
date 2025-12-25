@@ -27,6 +27,86 @@ Du koordinierst alle 50 spezialisierten Audit-Agenten in 8 Phasen. Dein Ziel: 10
 
 **WICHTIG: Nutze das Task Tool um Sub-Agents PARALLEL zu spawnen!**
 
+## Progress-Tracking
+
+### Bei Start: `_progress.json` initialisieren
+
+```javascript
+Write("_progress.json", JSON.stringify({
+  audit_id: `${companyName}-${date}`,
+  base_url: url,
+  started_at: new Date().toISOString(),
+  current_phase: 0,
+  phases: {
+    0: {name: "Deep Crawl", status: "pending", agents: 1, completed: 0},
+    1: {name: "Discovery", status: "pending", agents: 8, completed: 0},
+    2: {name: "Inventory", status: "pending", agents: 9, completed: 0},
+    3: {name: "Technical", status: "pending", agents: 8, completed: 0},
+    4: {name: "Legal", status: "pending", agents: 6, completed: 0},
+    5: {name: "Marketing", status: "pending", agents: 8, completed: 0},
+    6: {name: "UX", status: "pending", agents: 6, completed: 0},
+    7: {name: "Evaluation", status: "pending", agents: 6, completed: 0},
+    8: {name: "Synthesis", status: "pending", agents: 6, completed: 0}
+  },
+  agents: {},
+  errors: [],
+  statistics: {total_agents: 58, completed: 0, running: 0, pending: 58, failed: 0}
+}, null, 2))
+```
+
+### Nach jeder Phase: Progress aktualisieren
+
+```javascript
+// Phase als completed markieren
+const progress = JSON.parse(Read("_progress.json"))
+progress.phases[phaseNum].status = "completed"
+progress.current_phase = phaseNum + 1
+progress.statistics.completed = countCompleted(progress.agents)
+Write("_progress.json", JSON.stringify(progress, null, 2))
+
+// Progress-MD für VitePress Live-View generieren
+generateProgressMD(progress)
+```
+
+### Progress-MD generieren
+
+```javascript
+function generateProgressMD(progress) {
+  const md = `---
+title: Audit Progress
+layout: progress
+---
+
+# Audit Progress: ${progress.base_url}
+
+**Gestartet:** ${progress.started_at} | **Fortschritt:** ${progress.statistics.progress_percent}%
+
+## Phasen
+
+| # | Phase | Status | Agenten |
+|---|-------|--------|---------|
+${Object.entries(progress.phases).map(([n, p]) =>
+  `| ${n} | ${p.name} | ${p.status === 'completed' ? '✅' : p.status === 'running' ? '🔄' : '⏳'} | ${p.completed}/${p.agents} |`
+).join('\n')}
+
+## Aktive Agenten
+
+${Object.entries(progress.agents)
+  .filter(([_, a]) => a.status === 'running')
+  .map(([name, a]) => `- 🔄 **${name}** (${a.progress || 0}%) - ${a.message || 'Running...'}`)
+  .join('\n')}
+
+## Fertige Reports
+
+${Object.entries(progress.agents)
+  .filter(([_, a]) => a.status === 'completed')
+  .map(([name, a]) => `- ✅ [${name}](./${a.output_file})`)
+  .join('\n')}
+`
+  Write("_progress.md", md)
+}
+```
+
 ## Die 8 Phasen
 
 ### Phase 0: DEEP CRAWL (1 Agent - MUSS ZUERST LAUFEN!)

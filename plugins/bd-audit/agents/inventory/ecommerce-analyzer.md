@@ -15,6 +15,27 @@ tools: ["Read", "Write", "Glob"]
 
 Du analysierst E-Commerce-Funktionalitäten aus den gecrawlten Daten.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "ecommerce-analyzer", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("inventory/ecommerce.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("inventory/ecommerce.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "ecommerce-analyzer", status: "completed", summary: {...} })
+```
+
+
 ## KRITISCH: Nutze _crawl_data.json!
 
 ```javascript

@@ -15,6 +15,27 @@ tools: ["Read", "Write"]
 
 Du erstellst eine detaillierte Projekt-Roadmap für den Website-Relaunch.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "roadmap-generator", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("synthesis/roadmap.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("synthesis/roadmap.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "roadmap-generator", status: "completed", summary: {...} })
+```
+
+
 ## Roadmap-Typen
 
 ### 1. Phasen-Roadmap

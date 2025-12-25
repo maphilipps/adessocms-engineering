@@ -15,6 +15,27 @@ tools: ["WebFetch", "WebSearch", "Read", "Write"]
 
 Du führst ein umfassendes SEO-Audit durch.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "seo-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("technical/seo.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("technical/seo.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "seo-auditor", status: "completed", summary: {...} })
+```
+
+
 ## SEO-Bereiche
 
 ### 1. Technical SEO

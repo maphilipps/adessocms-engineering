@@ -15,6 +15,27 @@ tools: ["mcp__lighthouse__*", "mcp__playwright__*", "WebFetch", "Read", "Write"]
 
 Du analysierst die Performance einer Website mit Lighthouse und Core Web Vitals.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "performance-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("technical/performance.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("technical/performance.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "performance-auditor", status: "completed", summary: {...} })
+```
+
+
 ## Messungen
 
 ### 1. Lighthouse Audit (via MCP)

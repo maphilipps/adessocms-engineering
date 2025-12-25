@@ -15,6 +15,27 @@ tools: ["Read", "Write", "Bash"]
 
 Du erstellst eine PowerPoint-Präsentation für die Kundenpräsentation der Audit-Ergebnisse.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "presentation-generator", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("synthesis/presentation_outline.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("synthesis/presentation_outline.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "presentation-generator", status: "completed", summary: {...} })
+```
+
+
 ## Präsentationsstruktur
 
 Die Präsentation nutzt das adesso PowerPoint-Template und folgt einer klaren Storyline.

@@ -21,6 +21,27 @@ tools: ["Read", "Write", "Glob"]
 
 Du analysierst die Geschäftsbereiche eines Unternehmens aus den gecrawlten Daten.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "business-segments-analyzer", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("discovery/business_segments.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("discovery/business_segments.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "business-segments-analyzer", status: "completed", summary: {...} })
+```
+
+
 ## KRITISCH: Nutze _crawl_data.json!
 
 ```javascript
@@ -150,6 +171,55 @@ contacts_found: 12
 | **Mit Kontaktdaten** | 10 |
 
 ## Organigramm
+
+### Mermaid-Diagramm
+
+```mermaid
+graph TB
+    COMPANY[🏢 Firmenname]
+
+    subgraph IND[🏭 INDUSTRIE]
+        AUTO[Automotive]
+        MAN[Manufacturing]
+        ENERGY[Energy]
+    end
+
+    subgraph FIN[💼 FINANCE]
+        BANK[Banking]
+        INS[Insurance]
+    end
+
+    HEALTH[🏥 Healthcare]
+    RETAIL[🛒 Retail]
+
+    COMPANY --> IND
+    COMPANY --> FIN
+    COMPANY --> HEALTH
+    COMPANY --> RETAIL
+
+    AUTO --> AUTO_C[👤 Max Mustermann<br/>Director]
+    MAN --> MAN_C[👤 Anna Schmidt<br/>Head of]
+    ENERGY --> ENERGY_C[👤 Peter Meyer<br/>Lead]
+    BANK --> BANK_C[👤 Lisa Weber<br/>Director]
+    INS --> INS_C[👤 Tom Braun<br/>Head of]
+    HEALTH --> HEALTH_C[👤 Dr. Julia Krämer<br/>Director]
+    RETAIL --> RETAIL_C[👤 Stefan Lange<br/>Lead]
+
+    style COMPANY fill:#1a365d,color:#fff
+    style IND fill:#2d3748,color:#fff
+    style FIN fill:#2d3748,color:#fff
+    style HEALTH fill:#2d3748,color:#fff
+    style RETAIL fill:#2d3748,color:#fff
+    style AUTO_C fill:#48bb78,color:#fff
+    style MAN_C fill:#48bb78,color:#fff
+    style ENERGY_C fill:#48bb78,color:#fff
+    style BANK_C fill:#4299e1,color:#fff
+    style INS_C fill:#4299e1,color:#fff
+    style HEALTH_C fill:#ed64a6,color:#fff
+    style RETAIL_C fill:#ed8936,color:#fff
+```
+
+### Text-Version
 
 ```
 [Firmenname]

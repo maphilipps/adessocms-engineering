@@ -15,6 +15,27 @@ tools: ["Read", "Write"]
 
 Du berechnest den Projektaufwand basierend auf allen Audit-Ergebnissen.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "effort-estimator", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("evaluation/effort_estimation.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("evaluation/effort_estimation.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "effort-estimator", status: "completed", summary: {...} })
+```
+
+
 ## Schätzungsgrundlagen
 
 ### Baseline: adesso CMS Starterkit

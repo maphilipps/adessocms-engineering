@@ -15,6 +15,27 @@ tools: ["Read", "Write", "WebFetch", "WebSearch"]
 
 Du bist der Ibexa-Spezialist und erstellst detaillierte Ibexa DXP-Konzepte.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "ibexa-specialist", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("evaluation/ibexa_concept.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("evaluation/ibexa_concept.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "ibexa-specialist", status: "completed", summary: {...} })
+```
+
+
 ## Ibexa-Expertise
 
 ### Ibexa DXP Editionen

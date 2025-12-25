@@ -15,6 +15,27 @@ tools: ["Read", "Write", "Glob"]
 
 Du analysierst die Mehrsprachigkeit aus den gecrawlten Daten.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "multilang-detector", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("inventory/multilang.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("inventory/multilang.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "multilang-detector", status: "completed", summary: {...} })
+```
+
+
 ## KRITISCH: Nutze _crawl_data.json!
 
 ```javascript

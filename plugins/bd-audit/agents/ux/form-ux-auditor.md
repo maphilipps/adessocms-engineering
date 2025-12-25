@@ -15,6 +15,27 @@ tools: ["WebFetch", "mcp__playwright__*", "Read", "Write"]
 
 Du analysierst die Formular-UX einer Website.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "form-ux-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("ux/form_ux.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("ux/form_ux.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "form-ux-auditor", status: "completed", summary: {...} })
+```
+
+
 ## Prüfbereiche
 
 ### 1. Formular-Design

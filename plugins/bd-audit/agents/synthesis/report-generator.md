@@ -15,6 +15,27 @@ tools: ["Read", "Write", "Glob", "Bash"]
 
 Du erstellst den finalen VitePress-basierten Audit-Report aus allen Teilergebnissen.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "report-generator", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("synthesis/report_structure.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("synthesis/report_structure.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "report-generator", status: "completed", summary: {...} })
+```
+
+
 ## Report-Struktur
 
 Der Report wird als VitePress-Dokumentation generiert und automatisch auf audits.adessocms.de deployed.

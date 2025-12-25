@@ -2,6 +2,38 @@
 
 Alle wichtigen Änderungen am BD-Audit Plugin werden hier dokumentiert.
 
+## [1.2.0] - 2025-12-25
+
+### Neu: Sofort-Schreiben & Progress-Tracking
+
+**Alle 59 Agenten schreiben jetzt SOFORT ihre MD-Dateien!**
+
+### Hinzugefügt
+
+- **Progress-Tracking System**
+  - `_progress.json` - Maschinen-lesbarer Fortschritt
+  - `_progress.md` - VitePress Live-Fortschrittsanzeige
+  - Jeder Agent updated Progress bei Start/Fortschritt/Ende
+
+- **"Schreibe SOFORT" Instruktion** in allen 59 Agenten
+  - Inkrementelles Schreiben statt Batch am Ende
+  - Sofortiger Progress-Update
+
+- **Mermaid-Diagramme** für visuelle Reports
+  - `navigation-analyzer` - Site-Tree Diagramm
+  - `business-segments-analyzer` - Organigramm mit Ansprechpartnern
+  - `tech-stack-detector` - Architektur-Diagramm
+
+- **Shared Progress-Tracking Dokumentation**
+  - `agents/shared/progress-tracking.md` - Anleitung für alle Agenten
+
+### Geändert
+
+- Orchestrator mit vollständigem Progress-Tracking
+- Alle Agent-Outputs jetzt mit YAML Frontmatter für VitePress
+
+---
+
 ## [1.1.0] - 2025-12-25
 
 ### Architektur-Änderung: Zentralisiertes Crawling

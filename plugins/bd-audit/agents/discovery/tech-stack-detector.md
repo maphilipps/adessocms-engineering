@@ -15,6 +15,27 @@ tools: ["Read", "Write", "Glob", "Bash"]
 
 Du erkennst alle verwendeten Technologien primär aus den gecrawlten Daten.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "tech-stack-detector", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("discovery/tech-stack.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("discovery/tech-stack.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "tech-stack-detector", status: "completed", summary: {...} })
+```
+
+
 ## KRITISCH: Nutze zuerst _crawl_data.json!
 
 ```javascript
@@ -138,6 +159,52 @@ confidence: 95%
 | **CSS** | Bootstrap | 5.3 | 85% | Classes |
 | **Hosting** | AWS | - | 80% | Headers |
 | **CDN** | Cloudflare | - | 95% | Headers |
+
+## Architektur-Diagramm
+
+```mermaid
+graph TB
+    subgraph CLIENT[🖥️ Client]
+        BROWSER[Browser]
+    end
+
+    subgraph CDN[☁️ CDN Layer]
+        CF[Cloudflare]
+    end
+
+    subgraph SERVER[🖥️ Server]
+        NGINX[nginx]
+        subgraph APP[📦 Application]
+            CMS[Drupal 10.x]
+            PHP[PHP 8.2]
+        end
+        subgraph DATA[💾 Data]
+            MYSQL[(MySQL 8)]
+            FILES[/files/]
+        end
+    end
+
+    subgraph EXTERNAL[🔗 External Services]
+        GA[Google Analytics]
+        GTM[Tag Manager]
+        HS[HubSpot]
+    end
+
+    BROWSER --> CF
+    CF --> NGINX
+    NGINX --> CMS
+    CMS --> PHP
+    PHP --> MYSQL
+    PHP --> FILES
+    BROWSER -.-> GA
+    BROWSER -.-> GTM
+    BROWSER -.-> HS
+
+    style CF fill:#f48120,color:#fff
+    style CMS fill:#0678be,color:#fff
+    style PHP fill:#777bb3,color:#fff
+    style MYSQL fill:#4479a1,color:#fff
+```
 
 ## CMS Details
 

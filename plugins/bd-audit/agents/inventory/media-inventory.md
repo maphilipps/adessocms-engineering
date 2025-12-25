@@ -15,6 +15,27 @@ tools: ["Read", "Write", "Glob"]
 
 Du erfasst ALLE Medien-Assets aus den gecrawlten Daten.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "media-inventory", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("inventory/media.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("inventory/media.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "media-inventory", status: "completed", summary: {...} })
+```
+
+
 ## KRITISCH: Nutze _crawl_data.json!
 
 ```javascript

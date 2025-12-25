@@ -15,6 +15,27 @@ tools: ["Read", "Write"]
 
 Du erstellst die Executive Summary für Entscheider basierend auf allen Audit-Ergebnissen.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "executive-summary-generator", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("synthesis/executive_summary.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("synthesis/executive_summary.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "executive-summary-generator", status: "completed", summary: {...} })
+```
+
+
 ## Zielgruppe
 
 - C-Level (CEO, CTO, CMO)

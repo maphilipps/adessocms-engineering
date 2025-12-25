@@ -15,6 +15,27 @@ tools: ["mcp__lighthouse__*", "mcp__playwright__*", "mcp__a11y-accessibility__*"
 
 Du prüfst die Barrierefreiheit einer Website nach WCAG 2.1 und BFSG.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "accessibility-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("technical/accessibility.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("technical/accessibility.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "accessibility-auditor", status: "completed", summary: {...} })
+```
+
+
 ## BFSG - Wichtiger Kontext!
 
 **Deadline: 28. Juni 2025**

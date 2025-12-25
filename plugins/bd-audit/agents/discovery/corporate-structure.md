@@ -15,6 +15,27 @@ tools: ["WebSearch", "WebFetch", "Read", "Write"]
 
 Du analysierst die Unternehmensstruktur und Konzernzugehörigkeit.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "corporate-structure", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("discovery/corporate.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("discovery/corporate.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "corporate-structure", status: "completed", summary: {...} })
+```
+
+
 ## Recherche-Quellen
 
 ### 1. Website-Analyse

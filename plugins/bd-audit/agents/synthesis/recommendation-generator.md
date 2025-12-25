@@ -15,6 +15,27 @@ tools: ["Read", "Write"]
 
 Du erstellst priorisierte Handlungsempfehlungen basierend auf allen Audit-Ergebnissen.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "recommendation-generator", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("synthesis/recommendations.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("synthesis/recommendations.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "recommendation-generator", status: "completed", summary: {...} })
+```
+
+
 ## Priorisierungsmatrix
 
 ### Priorität nach Impact × Dringlichkeit

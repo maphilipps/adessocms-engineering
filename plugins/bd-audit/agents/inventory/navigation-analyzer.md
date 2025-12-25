@@ -15,6 +15,27 @@ tools: ["Read", "Write", "Glob"]
 
 Du analysierst die Navigationsstruktur aus den gecrawlten Daten.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "navigation-analyzer", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("inventory/navigation.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("inventory/navigation.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "navigation-analyzer", status: "completed", summary: {...} })
+```
+
+
 ## KRITISCH: Nutze _crawl_data.json!
 
 ```javascript
@@ -95,6 +116,50 @@ max_depth: 4
 | **Sprachen** | DE, EN |
 
 ## Website-Hierarchie
+
+### Mermaid Site-Tree
+
+```mermaid
+graph TD
+    HOME[🏠 Homepage]
+
+    HOME --> PROD[📦 Produkte]
+    HOME --> LEIS[⚙️ Leistungen]
+    HOME --> ABOUT[ℹ️ Über uns]
+    HOME --> BLOG[📝 Blog]
+    HOME --> CONTACT[📧 Kontakt]
+    HOME --> LEGAL[⚖️ Rechtliches]
+
+    PROD --> KATA[Kategorie A]
+    PROD --> KATB[Kategorie B]
+    KATA --> P1[Produkt 1]
+    KATA --> P2[Produkt 2]
+    KATA --> P3[Produkt 3]
+    KATB --> P4[Produkt 4]
+
+    LEIS --> BER[Beratung]
+    LEIS --> ENT[Entwicklung]
+
+    ABOUT --> TEAM[Team]
+    ABOUT --> KAR[Karriere]
+    ABOUT --> STAND[Standorte]
+
+    BLOG --> ART["52 Artikel"]
+
+    LEGAL --> IMP[Impressum]
+    LEGAL --> DSG[Datenschutz]
+    LEGAL --> AGB[AGB]
+
+    style HOME fill:#4CAF50,color:#fff
+    style PROD fill:#2196F3,color:#fff
+    style LEIS fill:#2196F3,color:#fff
+    style ABOUT fill:#2196F3,color:#fff
+    style BLOG fill:#FF9800,color:#fff
+    style CONTACT fill:#9C27B0,color:#fff
+    style LEGAL fill:#607D8B,color:#fff
+```
+
+### Text-Hierarchie
 
 ```
 example.com/

@@ -15,6 +15,27 @@ tools: ["WebFetch", "Read", "Write"]
 
 Du prüfst das Impressum einer Website auf Vollständigkeit.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "imprint-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("legal/imprint.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("legal/imprint.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "imprint-auditor", status: "completed", summary: {...} })
+```
+
+
 ## Pflichtangaben (TMG §5)
 
 ### Für alle Unternehmen

@@ -15,6 +15,27 @@ tools: ["WebFetch", "Read", "Write"]
 
 Du analysierst die Code-Qualität einer Website.
 
+
+## KRITISCH: Sofort schreiben & Progress updaten!
+
+**Schreibe SOFORT in deine Output-Datei, nicht erst am Ende!**
+**Aktualisiere `_progress.json` bei Start, Fortschritt und Ende!**
+
+```javascript
+// 1. Bei Start: Progress melden
+updateProgress({ agent: "code-quality-auditor", status: "running", started_at: new Date().toISOString() })
+
+// 2. Sofort Header schreiben
+Write("technical/code_quality.md", headerContent)
+
+// 3. Inkrementell Ergebnisse anhängen
+results.forEach(r => Append("technical/code_quality.md", formatResult(r)))
+
+// 4. Bei Ende: Progress melden
+updateProgress({ agent: "code-quality-auditor", status: "completed", summary: {...} })
+```
+
+
 ## Prüfbereiche
 
 ### 1. HTML-Qualität
