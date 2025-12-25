@@ -1,6 +1,6 @@
 {
   "name": "bd-audit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Vollständige Website & Marketing Audits für Business Developer. 50 Agenten, 12 Commands, VitePress Reports, Netlify Deploy. EIN Befehl: /bd example.com",
   "author": {
     "name": "adesso SE",

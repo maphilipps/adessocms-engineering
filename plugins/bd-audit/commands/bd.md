@@ -2,7 +2,7 @@
 name: bd
 description: "Vollständiger Website-Audit mit einem Befehl. Analysiert Website, Technik, Marketing, Legal und generiert VitePress Report."
 argument-hint: "<url> [--quick|--tech|--marketing|--legal] [--no-deploy]"
-allowed-tools: ["Task", "Read", "Write", "Bash", "WebFetch", "WebSearch", "Glob", "Grep", "TodoWrite", "mcp__playwright__*", "mcp__wappalyzer__*", "mcp__lighthouse__*", "mcp__firecrawl__*"]
+allowed-tools: ["Task", "Read", "Write", "Bash", "WebFetch", "WebSearch", "Glob", "Grep", "TodoWrite", "mcp__playwright__*", "mcp__wappalyzer__*", "mcp__lighthouse__*"]
 ---
 
 Du führst einen vollständigen Website-Audit durch. Der Benutzer ist ein Business Developer ohne technisches Wissen - halte alles einfach!
@@ -25,18 +25,14 @@ Führe einen umfassenden Audit der angegebenen Website durch und erstelle einen 
 
 ## Workflow
 
-### 1. Prüfe ob wir im Audit-Reports Repo sind
+### 1. Output-Verzeichnis bestimmen
 
 ```bash
-# Prüfe ob wir im bd-audit-reports Repo sind
-if [ -d ".vitepress" ] && [ -f "index.md" ]; then
-  echo "Im Audit-Reports Repo"
-  OUTPUT_DIR="reports/$(date +%Y)/$(date +%m)/${COMPANY_SLUG}/"
-else
-  echo "Lokaler Audit"
-  OUTPUT_DIR="./audit-${COMPANY_SLUG}/"
-fi
+# Einfache Struktur: firmenname/
+OUTPUT_DIR="./${COMPANY_SLUG}/"
 ```
+
+Reports werden direkt im Firmen-Ordner gespeichert und können iterativ verbessert werden.
 
 ### 2. Extrahiere Firmenname aus URL
 
@@ -138,7 +134,7 @@ Nach allen Agenten:
 ### 5. Git Commit & Deploy (wenn nicht --no-deploy)
 
 ```bash
-git add reports/${YEAR}/${MONTH}/${COMPANY}/
+git add ${COMPANY_SLUG}/
 git commit -m "Audit: ${COMPANY} - Score ${SCORE}/100 - ${DATE}"
 git push origin main
 ```
@@ -148,8 +144,8 @@ git push origin main
 ```
 ✅ Audit abgeschlossen: [Firmenname]
 
-📊 Report: https://audits.adessocms.de/2025/12/firmenname/
-📁 Lokal:  reports/2025/12/firmenname/
+📊 Report: https://audits.adessocms.de/firmenname/
+📁 Lokal:  ./firmenname/
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

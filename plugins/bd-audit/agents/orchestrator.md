@@ -29,32 +29,46 @@ Du koordinierst alle 50 spezialisierten Audit-Agenten in 8 Phasen. Dein Ziel: 10
 
 ## Die 8 Phasen
 
-### Phase 1: DISCOVERY (8 Agenten)
-Wer ist das Unternehmen? Was macht die Website?
+### Phase 0: DEEP CRAWL (1 Agent - MUSS ZUERST LAUFEN!)
+
+**KRITISCH: Dieser Agent läuft ALLEINE und VOR allen anderen!**
+Er crawlt JEDE Seite und speichert alles in `_crawl_data.json`.
 
 ```
-Task(subagent_type="bd-audit:discovery-basic", prompt="Analysiere ${URL}")
+Task(subagent_type="bd-audit:sitemap-crawler", prompt="Deep-Crawle ${URL} - besuche JEDE Seite, mache Screenshots, extrahiere alle Daten nach _crawl_data.json")
+```
+
+**Warte auf Abschluss!** Alle folgenden Agents nutzen `_crawl_data.json`.
+
+---
+
+### Phase 1: DISCOVERY (8 Agenten - PARALLEL)
+Wer ist das Unternehmen? Nutzen `_crawl_data.json`!
+
+```
+Task(subagent_type="bd-audit:discovery-basic", prompt="Analysiere ${URL} anhand _crawl_data.json")
 Task(subagent_type="bd-audit:tech-stack-detector", prompt="Erkenne Tech Stack von ${URL}")
-Task(subagent_type="bd-audit:sitemap-crawler", prompt="Crawle Sitemap von ${URL}")
 Task(subagent_type="bd-audit:company-profiler", prompt="Recherchiere ${COMPANY}")
 Task(subagent_type="bd-audit:corporate-structure", prompt="Analysiere Struktur von ${COMPANY}")
-Task(subagent_type="bd-audit:contact-finder", prompt="Finde Ansprechpartner bei ${COMPANY}")
+Task(subagent_type="bd-audit:business-segments-analyzer", prompt="Analysiere Geschäftsbereiche aus _crawl_data.json mit Ansprechpartnern")
+Task(subagent_type="bd-audit:contact-finder", prompt="Extrahiere Ansprechpartner aus _crawl_data.json")
 Task(subagent_type="bd-audit:social-media-scanner", prompt="Scanne Social Media von ${COMPANY}")
 Task(subagent_type="bd-audit:news-scanner", prompt="Suche News über ${COMPANY}")
 ```
 
-### Phase 2: INVENTORY (8 Agenten)
-Was gibt es alles auf der Website?
+### Phase 2: INVENTORY (9 Agenten - PARALLEL)
+Was gibt es alles auf der Website? Nutzen `_crawl_data.json`!
 
 ```
-Task(subagent_type="bd-audit:page-inventory", ...)
-Task(subagent_type="bd-audit:component-detector", ...)
-Task(subagent_type="bd-audit:corporate-design", ...)
-Task(subagent_type="bd-audit:content-census", ...)
-Task(subagent_type="bd-audit:forms-analyzer", ...)
-Task(subagent_type="bd-audit:media-library", ...)
-Task(subagent_type="bd-audit:navigation-analyzer", ...)
-Task(subagent_type="bd-audit:footer-header-scanner", ...)
+Task(subagent_type="bd-audit:content-inventory", prompt="Analysiere Content aus _crawl_data.json")
+Task(subagent_type="bd-audit:component-detector", prompt="Erstelle Komponenten-Katalog aus _crawl_data.json")
+Task(subagent_type="bd-audit:page-type-analyzer", prompt="Kategorisiere Seitentypen aus _crawl_data.json")
+Task(subagent_type="bd-audit:media-inventory", prompt="Analysiere Medien aus _crawl_data.json")
+Task(subagent_type="bd-audit:form-inventory", prompt="Analysiere Formulare aus _crawl_data.json")
+Task(subagent_type="bd-audit:navigation-analyzer", prompt="Analysiere Navigation aus _crawl_data.json")
+Task(subagent_type="bd-audit:integration-detector", prompt="Erkenne Integrationen aus _crawl_data.json")
+Task(subagent_type="bd-audit:multilang-detector", prompt="Prüfe Mehrsprachigkeit aus _crawl_data.json")
+Task(subagent_type="bd-audit:ecommerce-analyzer", prompt="Analysiere E-Commerce aus _crawl_data.json")
 ```
 
 ### Phase 3: TECHNICAL (8 Agenten)
@@ -145,15 +159,20 @@ Zusammenfassung und Empfehlungen
 
 ## Output-Struktur
 
-Jeder Agent schreibt seine Ergebnisse als Markdown:
+Jeder Agent schreibt seine Ergebnisse als Markdown.
+
+**Basis-Verzeichnis:** `./<firmenname>/` (wird vom Orchestrator gesetzt)
+
+Alle Agent-Pfade sind relativ zu diesem Verzeichnis:
 
 ```
-reports/2025/12/firmenname/
+<firmenname>/
 ├── index.md               # Executive Summary
 ├── discovery/
 │   ├── overview.md
 │   ├── tech-stack.md
-│   └── company.md
+│   ├── company.md
+│   └── business_segments.md
 ├── inventory/
 │   ├── pages.md
 │   ├── components.md
@@ -177,6 +196,8 @@ reports/2025/12/firmenname/
 └── screenshots/
     └── *.png
 ```
+
+**Iteratives Arbeiten:** Reports können jederzeit erneut analysiert/verbessert werden durch erneuten Aufruf von `/bd`.
 
 ## Lead Score Berechnung
 

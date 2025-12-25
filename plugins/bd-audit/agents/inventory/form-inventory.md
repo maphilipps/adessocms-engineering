@@ -1,27 +1,40 @@
 ---
 name: form-inventory
-description: "Formular-Inventar - Kontaktformulare, Lead-Gen, Newsletter. Automatisch bei Audit."
+description: "Formular-Inventar - EXAKTE Erfassung aller Formulare aus _crawl_data.json."
 
 <example>
 Context: Formulare analysieren
 user: "Welche Formulare gibt es auf der Website?"
-assistant: "Ich starte form-inventory für die Formular-Erfassung."
+assistant: "Ich analysiere _crawl_data.json für das vollständige Formular-Inventar."
 </example>
 
 model: haiku
 color: rose
-tools: ["WebFetch", "Read", "Write"]
+tools: ["Read", "Write", "Glob"]
 ---
 
-Du erfasst alle Formulare einer Website und analysierst deren Funktion.
+Du erfasst ALLE Formulare aus den gecrawlten Daten und analysierst deren Funktion.
 
-## Formular-Typen
+## KRITISCH: Nutze _crawl_data.json!
+
+```javascript
+const crawlData = JSON.parse(Read("_crawl_data.json"))
+// ALLE Formulare sind bereits gecrawlt!
+const allForms = crawlData.pages.flatMap(p =>
+  p.forms.map(f => ({ ...f, page_url: p.url }))
+)
+```
+
+**KEINE eigenen Crawls! EXAKTE Zahlen aus den Crawl-Daten!**
+
+## Formular-Klassifikation
 
 ### Lead-Generation
 - Kontaktformular
 - Angebotsanfrage
 - Demo-Anfrage
 - Beratungstermin
+- Callback-Formular
 
 ### Newsletter & Downloads
 - Newsletter-Anmeldung
@@ -50,16 +63,21 @@ Du erfasst alle Formulare einer Website und analysierst deren Funktion.
 - Umfragen
 - Support-Ticket
 
-## Analyse-Kriterien
+## Analyse aus Crawl-Daten
 
-Pro Formular:
-- Name/Zweck
-- Seite/URL
-- Anzahl Felder
-- Pflichtfelder
-- Validierung
-- Captcha/Spam-Schutz
-- Backend-Anbindung
+```javascript
+// Pro Formular aus crawlData.pages[].forms[]
+const formAnalysis = {
+  id: form.id,
+  type: classifyFormType(form),
+  page_url: page.url,
+  fields: form.fields,        // [{name, type, required}]
+  action: form.action,        // Submit-URL
+  method: form.method,        // GET/POST
+  has_captcha: form.has_captcha,
+  has_privacy_checkbox: form.fields.some(f => f.name.includes('privacy'))
+}
+```
 
 ## Output Format
 
@@ -70,111 +88,122 @@ Schreibe nach: `inventory/forms.md`
 title: Formular-Inventar
 agent: form-inventory
 date: 2025-12-25
-total_forms: 8
-lead_forms: 4
+total_forms: 12
+lead_forms: 5
 ---
 
 # Formular-Inventar: [Firmenname]
 
-## Übersicht
+## Zusammenfassung
 
 | Metrik | Wert |
 |--------|------|
-| **Gesamt-Formulare** | 8 |
-| **Lead-Gen Formulare** | 4 |
-| **Newsletter** | 1 |
-| **Login/Account** | 2 |
+| **Gesamt-Formulare** | 12 |
+| **Lead-Gen Formulare** | 5 |
+| **Newsletter** | 2 |
+| **Login/Account** | 3 |
+| **Suche** | 1 |
 | **Sonstige** | 1 |
+
+## Alle Formulare
+
+| # | Typ | Seite | Felder | Captcha | DSGVO |
+|---|-----|-------|--------|---------|-------|
+| 1 | Kontakt | /kontakt | 6 | ❌ | ✓ |
+| 2 | Angebot | /angebot | 10 | ✓ | ✓ |
+| 3 | Newsletter | Footer | 1 | ❌ | ✓ |
+| 4 | Suche | Header | 1 | - | - |
+| 5 | Login | /login | 2 | ❌ | - |
+| ... | ... | ... | ... | ... | ... |
 
 ## Formular-Details
 
-### 1. Kontaktformular ⭐ Wichtig
+### 1. Kontaktformular ⭐ Lead-Gen
 
 | Eigenschaft | Wert |
 |-------------|------|
 | **URL** | /kontakt |
 | **Zweck** | Allgemeine Anfragen |
 | **Felder** | 6 |
-| **Pflichtfelder** | Name, E-Mail, Nachricht |
+| **Pflichtfelder** | 3 (Name, E-Mail, Nachricht) |
 | **Captcha** | ❌ Keins |
-| **Backend** | Unbekannt |
+| **DSGVO-Checkbox** | ✓ Ja |
 
-**Felder:**
-1. Anrede (Dropdown)
-2. Name* (Text)
-3. E-Mail* (Email)
-4. Telefon (Tel)
-5. Betreff (Text)
-6. Nachricht* (Textarea)
-7. Datenschutz* (Checkbox)
+**Felder-Liste:**
+| Feld | Typ | Pflicht |
+|------|-----|---------|
+| Anrede | select | ❌ |
+| Name | text | ✓ |
+| E-Mail | email | ✓ |
+| Telefon | tel | ❌ |
+| Betreff | text | ❌ |
+| Nachricht | textarea | ✓ |
+| Datenschutz | checkbox | ✓ |
 
-### 2. Angebotsanfrage ⭐ Wichtig
+---
+
+### 2. Angebotsanfrage ⭐ Lead-Gen
 
 | Eigenschaft | Wert |
 |-------------|------|
 | **URL** | /angebot |
 | **Zweck** | Lead-Generierung |
 | **Felder** | 10 |
-| **Captcha** | ✓ reCAPTCHA |
-| **Backend** | CRM-Anbindung? |
+| **Captcha** | ✓ reCAPTCHA v3 |
+| **DSGVO-Checkbox** | ✓ Ja |
 
-### 3. Newsletter-Anmeldung
+**Felder-Liste:**
+| Feld | Typ | Pflicht |
+|------|-----|---------|
+| ... | ... | ... |
 
-| Eigenschaft | Wert |
-|-------------|------|
-| **URL** | Footer (alle Seiten) |
-| **Zweck** | E-Mail Liste |
-| **Felder** | 1 (E-Mail) |
-| **Double-Opt-In** | ✓ Ja |
-| **Backend** | Mailchimp? |
+---
 
-### 4. Suche
+## Formular-Qualität Matrix
 
-| Eigenschaft | Wert |
-|-------------|------|
-| **URL** | Header (alle Seiten) |
-| **Typ** | Autocomplete |
-| **Backend** | CMS-Suche |
-
-## Formular-Qualität
-
-| Formular | UX | A11y | Spam | Gesamt |
-|----------|-----|------|------|--------|
-| Kontakt | ⭐⭐ | ⭐ | ⭐ | ⭐⭐ |
-| Angebot | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| Newsletter | ⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐ |
-| Suche | ⭐⭐ | ⭐ | - | ⭐⭐ |
-
-## Integrations-Anforderungen
-
-### Identifizierte Backends
-- [ ] CRM-System: [Name?]
-- [ ] Newsletter: [Mailchimp/Hubspot?]
-- [ ] Support: [Zendesk/Freshdesk?]
-- [ ] Analytics: [GA4/Tag Manager?]
-
-### Drupal-Implementierung
-
-| Formular | Modul |
-|----------|-------|
-| Kontakt | Webform |
-| Angebot | Webform + CRM |
-| Newsletter | Simplenews/Integration |
-| Suche | Search API |
+| Formular | Spam-Schutz | A11y | Validierung | Mobile | Gesamt |
+|----------|-------------|------|-------------|--------|--------|
+| Kontakt | ⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| Angebot | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
+| Newsletter | ⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐ |
+| Login | ⭐ | ⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐ |
 
 ## DSGVO-Compliance
 
-| Aspekt | Status |
-|--------|--------|
-| Datenschutz-Checkbox | ⚠️ Nicht überall |
-| Double-Opt-In | ✓ Newsletter |
-| Datenminimierung | ⚠️ Zu viele Felder? |
-| Löschkonzept | ❓ Unbekannt |
+| Aspekt | Status | Betroffene Formulare |
+|--------|--------|---------------------|
+| Datenschutz-Checkbox | ⚠️ Fehlt bei 3 | Login, Suche, Filter |
+| Double-Opt-In | ✓ | Newsletter |
+| Datenminimierung | ⚠️ | Angebot (zu viele Felder) |
+| SSL-Verschlüsselung | ✓ | Alle |
+
+## Drupal-Implementierung
+
+### Formular → Modul Mapping
+
+| Formular | Empfohlenes Modul | Aufwand |
+|----------|-------------------|---------|
+| Kontakt | Webform | 0.5 PT |
+| Angebot | Webform + CRM | 1 PT |
+| Newsletter | Simplenews/Mailchimp | 0.5 PT |
+| Login | Core User | 0 PT |
+| Suche | Search API | 0.5 PT |
+
+### Geschätzter Gesamtaufwand
+
+| Phase | PT |
+|-------|-----|
+| Formular-Setup | 3-5 |
+| Validierung & Spam | 1-2 |
+| Backend-Integration | 2-4 |
+| Testing | 1-2 |
+| **Gesamt** | **7-13 PT** |
 
 ## Empfehlungen
 
-1. **Spam-Schutz** verbessern (Honeypot, reCAPTCHA v3)
-2. **Datenschutz-Checkbox** bei allen Formularen
-3. **Accessibility** verbessern (Labels, Errors)
+1. **Spam-Schutz** bei allen Formularen (Honeypot + reCAPTCHA v3)
+2. **DSGVO-Checkbox** bei allen datensammelnden Formularen
+3. **Accessibility** verbessern (Labels, Error-Messages)
 4. **Validierung** client- und serverseitig
+5. **Webform-Modul** für einheitliche Verwaltung
 ```

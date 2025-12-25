@@ -77,36 +77,33 @@ The plugin includes specialized knowledge through skills:
 
 | Server | Purpose |
 |--------|---------|
-| **Wappalyzer** | Technology detection |
+| **Playwright** | Browser automation, crawling, screenshots |
+| **Wappalyzer** | Technology detection (local) |
 | **Lighthouse** | Performance, accessibility, SEO audits |
-| **Firecrawl** | Website crawling and content extraction |
 
 ## Report Structure
 
-Reports are generated as VitePress static sites:
+Reports are generated as VitePress static sites with a simple flat structure:
 
 ```
-customers/<customer-slug>/
-├── index.md              # Landing page
-├── zusammenfassung.md    # Executive summary
-├── dashboard.md          # Score dashboard
-├── analyse/
-│   ├── technologie.md    # Tech stack
+<firmenname>/
+├── index.md              # Executive summary + dashboard
+├── discovery/
+│   ├── overview.md       # Quick overview
+│   ├── tech-stack.md     # Technology detection
+│   ├── company.md        # Company profile
+│   └── business_segments.md  # Divisions + contacts
+├── technical/
 │   ├── performance.md    # Lighthouse results
 │   ├── accessibility.md  # BFSG/WCAG
-│   ├── seo.md            # SEO analysis
-│   ├── security.md       # Security check
-│   ├── content.md        # Content inventory
-│   └── ux.md             # UX analysis
-├── empfehlung/
-│   ├── cms.md            # CMS recommendation
-│   ├── roadmap.md        # Project roadmap
-│   ├── kosten.md         # TCO calculation
-│   └── team.md           # Team proposal
-└── anhang/
-    ├── details.md        # Technical details
-    └── kontakt.md        # Contact info
+│   └── seo.md            # SEO analysis
+├── evaluation/
+│   ├── cms-comparison.md # CMS recommendation
+│   └── recommendation.md # Final recommendation
+└── screenshots/          # Visual captures
 ```
+
+**Iterative:** Re-run `/bd <url>` anytime to improve existing reports.
 
 ## Setup
 
@@ -119,13 +116,7 @@ customers/<customer-slug>/
 ### Environment Variables
 
 ```bash
-# Optional: Wappalyzer API for enhanced detection
-WAPPALYZER_API_KEY=your-api-key
-
-# Optional: Firecrawl for advanced crawling
-FIRECRAWL_API_KEY=your-api-key
-
-# Deployment
+# Deployment (optional)
 NETLIFY_AUTH_TOKEN=your-token
 NETLIFY_SITE_ID=your-site-id
 ```

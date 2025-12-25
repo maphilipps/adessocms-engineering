@@ -1,49 +1,73 @@
 ---
 name: navigation-analyzer
-description: "Navigation-Analyse - Menüstruktur, Hierarchie, Benutzerführung. Automatisch bei Audit."
+description: "Navigation-Analyse - EXAKTE Menüstruktur aus _crawl_data.json."
 
 <example>
 Context: Navigation verstehen
 user: "Wie ist die Website-Navigation aufgebaut?"
-assistant: "Ich starte navigation-analyzer für die Navigations-Analyse."
+assistant: "Ich analysiere _crawl_data.json für die vollständige Navigations-Analyse."
 </example>
 
 model: haiku
 color: lime
-tools: ["WebFetch", "Read", "Write"]
+tools: ["Read", "Write", "Glob"]
 ---
 
-Du analysierst die Navigationsstruktur einer Website.
+Du analysierst die Navigationsstruktur aus den gecrawlten Daten.
 
-## Navigations-Elemente
+## KRITISCH: Nutze _crawl_data.json!
 
-### Primär-Navigation
-- Hauptmenü (Header)
-- Mega-Menü?
-- Mobile Navigation
+```javascript
+const crawlData = JSON.parse(Read("_crawl_data.json"))
 
-### Sekundär-Navigation
-- Footer-Navigation
-- Sidebar-Navigation
-- Breadcrumbs
+// Navigation-Daten sind bereits gecrawlt
+const navigation = crawlData.structure  // {main_nav, footer_nav, languages, ...}
 
-### Utility-Navigation
-- Meta-Navigation (Login, Sprache)
-- Quick Links
-- Suche
+// Breadcrumbs aus Seiten
+const allBreadcrumbs = crawlData.pages.map(p => ({
+  url: p.url,
+  breadcrumb: p.breadcrumb,
+  depth: p.depth
+}))
 
-### Kontext-Navigation
-- In-Page Navigation
-- Related Content
-- Pagination
+// Hierarchie rekonstruieren
+const siteHierarchy = buildHierarchy(crawlData.pages)
+```
 
-## Analyse-Kriterien
+**KEINE eigenen Crawls! EXAKTE Daten aus _crawl_data.json!**
 
-- Hierarchie-Tiefe (max. Ebenen)
-- Anzahl Hauptpunkte
-- Anzahl Gesamtpunkte
-- Mobile-Variante
-- Accessibility
+## Analyse aus Crawl-Daten
+
+### Aus crawlData.structure
+
+```javascript
+{
+  main_nav: ["Home", "Produkte", "Leistungen", "Über uns", "Kontakt"],
+  footer_nav: ["Impressum", "Datenschutz", "AGB"],
+  languages: ["de", "en"],
+  meta_nav: ["Login", "Suche"]
+}
+```
+
+### Aus crawlData.pages[].breadcrumb
+
+```javascript
+// Hierarchie aus Breadcrumbs rekonstruieren
+crawlData.pages.forEach(page => {
+  // page.breadcrumb = ["Home", "Produkte", "Kategorie A", "Produkt 1"]
+  // page.depth = 3
+})
+```
+
+### Tiefenanalyse
+
+```javascript
+const depthStats = {}
+crawlData.pages.forEach(p => {
+  depthStats[p.depth] = (depthStats[p.depth] || 0) + 1
+})
+// {0: 1, 1: 6, 2: 25, 3: 45, 4: 50}
+```
 
 ## Output Format
 
@@ -55,113 +79,144 @@ title: Navigation-Analyse
 agent: navigation-analyzer
 date: 2025-12-25
 menu_items: 45
-max_depth: 3
+max_depth: 4
 ---
 
 # Navigation-Analyse: [Firmenname]
 
-## Übersicht
+## Zusammenfassung
 
 | Metrik | Wert |
 |--------|------|
 | **Hauptmenü-Punkte** | 6 |
 | **Gesamt-Menüpunkte** | 45 |
-| **Max. Tiefe** | 3 Ebenen |
-| **Mega-Menü** | ✓ Ja |
-| **Mobile-Navigation** | ✓ Hamburger |
+| **Max. Tiefe** | 4 Ebenen |
+| **Seiten pro Ebene** | Siehe unten |
+| **Sprachen** | DE, EN |
 
-## Hauptnavigation
+## Website-Hierarchie
 
 ```
-├── Produkte
-│   ├── Kategorie A
-│   │   ├── Produkt 1
-│   │   └── Produkt 2
-│   └── Kategorie B
-├── Leistungen
-│   ├── Beratung
-│   └── Umsetzung
-├── Referenzen
-├── Über uns
-│   ├── Team
-│   ├── Karriere
-│   └── Geschichte
-├── Blog
-└── Kontakt
+example.com/
+├── / (Homepage)
+├── /produkte/
+│   ├── /kategorie-a/
+│   │   ├── /produkt-1/
+│   │   ├── /produkt-2/
+│   │   └── /produkt-3/
+│   └── /kategorie-b/
+│       └── /produkt-4/
+├── /leistungen/
+│   ├── /beratung/
+│   └── /entwicklung/
+├── /ueber-uns/
+│   ├── /team/
+│   ├── /karriere/
+│   └── /standorte/
+├── /blog/
+│   └── [52 Artikel]
+├── /kontakt/
+└── /rechtliches/
+    ├── /impressum/
+    ├── /datenschutz/
+    └── /agb/
 ```
 
-## Navigations-Typen
+## Tiefenverteilung
 
-### Header-Navigation
+| Ebene | Seiten | Anteil | Beispiele |
+|-------|--------|--------|-----------|
+| 0 | 1 | 1% | Homepage |
+| 1 | 6 | 5% | Hauptsektionen |
+| 2 | 25 | 20% | Kategorien |
+| 3 | 45 | 35% | Detailseiten |
+| 4 | 50 | 39% | Blog-Artikel |
 
-| Typ | Vorhanden | Anmerkung |
-|-----|-----------|-----------|
-| Hauptmenü | ✓ | 6 Punkte, 3 Ebenen |
-| Mega-Menü | ✓ | Mit Bildern |
-| Suche | ✓ | Icon + Overlay |
-| Sprache | ✓ | DE/EN Toggle |
-| CTA-Button | ✓ | "Kontakt" |
+## Navigations-Elemente
+
+### Hauptnavigation
+
+| Menüpunkt | Untermenüs | Seiten |
+|-----------|------------|--------|
+| Home | - | 1 |
+| Produkte | 2 Kategorien | 15 |
+| Leistungen | 3 Services | 8 |
+| Über uns | 4 Bereiche | 12 |
+| Blog | - | 52 |
+| Kontakt | - | 1 |
 
 ### Footer-Navigation
 
-| Bereich | Punkte |
-|---------|--------|
-| Produkte | 8 |
-| Unternehmen | 5 |
-| Service | 4 |
-| Rechtliches | 3 |
-| Social Media | 4 Icons |
+| Bereich | Links |
+|---------|-------|
+| Unternehmen | Über uns, Team, Karriere, Standorte |
+| Produkte | Kategorie A, Kategorie B |
+| Service | FAQ, Support, Kontakt |
+| Rechtliches | Impressum, Datenschutz, AGB |
 
-### Breadcrumbs
-- Vorhanden: ✓ Ja
-- Schema.org: ✓ Ja
-- Auf allen Seiten: Nein (nicht auf Homepage)
+### Meta-Navigation
 
-## Mobile Navigation
+| Element | Funktion |
+|---------|----------|
+| Suche | Sitewide Search |
+| Sprache | DE / EN Toggle |
+| Login | Kundenbereich |
+
+## Breadcrumb-Analyse
 
 | Aspekt | Status |
 |--------|--------|
+| Vorhanden | ✓ Ja |
+| Konsistent | ✓ Alle Unterseiten |
+| Schema.org Markup | ? Zu prüfen |
+| Homepage inkludiert | ✓ Ja |
+
+## Mobile Navigation
+
+| Aspekt | Erwartet |
+|--------|----------|
 | Typ | Hamburger Menu |
-| Animation | Slide-in rechts |
 | Untermenüs | Accordion |
-| Touch-freundlich | ✓ Ja |
-| Breakpoint | 1024px |
+| Breakpoint | ~1024px |
+| Touch-Targets | ≥44px |
 
 ## Accessibility-Check
 
 | Kriterium | Status |
 |-----------|--------|
-| Keyboard-Navigation | ⚠️ Teilweise |
-| Focus-Indikatoren | ❌ Fehlen |
-| ARIA-Labels | ⚠️ Teilweise |
-| Skip-Links | ❌ Fehlen |
-| Mobile Touch-Targets | ✓ OK (>44px) |
+| Keyboard-Navigation | ⚠️ Zu prüfen |
+| Focus-Indikatoren | ⚠️ Zu prüfen |
+| ARIA-Labels | ⚠️ Zu prüfen |
+| Skip-Links | ⚠️ Zu prüfen |
+| Mobile Touch-Targets | ⚠️ Zu prüfen |
 
 ## Drupal-Implementierung
 
-### Menü-Struktur
+### Menü-Mapping
 
-| Menü | Drupal-Menü |
-|------|-------------|
+| Navigation | Drupal-Menü |
+|------------|-------------|
 | Hauptnavigation | main |
-| Footer Links | footer |
-| Meta Navigation | account |
-| Rechtliches | legal |
+| Footer-Links | footer |
+| Meta-Navigation | account |
+| Rechtliches | footer-legal |
 
-### Empfehlung
+### Empfehlungen
 
-- **Menu-System:** Drupal Core Menus
-- **Mega-Menü:** We Megamenu oder Custom
-- **Mobile:** Responsive mit Alpine.js
-- **Breadcrumbs:** Easy Breadcrumb Modul
+| Feature | Modul |
+|---------|-------|
+| Mega-Menü | We Megamenu / Custom |
+| Mobile Nav | Alpine.js Responsive |
+| Breadcrumbs | Easy Breadcrumb |
+| Skip-Links | Core + Custom CSS |
 
 ## UX-Bewertung
 
 | Kriterium | Score | Anmerkung |
 |-----------|-------|-----------|
 | Klarheit | ⭐⭐⭐ | Gut strukturiert |
-| Hierarchie | ⭐⭐⭐ | Logisch |
-| Auffindbarkeit | ⭐⭐ | Suche verbessern |
-| Mobile | ⭐⭐ | Touch-Optimierung |
-| Accessibility | ⭐ | Verbesserungsbedarf |
+| Hierarchie | ⭐⭐⭐ | Logisch aufgebaut |
+| Auffindbarkeit | ⭐⭐ | 4 Ebenen = tief |
+| Konsistenz | ⭐⭐⭐ | Einheitlich |
+| Mobile | ⭐⭐ | Zu evaluieren |
 ```
