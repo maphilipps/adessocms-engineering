@@ -100,6 +100,8 @@ mcp__playwright__browser_resize({ width: 1920, height: 1080 })
 
 ## Phase 3: Daten speichern
 
+Schreibe nach: `_crawl_data.json` UND `discovery/sitemap.md`
+
 ### Zentrale Datei: `_crawl_data.json`
 
 ```json

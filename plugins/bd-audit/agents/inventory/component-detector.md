@@ -155,6 +155,8 @@ if (hasPersonImage && hasPersonName && hasPosition) {
 
 ## Output Format
 
+Schreibe nach: `inventory/components.md` UND `inventory/components.json`
+
 ### Datei: `inventory/components.json`
 
 ```json
