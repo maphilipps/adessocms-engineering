@@ -1,5 +1,6 @@
 ---
 name: pattern-collector
+color: cyan
 model: haiku
 description: Collects recurring solution patterns from multiple sessions. Extracts patterns when similar problems are solved 3+ times.
 tools: Read, Write, Glob, Grep

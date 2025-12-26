@@ -8,9 +8,11 @@ Look at github issue #$ARGUMENTS and read the issue description and comments.
 
 Then, run the following agents in parallel to investigate the bug:
 
-1. Task drupal-reviewer(issue_description) - Review relevant Drupal code
-2. Task git-history-analyzer(issue_description) - Check recent changes that might have caused the bug
-3. Task pattern-recognition-specialist(issue_description) - Look for patterns or anti-patterns
+```
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Review relevant Drupal code for: {issue_description}")
+Task(subagent_type="adessocms-engineering:research:git-history-analyzer", prompt="Check recent changes that might have caused: {issue_description}")
+Task(subagent_type="adessocms-engineering:specialists:pattern-recognition-specialist", prompt="Look for patterns or anti-patterns related to: {issue_description}")
+```
 
 Then think about the places it could go wrong looking at the codebase. Look for logging output we can look for.
 
@@ -32,10 +34,15 @@ Then think about the places it could go wrong looking at the codebase. Look for 
    ddev drush sqlq "SELECT * FROM watchdog ORDER BY wid DESC LIMIT 10"
    ```
 
-4. **Test with Playwright MCP** if it's a frontend issue:
-   - Navigate to the affected page
-   - Take screenshots and snapshots
-   - Check console for JavaScript errors
+4. **Test with Claude in Chrome** if it's a frontend issue:
+   ```
+   mcp__claude-in-chrome__tabs_context_mcp
+   mcp__claude-in-chrome__navigate(url="...", tabId=<tab_id>)
+   mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+   mcp__claude-in-chrome__read_console_messages(tabId=<tab_id>)  # Check for JS errors
+   ```
+
+   **Fallback (only if Claude in Chrome unavailable):** Use Playwright MCP
 
 Keep investigating until you have a good understanding of what is going on.
 

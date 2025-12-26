@@ -74,7 +74,7 @@ Alle Referenzen in `references/`:
 
 **Setup:** mkdocs-setup.md - MkDocs Material Konfiguration und Projektstruktur
 **Schreibstil:** writing-style.md - Anleitungen für verständliche Texte
-**Screenshots:** screenshot-guidelines.md - Playwright-basierte Screenshot-Erstellung
+**Screenshots:** screenshot-guidelines.md - Claude in Chrome Screenshot-Erstellung (Playwright als Fallback)
 </reference_index>
 
 <workflows_index>

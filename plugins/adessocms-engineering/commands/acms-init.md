@@ -33,7 +33,7 @@ For EVERY request, classify intent and act accordingly:
 | Request Type | Action | Entry Point |
 |--------------|--------|-------------|
 | **Trivial** (typo, rename) | Direct tools only | None |
-| **Exploratory** (find, research) | `Task(subagent_type="Explore")` parallel | None |
+| **Exploratory** (find, research) | `Task Explore` parallel | None |
 | **New Feature** | Full workflow | `/acms-plan` |
 | **Bug Fix** | Abbreviated workflow | `/acms-work` |
 | **Complex/Risky** | Full workflow + Oracle | `/acms-plan` + Oracle |
@@ -41,25 +41,34 @@ For EVERY request, classify intent and act accordingly:
 
 ## Core Agents
 
-Always use full `subagent_type` paths:
+Use the full Task syntax with `subagent_type`:
 
-| Agent | subagent_type | Model | When to Use |
-|-------|---------------|-------|-------------|
-| **Oracle** | `adessocms-engineering:core:oracle` | Opus | After 3 failures, architecture decisions, hard debugging |
-| **Librarian** | `adessocms-engineering:core:librarian` | Sonnet | Documentation lookup, evidence-based answers |
-| **Frontend Engineer** | `adessocms-engineering:core:frontend-engineer` | Sonnet | Visual changes, UI/UX, Tailwind, Alpine.js |
-| **Document Writer** | `adessocms-engineering:core:document-writer` | Sonnet | README, API docs, user guides |
+| Agent | Usage | When to Use |
+|-------|-------|-------------|
+| **Oracle** | `Task(subagent_type="adessocms-engineering:core:oracle", prompt="...")` | After 3 failures, architecture decisions, hard debugging |
+| **Librarian** | `Task(subagent_type="adessocms-engineering:core:librarian", prompt="...")` | Documentation lookup, evidence-based answers |
+| **Frontend Engineer** | `Task(subagent_type="adessocms-engineering:core:frontend-engineer", prompt="...")` | Visual changes, UI/UX, Tailwind, Alpine.js |
+| **Document Writer** | `Task(subagent_type="adessocms-engineering:core:document-writer", prompt="...")` | README, API docs, user guides |
 
 ## Specialist Agents
 
-Use for domain-specific expertise:
+Use for domain-specific expertise (format: `plugin:category:agent-name`):
 
-- `adessocms-engineering:specialists:drupal-specialist` - Drupal APIs, hooks, services
-- `adessocms-engineering:specialists:sdc-specialist` - Single Directory Components
-- `adessocms-engineering:specialists:twig-specialist` - Twig templates, filters
-- `adessocms-engineering:specialists:tailwind-specialist` - Tailwind CSS, theming
-- `adessocms-engineering:specialists:accessibility-specialist` - WCAG 2.1 AA compliance
-- `adessocms-engineering:specialists:security-sentinel` - Security review, vulnerabilities
+- `Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="...")` - Drupal APIs, hooks, services
+- `Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="...")` - Single Directory Components
+- `Task(subagent_type="adessocms-engineering:specialists:twig-specialist", prompt="...")` - Twig templates, filters
+- `Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", prompt="...")` - Tailwind CSS, theming
+- `Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="...")` - WCAG 2.1 AA compliance
+- `Task(subagent_type="adessocms-engineering:specialists:security-sentinel", prompt="...")` - Security review, vulnerabilities
+
+## Research Agents
+
+For parallel research and analysis:
+
+- `Task(subagent_type="adessocms-engineering:research:repo-research-analyst", prompt="...")` - Codebase research
+- `Task(subagent_type="adessocms-engineering:research:best-practices-researcher", prompt="...")` - External best practices
+- `Task(subagent_type="adessocms-engineering:research:framework-docs-researcher", prompt="...")` - Framework documentation
+- `Task(subagent_type="adessocms-engineering:research:git-history-analyzer", prompt="...")` - Git history analysis
 
 ## Failure Protocol
 
@@ -68,11 +77,7 @@ After 3 consecutive failures on any task:
 2. **Revert** - Undo any partial changes
 3. **Consult Oracle**:
    ```
-   Task(
-     subagent_type="adessocms-engineering:core:oracle",
-     model="opus",
-     prompt="Problem: {description}\nAttempts: {what tried}\nErrors: {messages}"
-   )
+   Task(subagent_type="adessocms-engineering:core:oracle", prompt="Problem: {description}\nAttempts: {what tried}\nErrors: {messages}")
    ```
 
 ## Compound Triggers

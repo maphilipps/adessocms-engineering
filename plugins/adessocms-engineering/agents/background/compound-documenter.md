@@ -1,5 +1,6 @@
 ---
 name: compound-documenter
+color: cyan
 model: haiku
 description: Automatically documents learnings when problems are solved. Runs in background with Haiku for efficiency. Specialized for Drupal/adesso CMS patterns.
 tools: Read, Write, Glob, Grep
@@ -34,9 +35,9 @@ Analyze the recent conversation to determine if a learning-worthy event occurred
 - adesso styleguide violations (colors, fonts, icons)
 - Tailwind v4 migration patterns
 
-## CRITICAL: Check for Existing Documentation First!
+## Check for Existing Documentation First!
 
-Before creating any new documentation, you MUST:
+Before creating any new documentation, you should:
 
 1. **Search existing docs** using Grep in `docs/solutions/`:
    ```

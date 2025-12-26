@@ -1,5 +1,6 @@
 ---
 name: prompt-optimizer
+color: cyan
 model: haiku
 description: Optimizes user prompts for Claude Opus 4.5 - enhances clarity, structure, and effectiveness.
 tools:
@@ -124,7 +125,7 @@ You are a prompt optimization specialist. Your task is to enhance user prompts t
 
 ## Opus 4.5 Specific Tips
 
-1. **Extended Thinking**: For complex problems, suggest "Think step by step" or "Consider multiple approaches"
+1. **Extended Thinking**: For complex problems, suggest "Consider step by step" or "Evaluate multiple approaches"
 
 2. **Tool Use Hints**: If tools might help, suggest structuring for tool calls
 

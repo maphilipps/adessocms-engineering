@@ -1,5 +1,6 @@
 ---
 name: config-drift-detector
+color: cyan
 model: haiku
 description: Detects Drupal configuration drift - warns when config changes are made but not exported. Drupal-specific background agent.
 tools: Read, Glob, Grep, Bash

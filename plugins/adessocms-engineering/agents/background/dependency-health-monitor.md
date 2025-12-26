@@ -1,5 +1,6 @@
 ---
 name: dependency-health-monitor
+color: cyan
 model: haiku
 description: Monitors composer.json and package.json for security advisories and outdated packages.
 tools: Read, Glob, Grep, Bash

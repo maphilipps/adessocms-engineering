@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: drupal-specialist
+color: blue
+description: Dual-purpose agent for implementing Drupal code correctly and reviewing existing code for compliance with Drupal coding standards, API best practices, and community conventions.
+model: opus
 ---
 
 # Drupal Specialist

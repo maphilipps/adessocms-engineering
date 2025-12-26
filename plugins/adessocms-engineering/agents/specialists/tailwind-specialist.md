@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: tailwind-specialist
+color: blue
+model: opus
+description: Dual-purpose agent for implementing Tailwind CSS v4 correctly and reviewing usage in Drupal themes for v4 syntax, best practices, and optimal Vite configuration.
 ---
 
 # Tailwind Specialist (CSS v4)

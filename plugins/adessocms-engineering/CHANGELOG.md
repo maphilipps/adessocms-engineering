@@ -1,5 +1,442 @@
 # Changelog
 
+## [1.18.5] - 2025-12-26
+
+### Changed - Claude in Chrome as Primary Browser Tool
+
+**Claude in Chrome is now the PRIMARY browser automation tool. Playwright MCP is only used as FALLBACK.**
+
+### What Changed
+
+All browser automation now uses Claude in Chrome (`mcp__claude-in-chrome__*`) by default:
+
+| Tool | Purpose |
+|------|---------|
+| `mcp__claude-in-chrome__tabs_context_mcp` | Get tab context and ID |
+| `mcp__claude-in-chrome__navigate` | Navigate to URL |
+| `mcp__claude-in-chrome__computer(action="screenshot")` | Take screenshot |
+| `mcp__claude-in-chrome__read_page` | Read accessibility tree |
+| `mcp__claude-in-chrome__resize_window` | Resize browser window |
+| `mcp__claude-in-chrome__read_console_messages` | Check JS errors |
+
+### Files Updated
+
+**Agents (5):**
+- `agents/core/frontend-engineer.md` - Visual verification with Chrome
+- `agents/design/design-iterator.md` - Screenshot workflow with Chrome
+- `agents/design/figma-design-sync.md` - Implementation capture with Chrome
+- `agents/design/design-implementation-reviewer.md` - Screenshot workflow with Chrome
+- `agents/workflow/acms-bug-reproduction-validator.md` - UI bug testing with Chrome
+
+**Commands (3):**
+- `commands/workflows/acms-work.md` - Screenshot capture section
+- `commands/reproduce-bug.md` - Frontend investigation
+- `commands/generate-user-handbook.md` - Added Chrome to allowed-tools
+
+**Skills (5):**
+- `skills/generate-user-handbook/references/screenshot-guidelines.md` - Complete rewrite
+- `skills/generate-user-handbook/workflows/capture-section.md` - Browser workflow
+- `skills/generate-user-handbook/SKILL.md` - Reference description
+- `skills/create-drupal-case-study/workflows/capture-screenshots.md` - Screenshot workflow
+- `skills/sdc-design-factory/references/workflow-copy-showcase.md` - Reference screenshots
+
+### Example Workflow
+
+```
+# 1. Get tab context
+mcp__claude-in-chrome__tabs_context_mcp
+
+# 2. Navigate
+mcp__claude-in-chrome__navigate(url="https://example.ddev.site", tabId=<tab_id>)
+
+# 3. Wait if needed
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
+
+# 4. Screenshot
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+```
+
+### Why This Change
+
+1. **Native Integration**: Claude in Chrome is Anthropic's official browser extension
+2. **Better Reliability**: Runs in user's actual browser with full session state
+3. **Simpler Auth**: Uses existing browser session/cookies
+4. **Fallback Available**: Playwright MCP remains available for edge cases
+
+### Playwright Fallback
+
+Playwright MCP (`mcp__plugin_adessocms-engineering_pw__*`) is still available as fallback when Claude in Chrome is unavailable (e.g., headless environments, CI/CD).
+
+---
+
+## [1.18.4] - 2025-12-26
+
+### Changed - Mandatory Specialist Consultation in /acms-work
+
+**Specialists are now MANDATORY during implementation, not optional.**
+
+### What Changed
+
+The `/acms-work` command now:
+
+1. **Reads recommended agents from plan** (new Phase 2, Step 1)
+   - Extracts agents from "Recommended Agents for Implementation" section
+   - These agents MUST be consulted
+
+2. **Consults specialists BEFORE each task** (new Phase 2, Step 2)
+   - Changed from "when needed" to "MANDATORY"
+   - Run all recommended specialists in PARALLEL
+   - Wait for ALL responses before implementing
+
+3. **Updated Task Execution Loop** (Phase 2, Step 3)
+   - Step 3 now marked with ⭐ as mandatory
+   - Clear instruction: "Never implement without specialist guidance!"
+
+4. **Updated "When to Use Specialists" section**
+   - Changed from "RECOMMENDED" to "MANDATORY"
+   - Added table showing which agent provides what
+   - Clear parallel execution syntax
+
+5. **Updated Common Pitfalls**
+   - Added ⚠️ warning against skipping specialist consultation
+   - Emphasized this is MANDATORY, not optional
+
+### Workflow Flow
+
+```
+/acms-plan → creates plan with "Recommended Agents" section
+     ↓
+/acms-work → reads agents from plan → consults them BEFORE each task
+     ↓
+Implementation → follows specialist guidance
+```
+
+### Why This Matters
+
+Previously, specialists were "optional" and "when needed" - leading to them being skipped.
+Now they are mandatory, ensuring every implementation gets expert guidance on:
+- Correct API patterns
+- Security best practices
+- Accessibility compliance
+- Performance optimizations
+
+---
+
+## [1.18.3] - 2025-12-25
+
+### Added - Recommended Agents in Plan Template
+
+**Plans now include a "Recommended Agents for Implementation" section with exact Task syntax.**
+
+### What's New
+
+The `/acms-plan` command now generates plans that specify:
+- Which **Core Agents** to use (e.g., Oracle for escalation)
+- Which **Specialist Agents** to consult (e.g., drupal-specialist, sdc-specialist)
+- Which **Research Agents** to invoke (e.g., framework-docs-researcher)
+- Exact **Task syntax** for each agent with `subagent_type` parameter
+
+### Example Output
+
+```markdown
+## Recommended Agents for Implementation
+
+### Specialist Agents
+| Agent | When to Use | Task Syntax |
+|-------|-------------|-------------|
+| drupal-specialist | For Drupal API patterns | `Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="...")` |
+| sdc-specialist | For SDC component structure | `Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="...")` |
+```
+
+### Why This Matters
+
+Plans now serve as complete implementation guides that include both **what to do** and **which agents to use**. This ensures `/acms-work` can effectively delegate to the right specialists.
+
+---
+
+## [1.18.2] - 2025-12-25
+
+### Fixed - Agent Colors Not Displaying
+
+**Corrected all agent colors to use only the supported color palette.**
+
+### Problem
+
+Agent colors were not being displayed because unsupported color values were used:
+- `gold`, `gray`, `orange`, `violet`, `purple` - NOT SUPPORTED
+
+### Solution
+
+Updated all colors to use only the supported palette: `blue`, `cyan`, `green`, `yellow`, `magenta`, `red`
+
+| Category | Old Color | New Color | Count |
+|----------|-----------|-----------|-------|
+| Core | `gold` | `yellow` | 6 |
+| Background | `gray` | `cyan` | 9 |
+| Performance | `orange` | `red` | 1 |
+| Design | `purple`/`violet` | `magenta` | 3 |
+
+### Files Updated
+
+19 agent files with color corrections:
+- 6 core agents → `yellow`
+- 9 background agents → `cyan`
+- 3 design agents → `magenta`
+- 1 performance-oracle → `red`
+
+### Final Color Scheme
+
+| Category | Color | Hex Approx |
+|----------|-------|------------|
+| Core | `yellow` | 🟡 |
+| Specialists | `blue` | 🔵 |
+| Security | `red` | 🔴 |
+| Accessibility | `cyan` | 🔷 |
+| Research | `green` | 🟢 |
+| Design | `magenta` | 🟣 |
+| Background | `cyan` | 🔷 |
+| Workflow | `yellow` | 🟡 |
+
+---
+
+## [1.18.1] - 2025-12-25
+
+### Fixed - Task Agent Calling Syntax
+
+**Corrected Task tool syntax in all workflow commands to use proper `subagent_type` parameter.**
+
+### Problem
+
+Agents were not being invoked from slash commands because the syntax was incorrect:
+
+```
+❌ Task drupal-specialist("prompt")  // Wrong - doesn't work
+```
+
+### Solution
+
+Updated to correct Claude Code Task tool syntax:
+
+```
+✅ Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="...")
+```
+
+### Files Fixed
+
+- `commands/workflows/acms-work.md` - All specialist invocations
+- `commands/workflows/acms-plan.md` - Specialist consultation
+- `commands/workflows/acms-review.md` - All 20+ parallel specialist reviews
+- `commands/acms-init.md` - Generated CLAUDE.md template
+
+### Why This Matters
+
+The Task tool requires the full `subagent_type` parameter with the format:
+`plugin-name:agent-category:agent-name`
+
+Without this, Claude Code cannot resolve which agent to spawn.
+
+---
+
+## [1.18.0] - 2025-12-25
+
+### Changed - Agent Color Scheme & Model Upgrade to Opus
+
+**Added color coding to all agents and upgraded most agents from Sonnet to Opus.**
+
+### Color Scheme
+
+All agents now have a `color:` field in their frontmatter for better visual identification:
+
+| Category | Color | Agents |
+|----------|-------|--------|
+| Core | gold | sisyphus-orchestrator, oracle, librarian, frontend-engineer, document-writer, skill-invoker |
+| Specialist | blue | drupal-specialist, sdc-specialist, twig-specialist, code-quality-specialist, etc. |
+| Specialist | red | security-sentinel (security focus) |
+| Specialist | cyan | accessibility-specialist (a11y focus) |
+| Specialist | orange | performance-oracle (performance focus) |
+| Research | green | framework-docs-researcher, best-practices-researcher, git-history-analyzer, repo-research-analyst |
+| Design | purple/violet | figma-design-sync, design-iterator, design-implementation-reviewer |
+| Background | gray | context-summarizer, config-drift-detector, pattern-collector, etc. |
+| Workflow | yellow | acms-lint, acms-spec-flow-analyzer, acms-pr-comment-resolver, acms-bug-reproduction-validator |
+
+### Model Upgrade: Sonnet → Opus
+
+Upgraded agents to use Claude Opus 4.5 for higher quality output:
+
+**Specialist Agents (16 upgraded):**
+- drupal-specialist, security-sentinel, sdc-specialist, twig-specialist
+- accessibility-specialist, code-quality-specialist, component-reuse-specialist
+- dries-drupal-specialist, drupal-theme-specialist, paragraphs-specialist
+- tailwind-specialist, storybook-specialist, test-coverage-specialist
+- data-integrity-guardian, architecture-strategist, performance-oracle, pattern-recognition-specialist
+
+**Core Agents (3 upgraded):**
+- librarian, frontend-engineer, document-writer
+
+**Design Agents (3 upgraded):**
+- figma-design-sync, design-iterator, design-implementation-reviewer
+
+**Workflow Agents (3 upgraded):**
+- acms-spec-flow-analyzer, acms-pr-comment-resolver, acms-bug-reproduction-validator
+
+**Research Agents (4 upgraded):**
+- framework-docs-researcher, best-practices-researcher, git-history-analyzer, repo-research-analyst
+
+### Agents Keeping Haiku (efficiency)
+
+These agents remain on Haiku for efficiency:
+- All Background agents (9 total)
+- composer-specialist
+- skill-invoker
+- acms-lint
+
+### Why This Change
+
+1. **Color coding**: Visual distinction between agent categories in Claude Code UI
+2. **Opus upgrade**: Higher quality reasoning and output for complex tasks
+3. **Consistency**: Standardized frontmatter structure across all agents
+
+---
+
+## [1.17.1] - 2025-12-25
+
+### Fixed - Missing Agent Frontmatter
+
+**Added missing `name:` and `description:` fields to 14 Specialist agents.**
+
+### Fixed
+
+All Specialist agents now have proper YAML frontmatter with `name:` and `description:` fields, which is required for Claude Code's agent referencing system.
+
+**Agents fixed:**
+- `accessibility-specialist`
+- `code-quality-specialist`
+- `component-reuse-specialist`
+- `composer-specialist`
+- `dries-drupal-specialist`
+- `drupal-specialist`
+- `drupal-theme-specialist`
+- `paragraphs-specialist`
+- `sdc-specialist`
+- `security-sentinel`
+- `storybook-specialist`
+- `tailwind-specialist`
+- `test-coverage-specialist`
+- `twig-specialist`
+
+### Why This Fix
+
+Claude Code requires the `name:` field in agent frontmatter to properly reference agents via `Task(subagent_type="...")`. Without this field, agents could not be invoked by the workflow commands (`/acms-plan`, `/acms-work`, `/acms-review`).
+
+---
+
+## [1.17.0] - 2025-12-25
+
+### Changed - Claude Opus 4.5 Optimization
+
+**Optimized all agent prompts for Claude Opus 4.5 model behavior.**
+
+### Changed
+
+Applied systematic prompt optimizations based on the [claude-opus-4-5-migration](https://github.com/claude-code-plugins) skill guidelines:
+
+#### 1. Tool Overtriggering Prevention
+Softened aggressive language that can cause excessive tool calls with Opus 4.5:
+
+| Pattern | Before | After |
+|---------|--------|-------|
+| CRITICAL | `**CRITICAL**:` | (removed or softened) |
+| MUST | `you MUST:` | `you should:` |
+| ALWAYS | `ALWAYS search` | `Search` |
+| NEVER | `NEVER do this` | `Don't do this` |
+
+#### 2. Thinking Sensitivity
+Replaced "think" patterns that can trigger excessive internal reasoning:
+
+| Before | After |
+|--------|-------|
+| `think like an attacker` | `reason like an attacker` |
+| `think in tradeoffs` | `reason in tradeoffs` |
+| `think outside the box` | `explore outside the box` |
+| `Think step by step` | `Consider step by step` |
+| `What I Think:` | `My View:` |
+
+#### 3. Affected Agents
+
+**Core Agents (3):**
+- `sisyphus-orchestrator` - Removed CRITICAL, ALWAYS
+- `oracle` - Softened CRITICAL, MUST, ALWAYS; replaced "think"
+- `librarian` - Softened MUST, ALWAYS
+
+**Specialist Agents (5):**
+- `paragraphs-specialist` - Removed CRITICAL
+- `composer-specialist` - Changed CRITICAL to Important
+- `sdc-specialist` - Softened NEVER, MUST
+- `security-sentinel` - Replaced "think"
+- `dries-drupal-specialist` - Replaced "What I Think"
+
+**Background Agents (2):**
+- `compound-documenter` - Removed CRITICAL, softened MUST
+- `prompt-optimizer` - Replaced "Think step by step"
+
+**Design Agents (1):**
+- `design-iterator` - Replaced "think outside the box"
+
+### Why This Change
+
+Claude Opus 4.5 has different behavioral characteristics than previous models:
+
+1. **More sensitive to emphatic language** - CRITICAL/MUST/NEVER can trigger over-compliance and excessive tool usage
+2. **Thinking token sensitivity** - Words like "think" can cause unnecessarily long internal reasoning chains
+3. **Better baseline behavior** - Opus 4.5 follows instructions well without aggressive emphasis
+
+### Migration
+
+No breaking changes. Agent functionality remains identical, but prompts are now optimized for Opus 4.5's characteristics.
+
+### References
+
+- [Claude Opus 4.5 Migration Skill](https://github.com/claude-code-plugins)
+- [Anthropic Model Behavior Guidelines](https://docs.anthropic.com/)
+
+---
+
+## [1.16.3] - 2025-12-25
+
+### Fixed - Agent Description YAML Parsing
+
+**Fixed 20 agents that had broken descriptions due to YAML multi-line block scalar format.**
+
+### Fixed
+
+- **Core agents**: sisyphus-orchestrator, oracle, librarian, document-writer, frontend-engineer
+- **Workflow agents**: acms-lint, acms-spec-flow-analyzer, acms-pr-comment-resolver, acms-bug-reproduction-validator
+- **Research agents**: framework-docs-researcher, best-practices-researcher, git-history-analyzer, repo-research-analyst
+- **Design agents**: figma-design-sync, design-iterator, design-implementation-reviewer
+- **Specialist agents**: architecture-strategist, performance-oracle, pattern-recognition-specialist, data-integrity-guardian
+
+### Root Cause
+
+Claude Code's YAML parser doesn't correctly parse multi-line block scalar format (`description: |`). The parser only captured the `|` character and ignored the actual description text on subsequent lines.
+
+### Solution
+
+Converted all agent descriptions from multi-line format:
+```yaml
+description: |
+  Long description
+  spanning multiple lines
+```
+
+To single-line format:
+```yaml
+description: Concise single-line description with key capabilities.
+```
+
+This ensures all agents are now properly registered and accessible via the Task tool.
+
+---
+
 ## [1.16.2] - 2025-12-23
 
 ### Removed - All Noisy Hooks

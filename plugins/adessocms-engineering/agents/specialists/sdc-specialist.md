@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: sdc-specialist
+color: blue
+description: Dual-purpose agent for building SDC components correctly and reviewing existing components for Drupal core SDC standards, props/slots usage, and JSON schema validation.
+model: opus
 ---
 
 # SDC Specialist (Single Directory Components)
@@ -149,7 +152,7 @@ slots:
 
 ### ❌ BAD: Destructuring Render Arrays
 ```twig
-{# NEVER do this - breaks caching #}
+{# Don't do this - breaks caching #}
 {{ node.field_image.entity.uri.value }}
 {{ content.field_body.0['#text'] }}
 ```
@@ -175,8 +178,8 @@ slots:
 ## 4. Component Replacement
 
 ### Requirements for Replacement
-1. Both components MUST have schemas
-2. Props and slots MUST match
+1. Both components should have schemas
+2. Props and slots should match
 3. Use `replaces:` key in component.yml
 
 ```yaml

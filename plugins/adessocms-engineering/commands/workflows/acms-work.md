@@ -42,7 +42,7 @@ This command takes a work document (plan file or task description) and executes 
    ```bash
    # Ask user first: "Work in parallel with worktree or on current branch?"
    # If worktree:
-   Skill(skill="adessocms-engineering:git-worktree")
+   Skill git-worktree
    ```
 
 3. **Create Task List with TodoWrite**
@@ -66,48 +66,60 @@ This command takes a work document (plan file or task description) and executes 
 
 ### Phase 2: Execute
 
-1. **Consult Specialists for Complex Tasks**
+1. **Read Recommended Agents from Plan (MANDATORY)**
 
-   **Before implementing complex functionality**, get guidance from specialists:
+   The plan file contains a **"Recommended Agents for Implementation"** section. **You MUST use these agents.**
 
    ```
-   # For Drupal module/service implementation:
-   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist",
-        model="sonnet",
-        prompt="How should I implement: {task description}? Provide correct patterns.")
+   # First: Read the agents section from the plan
+   Read the "## Recommended Agents for Implementation" section
 
-   # For SDC components:
-   Task(subagent_type="adessocms-engineering:specialists:sdc-specialist",
-        model="sonnet",
-        prompt="How should I build this component: {component description}?")
-
-   # For security-sensitive code:
-   Task(subagent_type="adessocms-engineering:specialists:security-sentinel",
-        model="sonnet",
-        prompt="What security patterns should I follow for: {task}?")
+   # Extract the recommended agents and their purposes:
+   # - Core Agents (e.g., Oracle for escalation)
+   # - Specialist Agents (e.g., drupal-specialist, sdc-specialist)
+   # - Research Agents (e.g., framework-docs-researcher)
    ```
 
-   **When to consult specialists:**
-   - Unsure about correct API usage
-   - Implementing new patterns not in codebase
-   - Security-sensitive functionality
-   - Complex Drupal integrations
+2. **Consult Specialists BEFORE Each Task (MANDATORY)**
 
-2. **Task Execution Loop**
+   **Before implementing ANY non-trivial task**, consult the recommended specialists:
+
+   ```
+   # Run ALL recommended specialists in parallel:
+   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="How should I implement: {task description}? Provide correct patterns, caching, and DI approach.")
+
+   Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="How should I build this component: {component description}? Include props, slots, and schema.")
+
+   Task(subagent_type="adessocms-engineering:specialists:security-sentinel", prompt="What security patterns should I follow for: {task}? Check for XSS, CSRF, access control.")
+
+   Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="What accessibility requirements apply to: {task}? Include WCAG 2.1 AA requirements.")
+   ```
+
+   **This is NOT optional.** Specialists provide:
+   - Correct API usage patterns
+   - Security best practices
+   - Accessibility compliance
+   - Performance optimizations
+
+3. **Task Execution Loop**
 
    For each task in priority order:
 
    ```
    while (tasks remain):
-     - Mark task as in_progress in TodoWrite
-     - Read any referenced files from the plan
-     - Consult specialist if needed (see above)
-     - Look for similar patterns in codebase
-     - Implement following specialist guidance + existing conventions
-     - Write tests for new functionality
-     - Run tests after changes
-     - Mark task as completed in TodoWrite
+     1. Mark task as in_progress in TodoWrite
+     2. Read any referenced files from the plan
+     3. ⭐ CONSULT SPECIALISTS (from plan's Recommended Agents section)
+        - Run specialists in PARALLEL for efficiency
+        - Wait for ALL responses before implementing
+     4. Look for similar patterns in codebase
+     5. Implement following specialist guidance + existing conventions
+     6. Write tests for new functionality
+     7. Run tests after changes
+     8. Mark task as completed in TodoWrite
    ```
+
+   **Step 3 is MANDATORY** - Never implement without specialist guidance!
 
 4. **Follow Existing Patterns**
 
@@ -129,9 +141,7 @@ This command takes a work document (plan file or task description) and executes 
    For UI work with Figma designs:
 
    ```
-   Task(subagent_type="adessocms-engineering:design:figma-design-sync",
-        model="sonnet",
-        prompt="Compare implementation with Figma design for: {component}")
+   Task(subagent_type="adessocms-engineering:design:figma-design-sync", prompt="Compare implementation with Figma design for: {component}")
    ```
 
 ### Phase 3: Quality Check
@@ -154,20 +164,20 @@ This command takes a work document (plan file or task description) and executes 
 
 2. **Use Specialists for Code Review** (Optional)
 
-   **Only for complex, risky, or large changes.** Run in parallel with correct models:
+   **Only for complex, risky, or large changes.** Run in parallel:
 
    ```
    # For Drupal code changes:
-   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", model="sonnet", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:specialists:security-sentinel", model="sonnet", prompt="Security scan: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:security-sentinel", prompt="Security scan: {changes}")
 
    # For frontend changes:
-   Task(subagent_type="adessocms-engineering:specialists:twig-specialist", model="sonnet", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", model="sonnet", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", model="sonnet", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:twig-specialist", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="Review: {changes}")
 
    # For architecture concerns:
-   Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", model="sonnet", prompt="Review: {changes}")
+   Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", prompt="Review: {changes}")
    ```
 
 3. **Final Validation**
@@ -200,13 +210,16 @@ This command takes a work document (plan file or task description) and executes 
 
 2. **Capture Screenshots for UI Changes** (if applicable)
 
-   For any design changes, use Playwright MCP:
+   For any design changes, use **Claude in Chrome**:
 
    ```
-   mcp__playwright__browser_resize(width=320, height=568)  # Mobile
-   mcp__playwright__browser_navigate(url="https://...")
-   mcp__playwright__browser_take_screenshot(filename="screenshot.png")
+   mcp__claude-in-chrome__tabs_context_mcp
+   mcp__claude-in-chrome__resize_window(width=320, height=568, tabId=<tab_id>)  # Mobile
+   mcp__claude-in-chrome__navigate(url="https://...", tabId=<tab_id>)
+   mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
    ```
+
+   **Fallback (only if Claude in Chrome unavailable):** Use Playwright MCP
 
    Upload screenshots:
    ```bash
@@ -291,13 +304,25 @@ Before creating PR, verify:
 
 ## When to Use Specialists
 
-### For Implementation Guidance (RECOMMENDED)
+### For Implementation Guidance (MANDATORY)
 
-Use specialists **before** implementing complex functionality:
-- Drupal API patterns → `drupal-specialist`
-- SDC component design → `sdc-specialist`
-- Security patterns → `security-sentinel`
-- Accessibility compliance → `accessibility-specialist`
+**ALWAYS consult specialists BEFORE implementing.** The plan specifies which agents to use.
+
+| Task Type | Agent | What They Provide |
+|-----------|-------|-------------------|
+| Drupal API | `drupal-specialist` | Correct patterns, caching, DI |
+| SDC Components | `sdc-specialist` | Props, slots, schema design |
+| Security-sensitive | `security-sentinel` | XSS, CSRF, access control |
+| Accessibility | `accessibility-specialist` | WCAG 2.1 AA compliance |
+| Twig templates | `twig-specialist` | Attributes, filters, best practices |
+| Tailwind styling | `tailwind-specialist` | v4 syntax, responsive design |
+| Paragraphs | `paragraphs-specialist` | Field templates, SDC integration |
+
+**How to consult (run in parallel):**
+```
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="How should I implement: {task}?")
+Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="Structure for: {component}?")
+```
 
 ### For Code Review (OPTIONAL)
 
@@ -306,23 +331,19 @@ Use specialists **before** implementing complex functionality:
 - Large refactor affecting many files (10+)
 - Security-sensitive changes (authentication, permissions, data access)
 - Performance-critical code paths
-- Complex algorithms or business logic
 - User explicitly requests thorough review
 
-For most features: **tests + linting + following patterns is sufficient.**
+For most features: **tests + linting + following specialist guidance is sufficient.**
 
 ## Model Selection for Agents
 
-**Always specify model when calling agents:**
+All specialist agents run on **opus** by default (configured in agent frontmatter). Use the full Task syntax:
 
-| Agent Type | Model | Reason |
-|------------|-------|--------|
-| Implementation guidance | sonnet | Complex patterns need good reasoning |
-| Code review | sonnet | Standard reviews |
-| Research agents | sonnet | Fast, sufficient for research |
-| Simple tasks | haiku | Fast, cheap |
+```
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Your prompt here")
+```
 
-**NEVER use opus for agents unless explicitly required for complex reasoning.**
+The `subagent_type` format is: `plugin-name:agent-category:agent-name`
 
 ## Common Pitfalls to Avoid
 
@@ -332,6 +353,9 @@ For most features: **tests + linting + following patterns is sufficient.**
 - **Testing at the end** - Test continuously or suffer later
 - **Forgetting TodoWrite** - Track progress or lose track of what's done
 - **80% done syndrome** - Finish the feature, don't move on early
-- **Over-reviewing simple changes** - Save specialists for complex work
-- **Not consulting specialists** - Ask for guidance before implementing complex patterns
-- **Using opus everywhere** - Use appropriate model tiers
+- **Over-reviewing simple changes** - Save review specialists for complex work
+- **⚠️ SKIPPING SPECIALIST CONSULTATION** - This is MANDATORY, not optional!
+  - Read the "Recommended Agents" section from the plan
+  - Consult ALL recommended specialists BEFORE implementing each task
+  - Run specialists in PARALLEL for efficiency
+  - Never implement without specialist guidance

@@ -1,18 +1,8 @@
 ---
 name: git-history-analyzer
-description: |
-  Use this agent when you need to understand the historical context and evolution of code changes, trace the origins of specific code patterns, identify key contributors and their expertise areas, or analyze patterns in commit history. This agent excels at archaeological analysis of git repositories to provide insights about code evolution and development patterns.
-
-  **Example 1:** Context: The user wants to understand the history and evolution of recently modified files.
-  - user: "I've just refactored the authentication module. Can you analyze the historical context?"
-  - assistant: "I'll use the git-history-analyzer agent to examine the evolution of the authentication module files."
-  - Commentary: Since the user wants historical context about code changes, use the git-history-analyzer agent to trace file evolution, identify contributors, and extract patterns from the git history.
-
-  **Example 2:** Context: The user needs to understand why certain code patterns exist.
-  - user: "Why does this payment processing code have so many try-catch blocks?"
-  - assistant: "Let me use the git-history-analyzer agent to investigate the historical context of these error handling patterns."
-  - Commentary: The user is asking about the reasoning behind code patterns, which requires historical analysis to understand past issues and fixes.
-model: haiku
+color: green
+description: Analyzes git history for code evolution, contributor patterns, and historical context. Traces origins of code patterns and identifies key contributors.
+model: opus
 ---
 
 **Note: The current year is 2025.** Use this when interpreting commit dates and recent changes.

@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: accessibility-specialist
+color: cyan
+description: Dual-purpose agent for implementing accessible interfaces and reviewing code for WCAG 2.1 Level AA compliance, ensuring all user interfaces are accessible to people with disabilities.
+model: opus
 ---
 
 # Accessibility Specialist

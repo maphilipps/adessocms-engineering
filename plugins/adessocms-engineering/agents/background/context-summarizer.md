@@ -1,5 +1,6 @@
 ---
 name: context-summarizer
+color: cyan
 model: haiku
 description: Summarizes current session context and saves to .claude/last-context.md for cross-session persistence. Uses Haiku for efficiency.
 tools: Read, Write, Glob

@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: drupal-theme-specialist
+color: blue
+description: Dual-purpose agent for implementing Drupal themes correctly and reviewing theme implementations including Twig templates, SDC, preprocess functions, and asset libraries.
+model: opus
 ---
 
 # Drupal Theme Specialist

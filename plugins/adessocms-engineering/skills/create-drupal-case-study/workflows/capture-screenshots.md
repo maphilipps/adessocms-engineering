@@ -22,31 +22,33 @@ Ask user which screenshots to capture.
 
 ## Step 3: Navigate and Capture
 
-Use Playwright MCP tools:
+**Use Claude in Chrome (PRIMARY):**
 
 ```
-# Desktop Homepage
-mcp__playwright__browser_navigate to [URL]
-mcp__playwright__browser_take_screenshot
-  - filename: "[project]-homepage-desktop.png"
-  - fullPage: false (viewport only for hero)
+# Get tab context first
+mcp__claude-in-chrome__tabs_context_mcp
 
-# Mobile Homepage
-mcp__playwright__browser_resize width: 375, height: 812
-mcp__playwright__browser_take_screenshot
-  - filename: "[project]-homepage-mobile.png"
+# Desktop Homepage (1440x900)
+mcp__claude-in-chrome__resize_window(width=1440, height=900, tabId=<tab_id>)
+mcp__claude-in-chrome__navigate(url="[URL]", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+# Save as: [project]-homepage-desktop.png
+
+# Mobile Homepage (375x812)
+mcp__claude-in-chrome__resize_window(width=375, height=812, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+# Save as: [project]-homepage-mobile.png
 
 # Feature Page
-mcp__playwright__browser_resize width: 1440, height: 900
-mcp__playwright__browser_navigate to [feature URL]
-mcp__playwright__browser_take_screenshot
-  - filename: "[project]-feature.png"
-
-# Full Page (if needed)
-mcp__playwright__browser_take_screenshot
-  - filename: "[project]-fullpage.png"
-  - fullPage: true
+mcp__claude-in-chrome__resize_window(width=1440, height=900, tabId=<tab_id>)
+mcp__claude-in-chrome__navigate(url="[feature URL]", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+# Save as: [project]-feature.png
 ```
+
+**Fallback (only if Claude in Chrome unavailable):** Use Playwright MCP tools.
 
 ## Step 4: Review Screenshots
 

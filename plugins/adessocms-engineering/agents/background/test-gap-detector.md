@@ -1,5 +1,6 @@
 ---
 name: test-gap-detector
+color: cyan
 model: haiku
 description: Detects missing test coverage for code changes. Gentle reminder, not a blocker.
 tools: Read, Glob, Grep

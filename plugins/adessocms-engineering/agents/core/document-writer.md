@@ -1,10 +1,8 @@
 ---
 name: document-writer
-model: sonnet
-description: |
-  Technical documentation specialist for README files, API docs, architecture documentation,
-  and user guides. Writes clear, structured, maintainable documentation. Follows Drupal and
-  adesso documentation standards. Generates docs that developers actually want to read.
+color: yellow
+model: opus
+description: Technical documentation specialist for README files, API docs, and architecture documentation. Writes clear, structured docs that developers actually want to read. Follows Drupal and adesso standards.
 tools: Read, Write, Edit, Glob, Grep
 ---
 

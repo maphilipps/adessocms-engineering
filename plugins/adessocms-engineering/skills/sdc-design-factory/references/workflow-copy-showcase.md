@@ -42,13 +42,17 @@ For the inspiring component, document:
 
 ### Step 1.3: Create Screenshots for Reference
 
-Use Playwright MCP to capture the design:
+**Use Claude in Chrome (PRIMARY):**
 
-```javascript
-// Navigate and screenshot
-await page.goto('https://example.com');
-await page.screenshot({ path: 'inspiration/hero-reference.png', fullPage: false });
 ```
+mcp__claude-in-chrome__tabs_context_mcp
+mcp__claude-in-chrome__navigate(url="https://example.com", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+# Save screenshot as: inspiration/hero-reference.png
+```
+
+**Fallback (only if Claude in Chrome unavailable):** Use Playwright MCP.
 
 ## Phase 2: Design Abstraction
 

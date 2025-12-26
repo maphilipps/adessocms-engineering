@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: storybook-specialist
+color: blue
+model: opus
+description: Dual-purpose agent for creating Storybook stories correctly and reviewing existing stories for SDC components, ensuring comprehensive documentation and accessibility testing.
 ---
 
 # Storybook Specialist

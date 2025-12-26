@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: twig-specialist
+color: blue
+description: Dual-purpose agent for implementing Twig templates correctly and reviewing existing templates for security, performance, accessibility, and Drupal Twig best practices.
+model: opus
 ---
 
 # Twig Specialist

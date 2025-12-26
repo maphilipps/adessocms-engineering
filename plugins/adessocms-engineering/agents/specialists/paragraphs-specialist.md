@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: paragraphs-specialist
+color: blue
+description: Dual-purpose agent for implementing Drupal Paragraphs correctly and reviewing implementations for proper field template usage, SDC integration, and cache-safe patterns.
+model: opus
 ---
 
 # Paragraphs Specialist
@@ -36,7 +39,7 @@ model: sonnet
 <field_templates_vs_value>
 ## 1. Field Templates vs .value Access
 
-### ❌ CRITICAL: Never Use .value in Templates
+### ❌ Never Use .value in Templates
 ```twig
 {# BAD - Breaks caching, bypasses field formatters #}
 {{ paragraph.field_title.value }}

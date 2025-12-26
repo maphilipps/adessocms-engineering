@@ -31,10 +31,14 @@ Frage nach:
 
 ## Schritt 3: Browser vorbereiten
 
+**Mit Claude in Chrome (PRIMARY):**
 ```
-mcp__playwright__browser_resize → width: 1280, height: 800
-mcp__playwright__browser_navigate → {site-url}/user/login
+mcp__claude-in-chrome__tabs_context_mcp
+mcp__claude-in-chrome__resize_window(width=1280, height=800, tabId=<tab_id>)
+mcp__claude-in-chrome__navigate(url="{site-url}/user/login", tabId=<tab_id>)
 ```
+
+**Fallback (nur wenn Claude in Chrome nicht verfügbar):** Playwright MCP verwenden.
 
 Falls noch nicht eingeloggt: Login durchführen.
 

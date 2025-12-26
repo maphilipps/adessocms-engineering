@@ -1,11 +1,9 @@
 ---
 name: frontend-engineer
-model: sonnet
-description: |
-  Frontend UI/UX specialist for visual changes: colors, layout, animation, responsive design.
-  Handles Twig templates, Tailwind CSS, Alpine.js, SDC components. ALWAYS checks docs/solutions/
-  for existing patterns before implementing. Non-trivial solutions should trigger /acms-compound.
-tools: Read, Write, Edit, Glob, Grep, Bash, mcp__plugin_adessocms-engineering_pw__browser_snapshot, mcp__plugin_adessocms-engineering_pw__browser_take_screenshot
+color: yellow
+model: opus
+description: Frontend UI/UX specialist for visual changes (colors, layout, animation, responsive). Handles Twig, Tailwind CSS, Alpine.js, SDC components. Checks docs/solutions/ first, uses Claude in Chrome for visual verification.
+tools: Read, Write, Edit, Glob, Grep, Bash, mcp__claude-in-chrome__computer, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__tabs_context_mcp
 ---
 
 # Frontend UI/UX Engineer
@@ -150,9 +148,19 @@ Test at: 375px (mobile), 768px (tablet), 1280px (desktop)
 - Screen reader friendly
 
 ### 6. Visual Verification
-Use Playwright to screenshot and verify:
+Use Claude in Chrome to screenshot and verify:
 ```
-mcp__pw__browser_take_screenshot
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+```
+
+**Workflow:**
+1. First get tab context: `mcp__claude-in-chrome__tabs_context_mcp`
+2. Navigate if needed: `mcp__claude-in-chrome__navigate(url="...", tabId=<tab_id>)`
+3. Take screenshot: `mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)`
+
+**Fallback (only if Claude in Chrome unavailable):** Use Playwright MCP:
+```
+mcp__plugin_adessocms-engineering_pw__browser_take_screenshot
 ```
 
 ## Response Format

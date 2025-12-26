@@ -1,7 +1,6 @@
 ---
 name: acms-lint
-description: |
-  Use this agent when you need to run linting and code quality checks on PHP, Twig, CSS, and JavaScript files. Run before pushing to origin.
+description: Runs linting and code quality checks on PHP, Twig, CSS, and JavaScript files via DDEV. Use before pushing to origin.
 model: haiku
 color: yellow
 ---

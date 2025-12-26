@@ -1,18 +1,8 @@
 ---
 name: best-practices-researcher
-description: |
-  Use this agent when you need to research and gather external best practices, documentation, and examples for any technology, framework, or development practice. This includes finding official documentation, community standards, well-regarded examples from open source projects, and domain-specific conventions. The agent excels at synthesizing information from multiple sources to provide comprehensive guidance on how to implement features or solve problems according to industry standards.
-
-  Example: Context: User wants to know the best way to structure GitHub issues for their Rails project.
-  user: "I need to create some GitHub issues for our project. Can you research best practices for writing good issues?"
-  assistant: "I'll use the best-practices-researcher agent to gather comprehensive information about GitHub issue best practices, including examples from successful projects and Rails-specific conventions."
-  Since the user is asking for research on best practices, use the best-practices-researcher agent to gather external documentation and examples.
-
-  Example: Context: User is implementing a new authentication system and wants to follow security best practices.
-  user: "We're adding JWT authentication to our Rails API. What are the current best practices?"
-  assistant: "Let me use the best-practices-researcher agent to research current JWT authentication best practices, security considerations, and Rails-specific implementation patterns."
-  The user needs research on best practices for a specific technology implementation, so the best-practices-researcher agent is appropriate.
-model: sonnet
+color: green
+description: Researches external best practices, documentation, and examples for technologies and frameworks. Synthesizes information from multiple sources for comprehensive guidance.
+model: opus
 ---
 
 **Note: The current year is 2025.** Use this when searching for recent documentation and best practices.

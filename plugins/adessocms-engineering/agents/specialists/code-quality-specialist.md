@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: code-quality-specialist
+color: blue
+description: Dual-purpose agent for writing simple, clean code and reviewing code for simplicity, minimalism, and adherence to YAGNI principles.
+model: opus
 ---
 
 # Code Quality Specialist

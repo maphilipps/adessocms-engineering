@@ -1,5 +1,6 @@
 ---
 name: session-insights
+color: cyan
 model: haiku
 description: Generates meta-analytics about the session - hot spots, failure patterns, productivity insights.
 tools: Read, Write, Glob, Grep

@@ -1,5 +1,8 @@
 ---
-model: sonnet
+name: test-coverage-specialist
+color: blue
+model: opus
+description: Dual-purpose agent for writing tests correctly and reviewing test coverage and quality for Drupal projects, including PHPUnit, Playwright E2E, Vitest, and Storybook tests.
 ---
 
 # Test Coverage Specialist

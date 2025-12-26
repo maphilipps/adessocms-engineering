@@ -1,5 +1,5 @@
 <overview>
-Richtlinien für die Erstellung konsistenter, hilfreicher Screenshots mit Playwright MCP.
+Richtlinien für die Erstellung konsistenter, hilfreicher Screenshots mit Claude in Chrome (Primary) oder Playwright MCP (Fallback).
 </overview>
 
 <browser_setup>
@@ -8,10 +8,15 @@ Richtlinien für die Erstellung konsistenter, hilfreicher Screenshots mit Playwr
 ### Fenstergröße
 Immer 1280x800px für konsistente Screenshots:
 
+**Claude in Chrome (Primary):**
 ```
-mcp__playwright__browser_resize
-  width: 1280
-  height: 800
+mcp__claude-in-chrome__tabs_context_mcp
+mcp__claude-in-chrome__resize_window(width=1280, height=800, tabId=<tab_id>)
+```
+
+**Playwright (Fallback - nur wenn Claude in Chrome nicht verfügbar):**
+```
+mcp__plugin_adessocms-engineering_pw__browser_resize(width=1280, height=800)
 ```
 
 ### Warum 1280px?
@@ -60,43 +65,63 @@ docs/assets/images/
 ```
 </naming_convention>
 
-<playwright_workflow>
-## Playwright MCP Workflow
+<claude_in_chrome_workflow>
+## Claude in Chrome Workflow (PRIMARY)
 
-### 1. Navigieren
+### 1. Tab-Kontext holen
 ```
-mcp__playwright__browser_navigate
-  url: https://example.ddev.site/admin/content
+mcp__claude-in-chrome__tabs_context_mcp
+```
+Notiere die `tabId` für nachfolgende Befehle.
+
+### 2. Navigieren
+```
+mcp__claude-in-chrome__navigate(url="https://example.ddev.site/admin/content", tabId=<tab_id>)
 ```
 
-### 2. Warten bis geladen
+### 3. Warten bis geladen
 ```
-mcp__playwright__browser_wait_for
-  text: "Inhalt"
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
 ```
 
-Oder auf Element warten:
+### 4. Seite lesen (optional)
 ```
-mcp__playwright__browser_snapshot
+mcp__claude-in-chrome__read_page(tabId=<tab_id>)
 ```
 Prüfen ob gewünschte Elemente sichtbar sind.
 
-### 3. Screenshot erstellen
+### 5. Screenshot erstellen
 ```
-mcp__playwright__browser_take_screenshot
-  filename: content-liste-01.png
-  fullPage: false
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
 ```
 
-**fullPage: false** für Viewport-Screenshots (empfohlen)
-**fullPage: true** nur für sehr lange Seiten
-
-### 4. Screenshot verschieben
+### 6. Screenshot verschieben
 Nach dem Erstellen in richtiges Verzeichnis verschieben:
 ```bash
-mv content-liste-01.png docs/assets/images/inhalte/
+mv screenshot.png docs/assets/images/inhalte/content-liste-01.png
 ```
-</playwright_workflow>
+</claude_in_chrome_workflow>
+
+<playwright_fallback>
+## Playwright Workflow (FALLBACK)
+
+**Nur verwenden wenn Claude in Chrome nicht verfügbar ist!**
+
+### Navigieren
+```
+mcp__plugin_adessocms-engineering_pw__browser_navigate(url="https://example.ddev.site/admin/content")
+```
+
+### Warten bis geladen
+```
+mcp__plugin_adessocms-engineering_pw__browser_wait_for(text="Inhalt")
+```
+
+### Screenshot erstellen
+```
+mcp__plugin_adessocms-engineering_pw__browser_take_screenshot(filename="content-liste-01.png")
+```
+</playwright_fallback>
 
 <screenshot_types>
 ## Screenshot-Typen
@@ -108,12 +133,7 @@ mv content-liste-01.png docs/assets/images/inhalte/
 
 ### Fokus-Screenshot
 - Zeigt nur relevanten Bereich
-- Nutze Element-Screenshot:
-```
-mcp__playwright__browser_take_screenshot
-  ref: "form-element-ref"
-  element: "Das Formular zum Erstellen"
-```
+- Mit Claude in Chrome: Scroll zum Element, dann Screenshot
 
 ### Sequenz-Screenshots
 - Mehrere Screenshots für einen Ablauf

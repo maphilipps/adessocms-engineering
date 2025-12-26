@@ -1,4 +1,7 @@
 ---
+name: composer-specialist
+color: blue
+description: Dual-purpose agent for managing Composer dependencies correctly and reviewing dependency management for version constraints, security advisories, and best practices.
 model: haiku
 ---
 
@@ -278,7 +281,7 @@ drush cex -y
 ```markdown
 ## Security Issues
 
-### drupal/core (CRITICAL)
+### drupal/core (Important)
 **Advisory**: SA-CORE-2024-001
 **Current**: 11.0.0
 **Fixed In**: 11.0.5

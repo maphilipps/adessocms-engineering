@@ -12,8 +12,8 @@ Transform feature descriptions, bug reports, or improvement ideas into well-stru
 
 This command creates a **documented implementation plan** saved to `plans/<slug>.md` through **step-by-step collaboration**. Each phase is presented for feedback before proceeding.
 
-> ⚠️ **CRITICAL: DO NOT use `EnterPlanMode` tool!**
-> This command writes a Markdown plan file. NEVER call the `EnterPlanMode` tool.
+> ⚠️ **Do not use `EnterPlanMode` tool!**
+> This command writes a Markdown plan file. Never call the `EnterPlanMode` tool.
 > Always write the plan to `plans/<slug>.md` using the Write tool.
 
 **Workflow Ecosystem:**
@@ -79,11 +79,11 @@ grep -rl "keyword" web/themes/custom/*/components/
 grep -r "similar_pattern" web/modules/custom/
 ```
 
-**Consult specialists (in parallel with model="haiku"):**
+**Consult specialists in parallel:**
 
 ```
-Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", model="haiku", prompt="Pattern for: {task}?")
-Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", model="haiku", prompt="Structure for: {component}?")
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Pattern for: {task}?")
+Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="Structure for: {component}?")
 ```
 
 **Present findings to user:**
@@ -318,6 +318,27 @@ status: draft
 - [ ] E2E tests for [specific user journeys]
 - [ ] Storybook stories for [components]
 
+## Recommended Agents for Implementation
+
+### Core Agents
+| Agent | When to Use | Task Syntax |
+|-------|-------------|-------------|
+| [e.g., Oracle] | [e.g., If stuck after 3 attempts] | `Task(subagent_type="adessocms-engineering:core:oracle", prompt="...")` |
+
+### Specialist Agents
+| Agent | When to Use | Task Syntax |
+|-------|-------------|-------------|
+| [e.g., drupal-specialist] | [e.g., For Drupal API patterns] | `Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="...")` |
+| [e.g., sdc-specialist] | [e.g., For SDC component structure] | `Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="...")` |
+| [e.g., accessibility-specialist] | [e.g., For WCAG compliance checks] | `Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="...")` |
+
+### Research Agents
+| Agent | When to Use | Task Syntax |
+|-------|-------------|-------------|
+| [e.g., framework-docs-researcher] | [e.g., For Drupal/Tailwind docs] | `Task(subagent_type="adessocms-engineering:research:framework-docs-researcher", prompt="...")` |
+
+> **Note:** Use `/acms-work` to execute this plan. It will automatically consult the recommended agents during implementation.
+
 ## References
 
 - [Relevant documentation links]
@@ -352,21 +373,23 @@ AskUserQuestion(questions=[{
 
 ## Specialist Selection Guide
 
-| Task Type | Specialist | Model | Purpose |
-|-----------|------------|-------|---------|
-| Drupal modules/services | `drupal-specialist` | haiku | API patterns, DI, caching |
-| SDC components | `sdc-specialist` | haiku | Props vs slots, schemas |
-| Twig templates | `twig-specialist` | haiku | Attributes, translations |
-| Tailwind styling | `tailwind-specialist` | haiku | v4 syntax, responsive |
-| Accessibility | `accessibility-specialist` | haiku | WCAG compliance |
-| Security-sensitive | `security-sentinel` | sonnet | Auth, input handling |
-| Paragraphs | `paragraphs-specialist` | haiku | Field templates, SDC integration |
-| Architecture | `architecture-strategist` | sonnet | System design decisions |
+| Task Type | Specialist | Purpose |
+|-----------|------------|---------|
+| Drupal modules/services | `drupal-specialist` | API patterns, DI, caching |
+| SDC components | `sdc-specialist` | Props vs slots, schemas |
+| Twig templates | `twig-specialist` | Attributes, translations |
+| Tailwind styling | `tailwind-specialist` | v4 syntax, responsive |
+| Accessibility | `accessibility-specialist` | WCAG compliance |
+| Security-sensitive | `security-sentinel` | Auth, input handling |
+| Paragraphs | `paragraphs-specialist` | Field templates, SDC integration |
+| Architecture | `architecture-strategist` | System design decisions |
 
-**Model Selection:**
-- **haiku** - Quick guidance questions, pattern lookups
-- **sonnet** - Complex analysis, security review, architecture decisions
-- **NEVER use opus** for planning agents
+**Usage:** Use the full Task syntax with subagent_type:
+```
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Your question here")
+```
+
+The `subagent_type` format is: `plugin-name:agent-category:agent-name`
 
 ---
 

@@ -35,56 +35,56 @@ Perform exhaustive code reviews using multi-agent analysis with appropriate mode
 
 ### 2. Parallel Specialist Reviews
 
-Run ALL relevant specialists **in parallel** with **model="sonnet"**:
+Run ALL relevant specialists **in parallel**:
 
 ```
 # Core Drupal Review (ALWAYS)
-Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", model="sonnet", prompt="Review PR: {pr_context}")
-Task(subagent_type="adessocms-engineering:specialists:dries-drupal-specialist", model="sonnet", prompt="Review PR: {pr_title}")
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Review PR: {pr_context}")
+Task(subagent_type="adessocms-engineering:specialists:dries-drupal-specialist", prompt="Review PR: {pr_title}")
 
 # SDC & Paragraphs (if component changes)
-Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", model="sonnet", prompt="Review SDC: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:paragraphs-specialist", model="sonnet", prompt="Review Paragraphs: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="Review SDC: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:paragraphs-specialist", prompt="Review Paragraphs: {changes}")
 
 # DRY & Component Reuse (ALWAYS for frontend)
-Task(subagent_type="adessocms-engineering:specialists:component-reuse-specialist", model="sonnet", prompt="Review DRY: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:component-reuse-specialist", prompt="Review DRY: {changes}")
 
 # Frontend (if Twig/CSS/JS changes)
-Task(subagent_type="adessocms-engineering:specialists:twig-specialist", model="sonnet", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", model="sonnet", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:storybook-specialist", model="sonnet", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", model="sonnet", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:drupal-theme-specialist", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:twig-specialist", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:storybook-specialist", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:drupal-theme-specialist", prompt="Review: {changes}")
 
 # Quality & Security (ALWAYS)
-Task(subagent_type="adessocms-engineering:specialists:security-sentinel", model="sonnet", prompt="Security scan: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:test-coverage-specialist", model="sonnet", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:code-quality-specialist", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:security-sentinel", prompt="Security scan: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:test-coverage-specialist", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:code-quality-specialist", prompt="Review: {changes}")
 
 # Architecture (for significant changes)
-Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", model="sonnet", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:performance-oracle", model="sonnet", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:pattern-recognition-specialist", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:performance-oracle", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:pattern-recognition-specialist", prompt="Review: {changes}")
 
 # Dependencies (if composer.json/package.json changed)
-Task(subagent_type="adessocms-engineering:specialists:composer-specialist", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:composer-specialist", prompt="Review: {changes}")
 
 # Data (if database/entity changes)
-Task(subagent_type="adessocms-engineering:specialists:data-integrity-guardian", model="sonnet", prompt="Review: {changes}")
+Task(subagent_type="adessocms-engineering:specialists:data-integrity-guardian", prompt="Review: {changes}")
 
 # History context
-Task(subagent_type="adessocms-engineering:research:git-history-analyzer", model="sonnet", prompt="Analyze: {pr_context}")
+Task(subagent_type="adessocms-engineering:research:git-history-analyzer", prompt="Analyze: {pr_context}")
 ```
 
 **Specialist Selection Guide:**
 
 | Change Type | Required Specialists |
 |-------------|----------------------|
-| PHP/Module | drupal-specialist, dries, security-sentinel, test-coverage |
-| Twig/Theme | twig-specialist, drupal-theme-specialist, accessibility, component-reuse |
-| SDC Components | sdc-specialist, component-reuse-specialist, storybook |
+| PHP/Module | drupal-specialist, dries-drupal-specialist, security-sentinel, test-coverage-specialist |
+| Twig/Theme | twig-specialist, drupal-theme-specialist, accessibility-specialist, component-reuse-specialist |
+| SDC Components | sdc-specialist, component-reuse-specialist, storybook-specialist |
 | Paragraphs | paragraphs-specialist, sdc-specialist |
-| CSS/Tailwind | tailwind-specialist, accessibility-specialist, component-reuse |
+| CSS/Tailwind | tailwind-specialist, accessibility-specialist, component-reuse-specialist |
 | JS/Alpine | storybook-specialist (if applicable) |
 | composer.json | composer-specialist |
 | Database/Entity | data-integrity-guardian |
@@ -153,8 +153,8 @@ Present findings as markdown:
 
 ### Review Agents Used
 
-- drupal-reviewer
-- dries-drupal-reviewer
+- drupal-specialist
+- dries-drupal-specialist
 - security-sentinel
 - [others...]
 
@@ -171,26 +171,15 @@ Present findings as markdown:
 
 After presenting findings, offer options:
 
-1. **Fix P1 Issues** - Start `/work` to address critical findings
+1. **Fix P1 Issues** - Start `/acms-work` to address critical findings
 2. **Create Issues** - Create GitHub issues for P2/P3 findings
 3. **Approve PR** - If no P1 findings, approve the PR
 
 ---
 
-## Model Selection
-
-**CRITICAL: Always use appropriate model tiers to save tokens**
-
-| Agent Category | Model | Reason |
-|----------------|-------|--------|
-| All review agents | sonnet | Capable for code review |
-| Research agents | sonnet | Fast, sufficient |
-
-**NEVER use opus for review agents.** Sonnet is sufficient for code analysis.
-
 ## Parallel Execution
 
-**CRITICAL: Run agents in parallel** to minimize review time.
+Run agents in parallel to minimize review time.
 
 Bad (sequential):
 ```
@@ -243,4 +232,4 @@ agent3 ┘
 - Documentation-only changes
 - Simple bug fixes
 - Config changes
-- Dependency updates (just composer-dependency-reviewer)
+- Dependency updates (just composer-specialist)
