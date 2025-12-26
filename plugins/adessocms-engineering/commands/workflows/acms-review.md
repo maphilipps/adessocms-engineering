@@ -35,46 +35,44 @@ Perform exhaustive code reviews using multi-agent analysis with appropriate mode
 
 ### 2. Parallel Specialist Reviews
 
-Run ALL relevant specialists **in parallel**:
+Run ALL relevant specialists **in parallel at the same time**:
 
-```
-# Core Drupal Review (ALWAYS)
-Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Review PR: {pr_context}")
-Task(subagent_type="adessocms-engineering:specialists:dries-drupal-specialist", prompt="Review PR: {pr_title}")
+**Core Drupal Review (ALWAYS):**
+- Task drupal-specialist(pr_context)
+- Task dries-drupal-specialist(pr_context)
 
-# SDC & Paragraphs (if component changes)
-Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="Review SDC: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:paragraphs-specialist", prompt="Review Paragraphs: {changes}")
+**SDC & Paragraphs (if component changes):**
+- Task sdc-specialist(changes)
+- Task paragraphs-specialist(changes)
 
-# DRY & Component Reuse (ALWAYS for frontend)
-Task(subagent_type="adessocms-engineering:specialists:component-reuse-specialist", prompt="Review DRY: {changes}")
+**DRY & Component Reuse (ALWAYS for frontend):**
+- Task component-reuse-specialist(changes)
 
-# Frontend (if Twig/CSS/JS changes)
-Task(subagent_type="adessocms-engineering:specialists:twig-specialist", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:storybook-specialist", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:drupal-theme-specialist", prompt="Review: {changes}")
+**Frontend (if Twig/CSS/JS changes):**
+- Task twig-specialist(changes)
+- Task tailwind-specialist(changes)
+- Task storybook-specialist(changes)
+- Task accessibility-specialist(changes)
+- Task drupal-theme-specialist(changes)
 
-# Quality & Security (ALWAYS)
-Task(subagent_type="adessocms-engineering:specialists:security-sentinel", prompt="Security scan: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:test-coverage-specialist", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:code-quality-specialist", prompt="Review: {changes}")
+**Quality & Security (ALWAYS):**
+- Task security-sentinel(changes)
+- Task test-coverage-specialist(changes)
+- Task code-quality-specialist(changes)
 
-# Architecture (for significant changes)
-Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:performance-oracle", prompt="Review: {changes}")
-Task(subagent_type="adessocms-engineering:specialists:pattern-recognition-specialist", prompt="Review: {changes}")
+**Architecture (for significant changes):**
+- Task architecture-strategist(changes)
+- Task performance-oracle(changes)
+- Task pattern-recognition-specialist(changes)
 
-# Dependencies (if composer.json/package.json changed)
-Task(subagent_type="adessocms-engineering:specialists:composer-specialist", prompt="Review: {changes}")
+**Dependencies (if composer.json/package.json changed):**
+- Task composer-specialist(changes)
 
-# Data (if database/entity changes)
-Task(subagent_type="adessocms-engineering:specialists:data-integrity-guardian", prompt="Review: {changes}")
+**Data (if database/entity changes):**
+- Task data-integrity-guardian(changes)
 
-# History context
-Task(subagent_type="adessocms-engineering:research:git-history-analyzer", prompt="Analyze: {pr_context}")
-```
+**History context:**
+- Task git-history-analyzer(pr_context)
 
 **Specialist Selection Guide:**
 

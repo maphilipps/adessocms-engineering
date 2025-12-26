@@ -1,5 +1,54 @@
 # Changelog
 
+## [1.18.6] - 2025-12-26
+
+### Fixed - Agent Invocation Syntax (EveryInc-Style)
+
+**Agents now use the working EveryInc syntax for actual execution.**
+
+### The Problem
+
+Our commands used this syntax which Claude read as TEXT, not as executable instructions:
+```
+Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="...")
+```
+
+Result: Claude worked through everything alone without spawning agents.
+
+### The Solution
+
+Adopted EveryInc's proven syntax that Claude actually EXECUTES:
+```
+Run these specialists in parallel at the same time:
+
+- Task drupal-specialist(task_description)
+- Task sdc-specialist(component_description)
+- Task security-sentinel(changes)
+```
+
+### Files Updated
+
+**Commands (4):**
+- `commands/workflows/acms-plan.md` - Research phase, plan template, specialist guide
+- `commands/workflows/acms-work.md` - Specialist consultation, review section
+- `commands/workflows/acms-review.md` - All 20+ parallel reviewer invocations
+- `commands/reproduce-bug.md` - Bug investigation agents
+
+### Also Fixed: docs/solutions/ Check in Planning
+
+Added **MANDATORY** check of `docs/solutions/` in Phase 2 of `/acms-plan`:
+- Search compounded knowledge BEFORE searching codebase
+- Read `docs/solutions/patterns/cora-critical-patterns.md`
+- Added "Compounded Knowledge" section to research findings template
+
+This closes the compound loop:
+```
+/acms-compound → writes to docs/solutions/
+/acms-plan     → now reads from docs/solutions/ ✅
+```
+
+---
+
 ## [1.18.5] - 2025-12-26
 
 ### Changed - Claude in Chrome as Primary Browser Tool

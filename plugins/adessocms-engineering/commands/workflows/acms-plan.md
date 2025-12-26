@@ -66,7 +66,24 @@ AskUserQuestion(questions=[{
 
 ### Phase 2: Research & DRY Analysis → GET FEEDBACK
 
-**Search for existing solutions:**
+**Step 2.1: Check docs/solutions/ FIRST (Compounded Knowledge)**
+
+```bash
+# Search for existing solutions/learnings
+Grep(pattern="<keywords>", path="docs/solutions/")
+Grep(pattern="<error type>", path="docs/solutions/")
+
+# Check known patterns
+Read("docs/solutions/patterns/cora-critical-patterns.md")
+
+# List all documented solutions
+Glob(pattern="docs/solutions/**/*.md")
+```
+
+> ⚠️ **This is MANDATORY.** The whole point of `/acms-compound` is to reuse learnings.
+> Check docs/solutions/ BEFORE searching the codebase or consulting specialists.
+
+**Step 2.2: Search for existing code:**
 
 ```bash
 # Find existing SDC components
@@ -79,17 +96,23 @@ grep -rl "keyword" web/themes/custom/*/components/
 grep -r "similar_pattern" web/modules/custom/
 ```
 
-**Consult specialists in parallel:**
+**Step 2.3: Consult specialists in parallel:**
 
-```
-Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Pattern for: {task}?")
-Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="Structure for: {component}?")
-```
+Run these specialists in parallel at the same time:
+
+- Task drupal-specialist(feature_description)
+- Task sdc-specialist(feature_description)
+- Task repo-research-analyst(feature_description)
 
 **Present findings to user:**
 
 ```markdown
 ## Research Findings
+
+### Compounded Knowledge (docs/solutions/)
+- `docs/solutions/ui-bugs/accordion-animation.md` - Solved similar issue with [approach]
+- `docs/solutions/patterns/cora-critical-patterns.md` - Relevant pattern: [pattern name]
+- *(If nothing found: "No existing solutions documented for this task.")*
 
 ### Existing Components Found
 - `my_theme:button` - Could be reused for [purpose]
@@ -256,6 +279,11 @@ status: draft
 
 ## Research Findings
 
+### Compounded Knowledge (docs/solutions/)
+[Existing solutions/learnings from previous work - be specific with file paths]
+- `docs/solutions/...` - [How it applies]
+- *(If none: "No existing solutions documented for this task.")*
+
 ### Existing Codebase Patterns
 [Relevant patterns found in repo - be specific with file paths]
 
@@ -321,21 +349,27 @@ status: draft
 ## Recommended Agents for Implementation
 
 ### Core Agents
-| Agent | When to Use | Task Syntax |
-|-------|-------------|-------------|
-| [e.g., Oracle] | [e.g., If stuck after 3 attempts] | `Task(subagent_type="adessocms-engineering:core:oracle", prompt="...")` |
+| Agent | When to Use |
+|-------|-------------|
+| oracle | If stuck after 3 attempts |
 
 ### Specialist Agents
-| Agent | When to Use | Task Syntax |
-|-------|-------------|-------------|
-| [e.g., drupal-specialist] | [e.g., For Drupal API patterns] | `Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="...")` |
-| [e.g., sdc-specialist] | [e.g., For SDC component structure] | `Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="...")` |
-| [e.g., accessibility-specialist] | [e.g., For WCAG compliance checks] | `Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="...")` |
+| Agent | When to Use |
+|-------|-------------|
+| drupal-specialist | For Drupal API patterns |
+| sdc-specialist | For SDC component structure |
+| accessibility-specialist | For WCAG compliance checks |
+| security-sentinel | For security-sensitive code |
 
 ### Research Agents
-| Agent | When to Use | Task Syntax |
-|-------|-------------|-------------|
-| [e.g., framework-docs-researcher] | [e.g., For Drupal/Tailwind docs] | `Task(subagent_type="adessocms-engineering:research:framework-docs-researcher", prompt="...")` |
+| Agent | When to Use |
+|-------|-------------|
+| framework-docs-researcher | For Drupal/Tailwind docs |
+| repo-research-analyst | For codebase patterns |
+
+**Usage:** Run agents in parallel at the same time:
+- Task drupal-specialist(task_description)
+- Task sdc-specialist(component_description)
 
 > **Note:** Use `/acms-work` to execute this plan. It will automatically consult the recommended agents during implementation.
 
@@ -384,12 +418,9 @@ AskUserQuestion(questions=[{
 | Paragraphs | `paragraphs-specialist` | Field templates, SDC integration |
 | Architecture | `architecture-strategist` | System design decisions |
 
-**Usage:** Use the full Task syntax with subagent_type:
-```
-Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Your question here")
-```
-
-The `subagent_type` format is: `plugin-name:agent-category:agent-name`
+**Usage:** Run agents in parallel at the same time:
+- Task drupal-specialist(question)
+- Task sdc-specialist(question)
 
 ---
 
@@ -428,6 +459,7 @@ The `subagent_type` format is: `plugin-name:agent-category:agent-name`
 
 ## Common Pitfalls to Avoid
 
+- **⚠️ Skipping docs/solutions/** - ALWAYS check compounded knowledge FIRST. The whole point of `/acms-compound` is to reuse learnings!
 - **Rushing through phases** - Each feedback point is valuable, don't skip them
 - **Skipping DRY analysis** - Always check for existing components first
 - **Not consulting specialists** - Get guidance before designing complex patterns

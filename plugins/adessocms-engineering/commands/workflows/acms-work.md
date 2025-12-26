@@ -82,18 +82,14 @@ This command takes a work document (plan file or task description) and executes 
 
 2. **Consult Specialists BEFORE Each Task (MANDATORY)**
 
-   **Before implementing ANY non-trivial task**, consult the recommended specialists:
+   **Before implementing ANY non-trivial task**, consult the recommended specialists.
 
-   ```
-   # Run ALL recommended specialists in parallel:
-   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="How should I implement: {task description}? Provide correct patterns, caching, and DI approach.")
+   Run these specialists in parallel at the same time:
 
-   Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="How should I build this component: {component description}? Include props, slots, and schema.")
-
-   Task(subagent_type="adessocms-engineering:specialists:security-sentinel", prompt="What security patterns should I follow for: {task}? Check for XSS, CSRF, access control.")
-
-   Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="What accessibility requirements apply to: {task}? Include WCAG 2.1 AA requirements.")
-   ```
+   - Task drupal-specialist(task_description)
+   - Task sdc-specialist(component_description)
+   - Task security-sentinel(task_description)
+   - Task accessibility-specialist(task_description)
 
    **This is NOT optional.** Specialists provide:
    - Correct API usage patterns
@@ -140,9 +136,7 @@ This command takes a work document (plan file or task description) and executes 
 
    For UI work with Figma designs:
 
-   ```
-   Task(subagent_type="adessocms-engineering:design:figma-design-sync", prompt="Compare implementation with Figma design for: {component}")
-   ```
+   - Task figma-design-sync(component_description)
 
 ### Phase 3: Quality Check
 
@@ -166,19 +160,17 @@ This command takes a work document (plan file or task description) and executes 
 
    **Only for complex, risky, or large changes.** Run in parallel:
 
-   ```
-   # For Drupal code changes:
-   Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:specialists:security-sentinel", prompt="Security scan: {changes}")
+   For Drupal code changes:
+   - Task drupal-specialist(changes)
+   - Task security-sentinel(changes)
 
-   # For frontend changes:
-   Task(subagent_type="adessocms-engineering:specialists:twig-specialist", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:specialists:tailwind-specialist", prompt="Review: {changes}")
-   Task(subagent_type="adessocms-engineering:specialists:accessibility-specialist", prompt="Review: {changes}")
+   For frontend changes:
+   - Task twig-specialist(changes)
+   - Task tailwind-specialist(changes)
+   - Task accessibility-specialist(changes)
 
-   # For architecture concerns:
-   Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", prompt="Review: {changes}")
-   ```
+   For architecture concerns:
+   - Task architecture-strategist(changes)
 
 3. **Final Validation**
    - All TodoWrite tasks marked completed
@@ -319,10 +311,9 @@ Before creating PR, verify:
 | Paragraphs | `paragraphs-specialist` | Field templates, SDC integration |
 
 **How to consult (run in parallel):**
-```
-Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="How should I implement: {task}?")
-Task(subagent_type="adessocms-engineering:specialists:sdc-specialist", prompt="Structure for: {component}?")
-```
+
+- Task drupal-specialist(task_description)
+- Task sdc-specialist(component_description)
 
 ### For Code Review (OPTIONAL)
 
@@ -337,13 +328,9 @@ For most features: **tests + linting + following specialist guidance is sufficie
 
 ## Model Selection for Agents
 
-All specialist agents run on **opus** by default (configured in agent frontmatter). Use the full Task syntax:
+All specialist agents run on **opus** by default (configured in agent frontmatter). Use this syntax:
 
-```
-Task(subagent_type="adessocms-engineering:specialists:drupal-specialist", prompt="Your prompt here")
-```
-
-The `subagent_type` format is: `plugin-name:agent-category:agent-name`
+- Task agent-name(description)
 
 ## Common Pitfalls to Avoid
 
