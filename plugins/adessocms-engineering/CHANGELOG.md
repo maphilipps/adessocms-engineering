@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.19.6] - 2025-12-26
+
+### Changed - All Skills Updated to Chrome-First
+
+**All skill workflows now use Claude in Chrome as PRIMARY browser tool.**
+
+**Updated Files:**
+- `skills/generate-user-handbook/workflows/generate-handbook.md`
+- `skills/generate-user-handbook/workflows/update-handbook.md`
+- `skills/create-drupal-case-study/workflows/generate-case-study.md`
+
+**Changes Made:**
+- Replaced all `mcp__playwright__*` calls with `mcp__claude-in-chrome__*`
+- Added proper tab context setup (`tabs_context_mcp`, `tabs_create_mcp`)
+- Updated login workflows with `form_input` and `computer` actions
+- Updated screenshot workflows with `resize_window` and `computer(action="screenshot")`
+- Removed `browser_close` (Chrome tabs stay open for reuse)
+
+**Playwright MCP remains documented as FALLBACK only** in:
+- `skills/generate-user-handbook/references/screenshot-guidelines.md`
+- `skills/web-to-adessocms/SKILL.md`
+
+---
+
 ## [1.19.5] - 2025-12-26
 
 ### Changed - Claude in Chrome as Primary Browser Tool

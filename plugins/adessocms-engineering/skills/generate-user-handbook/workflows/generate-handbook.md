@@ -52,14 +52,30 @@ docs/
 
 ## Schritt 3: Browser starten und einloggen
 
-Nutze Playwright MCP:
+**Claude in Chrome (PRIMARY - immer zuerst verwenden!):**
 
 ```
-mcp__playwright__browser_navigate → {site-url}/user/login
-mcp__playwright__browser_snapshot → Snapshot für Login-Formular
-mcp__playwright__browser_fill_form → Username + Password eingeben
-mcp__playwright__browser_click → Login-Button klicken
-mcp__playwright__browser_wait_for → Warten auf Admin-Toolbar
+# 1. Tab-Kontext holen
+mcp__claude-in-chrome__tabs_context_mcp
+
+# 2. Neuen Tab erstellen
+mcp__claude-in-chrome__tabs_create_mcp
+
+# 3. Zur Login-Seite navigieren
+mcp__claude-in-chrome__navigate(url="{site-url}/user/login", tabId=<tab_id>)
+
+# 4. Seite lesen für Login-Formular
+mcp__claude-in-chrome__read_page(tabId=<tab_id>)
+
+# 5. Formular ausfüllen
+mcp__claude-in-chrome__form_input(ref="<username_ref>", value="username", tabId=<tab_id>)
+mcp__claude-in-chrome__form_input(ref="<password_ref>", value="password", tabId=<tab_id>)
+
+# 6. Login-Button klicken
+mcp__claude-in-chrome__computer(action="left_click", ref="<login_button_ref>", tabId=<tab_id>)
+
+# 7. Warten auf Admin-Toolbar
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
 ```
 
 **Screenshot erstellen:** Login-Seite VOR dem Einloggen für Dokumentation.
@@ -94,29 +110,34 @@ Für jeden Bereich:
 
 ## Schritt 5: Screenshots erstellen
 
+**Claude in Chrome (PRIMARY):**
+
 Für jeden Screen:
 
 1. **Browser auf 1280px Breite setzen:**
    ```
-   mcp__playwright__browser_resize → width: 1280, height: 800
+   mcp__claude-in-chrome__resize_window(width=1280, height=800, tabId=<tab_id>)
    ```
 
 2. **Navigieren zum Bereich:**
    ```
-   mcp__playwright__browser_navigate → {url}
+   mcp__claude-in-chrome__navigate(url="{url}", tabId=<tab_id>)
    ```
 
 3. **Warten bis geladen:**
    ```
-   mcp__playwright__browser_wait_for → Warten auf Key-Element
+   mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
    ```
 
 4. **Screenshot erstellen:**
    ```
-   mcp__playwright__browser_take_screenshot → filename: {section}-{action}-{step}.png
+   mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
    ```
 
-5. **Screenshot in docs/assets/images/{section}/ speichern**
+5. **Screenshot verschieben:**
+   ```bash
+   mv screenshot.png docs/assets/images/{section}/{section}-{action}-{step}.png
+   ```
 
 ## Schritt 6: Markdown-Seiten schreiben
 
@@ -162,9 +183,13 @@ mkdocs serve
 
 ## Schritt 9: Browser schließen
 
+**Claude in Chrome:**
 ```
-mcp__playwright__browser_close
+mcp__claude-in-chrome__computer(action="wait", duration=1, tabId=<tab_id>)
+# Tab kann offen bleiben - wird nicht automatisch geschlossen
 ```
+
+**Hinweis:** Claude in Chrome Tabs bleiben offen für weitere Nutzung. Nur bei Bedarf manuell schließen.
 
 ## Schritt 10: Ergebnis präsentieren
 

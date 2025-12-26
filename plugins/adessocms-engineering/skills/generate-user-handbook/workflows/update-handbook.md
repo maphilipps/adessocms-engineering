@@ -48,12 +48,27 @@ Frage mit AskUserQuestion:
 
 ## Schritt 4: Browser vorbereiten (falls Screenshots)
 
-```
-mcp__playwright__browser_resize → width: 1280, height: 800
-mcp__playwright__browser_navigate → {site-url}/user/login
-```
+**Claude in Chrome (PRIMARY):**
 
-Login durchführen.
+```
+# 1. Tab-Kontext holen
+mcp__claude-in-chrome__tabs_context_mcp
+
+# 2. Neuen Tab erstellen
+mcp__claude-in-chrome__tabs_create_mcp
+
+# 3. Browser-Größe setzen
+mcp__claude-in-chrome__resize_window(width=1280, height=800, tabId=<tab_id>)
+
+# 4. Zur Login-Seite navigieren
+mcp__claude-in-chrome__navigate(url="{site-url}/user/login", tabId=<tab_id>)
+
+# 5. Login durchführen (Formular ausfüllen + Button klicken)
+mcp__claude-in-chrome__read_page(tabId=<tab_id>)
+mcp__claude-in-chrome__form_input(ref="<username_ref>", value="username", tabId=<tab_id>)
+mcp__claude-in-chrome__form_input(ref="<password_ref>", value="password", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="left_click", ref="<login_button_ref>", tabId=<tab_id>)
+```
 
 ## Schritt 5: Update durchführen
 
@@ -101,9 +116,13 @@ Zeige dem Benutzer was sich geändert hat:
 
 ## Schritt 8: Browser schließen
 
+**Claude in Chrome:**
 ```
-mcp__playwright__browser_close
+# Tab kann offen bleiben für weitere Nutzung
+# Nur bei Bedarf manuell schließen
 ```
+
+**Hinweis:** Claude in Chrome Tabs bleiben offen. Bei Bedarf manuell im Browser schließen.
 </process>
 
 <success_criteria>

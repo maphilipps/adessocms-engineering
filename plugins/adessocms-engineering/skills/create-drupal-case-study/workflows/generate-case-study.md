@@ -100,13 +100,36 @@ Use the template from `templates/case-study-output.md` to generate each section:
 
 ## Step 5: Capture Screenshots
 
-If live URL provided, use Playwright to capture screenshots:
+If live URL provided, use **Claude in Chrome (PRIMARY)**:
 
 ```
-mcp__playwright__browser_navigate to [project URL]
-mcp__playwright__browser_take_screenshot for homepage (full page)
-mcp__playwright__browser_navigate to key feature page
-mcp__playwright__browser_take_screenshot for feature showcase
+# 1. Tab-Kontext holen
+mcp__claude-in-chrome__tabs_context_mcp
+
+# 2. Neuen Tab erstellen
+mcp__claude-in-chrome__tabs_create_mcp
+
+# 3. Browser-Größe für Desktop
+mcp__claude-in-chrome__resize_window(width=1280, height=900, tabId=<tab_id>)
+
+# 4. Zur Homepage navigieren
+mcp__claude-in-chrome__navigate(url="[project URL]", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="wait", duration=3, tabId=<tab_id>)
+
+# 5. Homepage Screenshot
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+# → mv screenshot.png [project]-homepage.png
+
+# 6. Feature-Seite
+mcp__claude-in-chrome__navigate(url="[feature URL]", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+# → mv screenshot.png [project]-feature.png
+
+# 7. Mobile View
+mcp__claude-in-chrome__resize_window(width=375, height=812, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+# → mv screenshot.png [project]-mobile.png
 ```
 
 **Screenshot recommendations:**
@@ -118,6 +141,7 @@ mcp__playwright__browser_take_screenshot for feature showcase
 Save screenshots with descriptive names:
 - `[project]-homepage.png`
 - `[project]-feature.png`
+- `[project]-mobile.png`
 
 ## Step 6: Output Final Sections
 
