@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.19.0] - 2025-12-26
+
+### Added - EveryInc-Inspired Workflow Enhancements
+
+**New agents and workflow improvements inspired by EveryInc's compound-engineering plugin.**
+
+### New Agents (2)
+
+**Review Agents (`agents/review/`):**
+
+| Agent | Purpose |
+|-------|---------|
+| `code-simplifier` | Final pass to ensure code is as simple as possible. Checks YAGNI violations, unnecessary complexity, and opportunities for LOC reduction. |
+| `agent-native-reviewer` | Ensures features are agent-accessible. Verifies action parity (API/Drush for every UI action), context parity, and shared workspace patterns. |
+
+### Workflow Changes
+
+**`/acms-plan` - SpecFlow Analysis (MANDATORY):**
+- Added Phase 2.5: SpecFlow Analysis
+- Runs `acms-spec-flow-analyzer` AFTER research, BEFORE technical approach
+- Maps all user flows, edge cases, and gaps
+- Critical questions must be answered before proceeding
+- Pattern from EveryInc: Validate specs before implementation
+
+**`/acms-review` - Simplification Review (MANDATORY):**
+- Added Step 3.5: Simplification Review
+- Runs `code-simplifier` AFTER synthesis
+- Checks for YAGNI violations and over-engineering
+- Pattern from EveryInc: Every PR gets a simplicity check
+
+**`/acms-review` - Agent-Native Review:**
+- Added `agent-native-reviewer` to parallel specialists
+- Runs for new features
+- Ensures features are accessible to AI agents (not just UI)
+
+### Updated Specialist Selection Guide
+
+| Change Type | Required Specialists |
+|-------------|----------------------|
+| New Features | agent-native-reviewer |
+| ALL PRs | code-simplifier (after synthesis) |
+
+### Why These Changes
+
+EveryInc's compound-engineering plugin runs these agents on EVERY review:
+- `spec-flow-analyzer` during planning
+- `code-simplicity-reviewer` after synthesis
+- `agent-native-reviewer` for new features
+
+We now match their workflow patterns for consistent quality.
+
+---
+
 ## [1.18.6] - 2025-12-26
 
 ### Fixed - Agent Invocation Syntax (EveryInc-Style)

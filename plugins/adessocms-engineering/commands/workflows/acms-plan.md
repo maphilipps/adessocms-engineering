@@ -146,6 +146,60 @@ AskUserQuestion(questions=[{
 
 **STOP and wait for user feedback before proceeding.**
 
+### Phase 2.5: SpecFlow Analysis (MANDATORY)
+
+**After research is validated, run the SpecFlow Analyzer to validate the feature specification:**
+
+- Task acms-spec-flow-analyzer(feature_description + research_findings)
+
+**The SpecFlow Analyzer will:**
+- Map ALL possible user flows and permutations
+- Identify gaps, ambiguities, and missing specifications
+- Ask clarifying questions about unclear elements
+- Highlight areas that need further definition
+
+**Integrate SpecFlow findings:**
+
+```markdown
+## SpecFlow Analysis Results
+
+### User Flows Identified
+- [Flow 1]: [description]
+- [Flow 2]: [description]
+
+### Edge Cases & Permutations
+- [Edge case 1]
+- [Edge case 2]
+
+### Gaps Identified
+- [Gap 1] - Impact: [why it matters]
+- [Gap 2] - Impact: [why it matters]
+
+### Questions Raised
+- [Question 1] - Critical/Important/Nice-to-have
+- [Question 2] - Critical/Important/Nice-to-have
+```
+
+> ⚠️ **This is MANDATORY.** EveryInc runs spec-flow-analyzer on every plan.
+> Critical questions must be answered BEFORE proceeding to technical approach.
+
+**If critical questions were raised, ask the user:**
+
+```
+AskUserQuestion(questions=[{
+  "question": "The SpecFlow Analyzer raised [N] critical questions. Should we address them now?",
+  "header": "SpecFlow",
+  "options": [
+    {"label": "Address now", "description": "Answer questions before proceeding"},
+    {"label": "Proceed anyway", "description": "Accept current assumptions"},
+    {"label": "Mark as TODO", "description": "Add to plan as open questions"}
+  ],
+  "multiSelect": false
+}])
+```
+
+**STOP and wait for user decision before proceeding.**
+
 ### Phase 3: Technical Approach → GET FEEDBACK
 
 **Based on research, propose the technical approach:**

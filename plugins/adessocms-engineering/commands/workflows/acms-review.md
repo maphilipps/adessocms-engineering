@@ -60,6 +60,9 @@ Run ALL relevant specialists **in parallel at the same time**:
 - Task test-coverage-specialist(changes)
 - Task code-quality-specialist(changes)
 
+**Agent-Native (for new features):**
+- Task agent-native-reviewer(changes)
+
 **Architecture (for significant changes):**
 - Task architecture-strategist(changes)
 - Task performance-oracle(changes)
@@ -87,6 +90,8 @@ Run ALL relevant specialists **in parallel at the same time**:
 | composer.json | composer-specialist |
 | Database/Entity | data-integrity-guardian |
 | Large/Arch | architecture-strategist, performance-oracle |
+| New Features | agent-native-reviewer |
+| ALL PRs | code-simplifier (after synthesis) |
 
 ### 3. Findings Synthesis
 
@@ -100,6 +105,22 @@ Run ALL relevant specialists **in parallel at the same time**:
   - **P3 NICE-TO-HAVE** - Minor improvements, code cleanup, optimizations
 - [ ] Remove duplicate or overlapping findings
 - [ ] Estimate effort for each finding (Small/Medium/Large)
+
+### 3.5. Simplification Review (MANDATORY)
+
+**After synthesizing findings, run the code-simplifier to check for unnecessary complexity:**
+
+- Task code-simplifier(changes)
+
+**The code-simplifier checks for:**
+- Unnecessary complexity and over-engineering
+- YAGNI violations (You Aren't Gonna Need It)
+- Premature abstractions
+- Dead code and unused variables
+- Opportunities to reduce LOC while maintaining functionality
+
+> ⚠️ **This is MANDATORY.** EveryInc runs code-simplicity-reviewer on every PR.
+> Simplification findings should be added to P2 or P3 categories.
 
 ### 4. Review Summary Report
 

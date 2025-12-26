@@ -1,7 +1,7 @@
 {
   "name": "adessocms-engineering",
-  "version": "1.18.6",
-  "description": "AI-powered Drupal development with Sisyphus orchestration (Opus) and Oracle escalation. Full workflow: Plan→Review→Work→Review→Compound. 35 agents, 21 commands, 18 skills.",
+  "version": "1.19.0",
+  "description": "AI-powered Drupal development with Sisyphus orchestration (Opus) and Oracle escalation. Full workflow: Plan→Review→Work→Review→Compound. 46 agents, 21 commands, 18 skills.",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",
