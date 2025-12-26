@@ -9,11 +9,37 @@ Convert website UI components into adesso CMS Single Directory Components (SDC) 
 
 ## Core Principles
 
-1. **Browser-First**: Always navigate to the URL and extract real HTML/CSS
-2. **Tailwind-Aware**: Source sites use Tailwind, so extract and adapt classes directly
-3. **Drupal-First**: Component MUST work in Drupal, not just Storybook
-4. **Slots-First**: ALWAYS prefer slots over props for content. Props are ONLY for configuration (theme, variant, size)
-5. **Field Templates**: Override field templates to fill component slots - this is how Drupal content flows into SDC
+1. **Claude in Chrome**: ALWAYS use `mcp__claude-in-chrome__*` tools. Playwright MCP is ONLY a last-resort fallback!
+2. **Browser-First**: Always navigate to the URL and extract real HTML/CSS
+3. **Tailwind-Aware**: Source sites use Tailwind, so extract and adapt classes directly
+4. **Drupal-First**: Component MUST work in Drupal, not just Storybook
+5. **Slots-First**: ALWAYS prefer slots over props for content. Props are ONLY for configuration (theme, variant, size)
+6. **Field Templates**: Override field templates to fill component slots - this is how Drupal content flows into SDC
+
+---
+
+## 🌐 Browser Tool Priority
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. Claude in Chrome (PRIMARY - ALWAYS USE FIRST)           │
+│     mcp__claude-in-chrome__tabs_context_mcp                 │
+│     mcp__claude-in-chrome__navigate                         │
+│     mcp__claude-in-chrome__javascript_tool                  │
+│     mcp__claude-in-chrome__computer (screenshot, wait)      │
+│     mcp__claude-in-chrome__resize_window                    │
+├─────────────────────────────────────────────────────────────┤
+│  2. Playwright MCP (FALLBACK ONLY)                          │
+│     ⚠️ Only use if Chrome extension is unavailable          │
+│     mcp__plugin_adessocms-engineering_pw__*                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Why Chrome First?**
+- Direct browser control via extension
+- Better JavaScript execution context
+- More reliable for complex sites
+- Consistent with other adesso CMS workflows
 
 ---
 

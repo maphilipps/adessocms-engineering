@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.19.5] - 2025-12-26
+
+### Changed - Claude in Chrome as Primary Browser Tool
+
+**Enforces Claude in Chrome as the PRIMARY browser tool. Playwright MCP is ONLY a last-resort fallback.**
+
+**New Core Principle:**
+```
+1. Claude in Chrome: ALWAYS use mcp__claude-in-chrome__* tools.
+   Playwright MCP is ONLY a last-resort fallback!
+```
+
+**New Section: Browser Tool Priority**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. Claude in Chrome (PRIMARY - ALWAYS USE FIRST)           │
+│     mcp__claude-in-chrome__tabs_context_mcp                 │
+│     mcp__claude-in-chrome__navigate                         │
+│     mcp__claude-in-chrome__javascript_tool                  │
+│     mcp__claude-in-chrome__computer (screenshot, wait)      │
+│     mcp__claude-in-chrome__resize_window                    │
+├─────────────────────────────────────────────────────────────┤
+│  2. Playwright MCP (FALLBACK ONLY)                          │
+│     ⚠️ Only use if Chrome extension is unavailable          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Why Chrome First?**
+- Direct browser control via extension
+- Better JavaScript execution context
+- More reliable for complex sites
+- Consistent with other adesso CMS workflows
+
+---
+
 ## [1.19.4] - 2025-12-26
 
 ### Changed - Slots-First Architecture in web-to-adessocms
