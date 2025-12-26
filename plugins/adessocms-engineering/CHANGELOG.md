@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.19.2] - 2025-12-26
+
+### Added - web-to-adessocms Skill
+
+**Moved `web-to-adessocms` skill from user skills to plugin.**
+
+This skill converts website UI components to adesso CMS SDC components with Tailwind v4 and Alpine.js.
+
+**Triggers:**
+- "copy the navigation from [URL]"
+- "replicate this hero section"
+- "convert this component"
+- "make a component like [website]"
+- "kopiere von [URL]"
+
+**Features:**
+- Screenshots at 3 breakpoints (mobile, tablet, desktop)
+- Maps to project typography classes (h-xs, h-base, etc.)
+- Uses project color variables
+- Proper Alpine.js patterns for interactivity
+- Drupal-first approach (not just Storybook)
+- Full preprocess hook examples
+
+---
+
 ## [1.19.1] - 2025-12-26
 
 ### Added - Parallelization Mindset Section
