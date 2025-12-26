@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.19.3] - 2025-12-26
+
+### Changed - web-to-adessocms Skill Rewrite
+
+**Complete rewrite for automated browser extraction using Claude in Chrome.**
+
+The skill now actually visits websites and extracts source code automatically instead of requiring manual input.
+
+**Browser-First Approach:**
+```
+mcp__claude-in-chrome__tabs_context_mcp
+mcp__claude-in-chrome__navigate(url="[SOURCE_URL]", tabId=<tab_id>)
+mcp__claude-in-chrome__javascript_tool(...) → Extract HTML/CSS
+```
+
+**Automated Extraction:**
+- **HTML**: `document.querySelector('[SELECTOR]').outerHTML`
+- **Tailwind Classes**: Filters all classes for Tailwind patterns
+- **Computed Styles**: backgroundColor, fontFamily, padding, etc.
+- **Alpine.js**: Detects `x-data`, `x-show`, `@click` patterns
+- **Interactive Elements**: Dropdowns, mobile menus, toggles
+
+**Multi-Breakpoint Screenshots:**
+- Desktop (1280px)
+- Tablet (768px)
+- Mobile (375px)
+
+**Tailwind Mapping:**
+| Source Tailwind | adesso CMS Equivalent |
+|-----------------|----------------------|
+| `text-sm`, `text-base` | `.p-sm`, `.p-base` |
+| `max-w-7xl mx-auto px-4` | `.container` |
+| `bg-gray-*`, `bg-slate-*` | `bg-neutral-*` |
+
+**Validation Phase:**
+- Visual comparison with original in Drupal
+- Console error checking
+- Responsive behavior verification
+
+---
+
 ## [1.19.2] - 2025-12-26
 
 ### Added - web-to-adessocms Skill

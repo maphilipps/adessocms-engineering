@@ -5,403 +5,385 @@ description: Convert website UI components to adesso CMS SDC components with Tai
 
 # Web to adesso CMS Component Converter
 
-Convert website UI components into adesso CMS Single Directory Components (SDC) that work in Drupal - not just Storybook.
+Convert website UI components into adesso CMS Single Directory Components (SDC) by **actually visiting the website and extracting the source code**.
 
-## Core Principle
+## Core Principles
 
-**Drupal First**: The component MUST render correctly in Drupal. Storybook is optional documentation, not the target.
+1. **Browser-First**: Always navigate to the URL and extract real HTML/CSS
+2. **Tailwind-Aware**: Source sites use Tailwind, so extract and adapt classes directly
+3. **Drupal-First**: Component MUST work in Drupal, not just Storybook
 
-## Workflow
+---
 
-### Phase 1: Research & Analysis
+## ⚡ Parallelization Mindset
 
-#### Step 1.1: Check Existing Components
+Run these in parallel where possible:
+- Screenshots at multiple breakpoints
+- HTML extraction + CSS extraction
+- Existing component check + source analysis
 
-**CRITICAL**: Before creating a new component, check what exists:
+---
+
+## Phase 1: Navigate & Extract (AUTOMATED)
+
+### Step 1.1: Open Browser and Navigate
+
+```
+mcp__claude-in-chrome__tabs_context_mcp
+mcp__claude-in-chrome__tabs_create_mcp
+mcp__claude-in-chrome__navigate(url="[SOURCE_URL]", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="wait", duration=3, tabId=<tab_id>)
+```
+
+### Step 1.2: Take Screenshots at All Breakpoints
+
+Run in parallel:
+
+```
+# Desktop (1280px)
+mcp__claude-in-chrome__resize_window(width=1280, height=900, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+
+# Tablet (768px)
+mcp__claude-in-chrome__resize_window(width=768, height=1024, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+
+# Mobile (375px)
+mcp__claude-in-chrome__resize_window(width=375, height=812, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
+```
+
+### Step 1.3: Extract HTML of Target Component
+
+Use JavaScript to extract the specific component's HTML:
+
+```
+mcp__claude-in-chrome__javascript_tool(
+  tabId=<tab_id>,
+  action="javascript_exec",
+  text="document.querySelector('[SELECTOR]').outerHTML"
+)
+```
+
+**Common selectors:**
+- Header/Nav: `header`, `nav`, `[role="navigation"]`, `.header`, `.navbar`
+- Hero: `.hero`, `[class*="hero"]`, `main > section:first-child`
+- Footer: `footer`, `.footer`, `[role="contentinfo"]`
+- Cards: `.card`, `[class*="card"]`, `article`
+
+### Step 1.4: Extract Tailwind Classes Used
+
+```
+mcp__claude-in-chrome__javascript_tool(
+  tabId=<tab_id>,
+  action="javascript_exec",
+  text=`
+    const element = document.querySelector('[SELECTOR]');
+    const allElements = element.querySelectorAll('*');
+    const classes = new Set();
+
+    // Collect all classes
+    allElements.forEach(el => {
+      el.classList.forEach(cls => classes.add(cls));
+    });
+    element.classList.forEach(cls => classes.add(cls));
+
+    // Filter for Tailwind-like classes
+    const tailwindClasses = [...classes].filter(cls =>
+      /^(flex|grid|block|inline|hidden|absolute|relative|fixed|sticky|w-|h-|p-|m-|text-|bg-|border-|rounded-|shadow-|opacity-|z-|gap-|space-|justify-|items-|self-|col-|row-|overflow-|transition|duration-|ease-|transform|translate-|rotate-|scale-|hover:|focus:|active:|group-|sm:|md:|lg:|xl:|2xl:)/.test(cls)
+    );
+
+    JSON.stringify({
+      allClasses: [...classes],
+      tailwindClasses: tailwindClasses,
+      count: classes.size
+    }, null, 2)
+  `
+)
+```
+
+### Step 1.5: Extract Computed Styles for Key Elements
+
+```
+mcp__claude-in-chrome__javascript_tool(
+  tabId=<tab_id>,
+  action="javascript_exec",
+  text=`
+    const element = document.querySelector('[SELECTOR]');
+    const styles = window.getComputedStyle(element);
+
+    JSON.stringify({
+      backgroundColor: styles.backgroundColor,
+      color: styles.color,
+      fontFamily: styles.fontFamily,
+      fontSize: styles.fontSize,
+      fontWeight: styles.fontWeight,
+      padding: styles.padding,
+      margin: styles.margin,
+      display: styles.display,
+      flexDirection: styles.flexDirection,
+      gap: styles.gap,
+      maxWidth: styles.maxWidth
+    }, null, 2)
+  `
+)
+```
+
+### Step 1.6: Extract Interactive Behavior Hints
+
+```
+mcp__claude-in-chrome__javascript_tool(
+  tabId=<tab_id>,
+  action="javascript_exec",
+  text=`
+    const element = document.querySelector('[SELECTOR]');
+
+    // Check for Alpine.js
+    const hasAlpine = element.querySelector('[x-data]') !== null;
+    const alpineData = [...element.querySelectorAll('[x-data]')].map(el => ({
+      data: el.getAttribute('x-data'),
+      show: el.getAttribute('x-show'),
+      click: el.getAttribute('@click') || el.getAttribute('x-on:click')
+    }));
+
+    // Check for dropdowns/toggles
+    const hasDropdowns = element.querySelectorAll('[class*="dropdown"], [class*="menu"], [aria-expanded]').length > 0;
+
+    // Check for mobile menu
+    const hasMobileMenu = element.querySelector('[class*="mobile"], [class*="hamburger"], button[aria-label*="menu"]') !== null;
+
+    JSON.stringify({
+      hasAlpine,
+      alpineData,
+      hasDropdowns,
+      hasMobileMenu
+    }, null, 2)
+  `
+)
+```
+
+---
+
+## Phase 2: Analyze Extracted Code
+
+### Step 2.1: Check Existing adesso CMS Components
 
 ```bash
 ls web/themes/custom/adesso_cms_theme/components/
 ```
 
-Key existing components:
-- `site-header` - Navigation header (dark/light themes, mega menu, mobile menu)
+**Key existing components:**
+- `site-header` - Navigation (dark/light, mega menu, mobile)
 - `hero` - Hero sections with variants
 - `page-header` - Combined header + hero
 - `site-footer` - Footer with menu integration
 - `card-group` - Card layouts
 - `accordion` - Collapsible content
-- `sidebyside` - Two-column layouts
 
-**Decision**: Extend existing OR create new? Prefer extending.
+**Decision:** Extend existing OR create new? Prefer extending.
 
-#### Step 1.2: Capture Target Component
+### Step 2.2: Map Extracted Tailwind to adesso CMS Classes
 
-Use webapp-testing skill (Playwright) or browser tools to:
+| Source Tailwind | adesso CMS Equivalent |
+|-----------------|----------------------|
+| `text-sm`, `text-base`, `text-lg` | `.p-sm`, `.p-base`, `.p-lg` |
+| `text-xl`, `text-2xl`, `text-3xl` | `.h-xl`, `.h-2xl`, `.h-3xl` |
+| `max-w-7xl`, `mx-auto`, `px-4` | `.container` |
+| `bg-gray-*`, `bg-slate-*` | `bg-neutral-*` |
+| `text-gray-*`, `text-slate-*` | `text-neutral-*` |
+| `bg-green-*`, `bg-lime-*` | `bg-primary` / `bg-primary-*` |
 
-1. Navigate to source URL
-2. Screenshot at 3 breakpoints:
-   - Mobile: 375px width
-   - Tablet: 768px width
-   - Desktop: 1280px width
-3. Extract HTML structure
-4. Note interactive behaviors
+### Step 2.3: Document Extraction Results
 
-```python
-# Example Playwright extraction
-from playwright.sync_api import sync_playwright
+```markdown
+## Extraction Results
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    page = browser.new_page()
-    page.goto('https://example.com')
-    page.wait_for_load_state('networkidle')
+### Screenshots
+- Desktop (1280px): [captured]
+- Tablet (768px): [captured]
+- Mobile (375px): [captured]
 
-    # Screenshots
-    for w, name in [(375, 'mobile'), (768, 'tablet'), (1280, 'desktop')]:
-        page.set_viewport_size({'width': w, 'height': 800})
-        page.screenshot(path=f'/tmp/{name}.png')
+### HTML Structure
+[Extracted HTML]
 
-    # HTML extraction
-    header_html = page.locator('header').inner_html()
-    print(header_html)
-    browser.close()
+### Tailwind Classes Used
+[List of classes]
+
+### Computed Styles
+- Background: [color]
+- Text: [color]
+- Font: [family, size, weight]
+
+### Interactive Elements
+- Alpine.js: [yes/no]
+- Dropdowns: [yes/no]
+- Mobile menu: [yes/no]
+
+### Recommended Approach
+- [ ] Extend existing component: [name]
+- [ ] Create new component: [name]
 ```
 
-#### Step 1.3: Document Requirements
+---
 
-Create analysis:
-- Layout structure (grid, flex, positioning)
-- Typography (map to project classes)
-- Colors (map to project palette)
-- Interactive elements (dropdowns, mobile menu)
-- Responsive breakpoints
-- Data requirements (menu items, config, etc.)
+## Phase 3: Create SDC Component
 
-### Phase 2: Map to Project Conventions
-
-#### Step 2.1: Typography Classes
-
-Use existing classes from `adesso.css`:
-
-```twig
-{# Headings - responsive sizing #}
-.h-xs    {# 0.875rem uppercase #}
-.h-base  {# 1rem #}
-.h-lg    {# 1rem → 1.125rem #}
-.h-xl    {# 1.125rem → 1.25rem #}
-.h-2xl   {# 1.25rem → 1.5rem #}
-.h-3xl   {# 1.5rem → 2rem #}
-.h-4xl   {# 1.5rem → 2.5rem #}
-.h-5xl   {# 2rem → 3rem #}
-.h-6xl   {# 2.5rem → 3.75rem #}
-.h-7xl   {# 3rem → 4.75rem #}
-
-{# Paragraphs #}
-.p-xs    {# 0.75rem #}
-.p-sm    {# 0.875rem #}
-.p-base  {# 1rem #}
-.p-lg    {# 1rem → 1.125rem #}
-.p-xl    {# 1.125rem → 1.25rem #}
-.p-2xl   {# 1.125rem → 1.5rem #}
-```
-
-#### Step 2.2: Button Classes
-
-```twig
-.btn           {# Primary filled (lime/gold) #}
-.btn-border    {# Outlined button #}
-.btn-sm        {# Smaller size #}
-.btn-xs        {# Extra small #}
-```
-
-#### Step 2.3: Layout Classes
-
-```twig
-.container     {# max-width: 80rem, responsive padding #}
-.rich-text     {# Typography rhythm for content #}
-```
-
-#### Step 2.4: Color Variables
-
-```css
-/* Primary */
---color-primary: #bbb629;         /* Venneker lime/gold */
---color-primary-400: #d5d639;
---color-primary-600: #9a9522;
-
-/* Neutrals (Slate-based) */
---color-neutral-50 through --color-neutral-950
-
-/* Section accents */
---color-venneker-gruppe: #bbb629;
---color-venneker-viehhandel: #4e994e;
---color-venneker-logistik: #4d7f7f;
---color-venneker-natur: #c37570;
-```
-
-### Phase 3: Create SDC Component
-
-#### Step 3.1: File Structure
+### Step 3.1: File Structure
 
 ```
 components/[name]/
 ├── [name].component.yml  # REQUIRED: Schema
 ├── [name].twig           # REQUIRED: Template
-├── [name].css            # OPTIONAL: Custom styles
-├── [name].behavior.js    # OPTIONAL: Drupal behaviors
+├── [name].css            # OPTIONAL: Custom styles (from extracted CSS)
 ```
 
-**Note**: Stories are OPTIONAL. Focus on Drupal integration first.
+### Step 3.2: Convert HTML to Twig
 
-#### Step 3.2: Component Schema (.component.yml)
+**Rules:**
+1. Keep Tailwind classes that work with our config
+2. Replace color classes with adesso CMS variables
+3. Replace typography classes with adesso CMS classes
+4. Add `{{ attributes }}` to root element
+5. Convert hardcoded content to props/slots
+6. Keep Alpine.js patterns (we use Alpine too!)
+
+**Before (extracted):**
+```html
+<header class="bg-slate-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 py-6">
+    <h1 class="text-3xl font-bold">Company Name</h1>
+    <nav class="flex gap-4">
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>
+```
+
+**After (Twig):**
+```twig
+{% set theme = theme|default('dark') %}
+{% set is_dark = theme == 'dark' %}
+
+<header {{ attributes.addClass([
+  'c-site-header',
+  is_dark ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-900'
+]) }}>
+  <div class="container py-6">
+    {% if site_name %}
+      <h1 class="h-3xl font-bold">{{ site_name }}</h1>
+    {% endif %}
+
+    {% if menu_items %}
+      <nav class="flex gap-4">
+        {% for item in menu_items %}
+          <a href="{{ item.url }}">{{ item.title }}</a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+  </div>
+</header>
+```
+
+### Step 3.3: Create Component Schema
+
+Based on extracted dynamic content:
 
 ```yaml
 $schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
 name: Component Name
-description: Brief description
+description: Converted from [SOURCE_URL]
 status: stable
 
 props:
   type: object
   properties:
-    # Configuration props
     theme:
       type: string
-      title: Theme
       enum: [dark, light]
       default: dark
-
-    # Content props (from Drupal)
-    title:
-      type: string
-      title: Title
-
-    # Complex data
-    menu_items:
-      type: array
-      items:
-        type: object
-        properties:
-          title:
-            type: string
-          url:
-            type: string
-          below:
-            type: array
+    # Add props based on extracted content
 
 slots:
   content:
     title: Content
-    description: Main content area
-
-libraryOverrides:
-  dependencies:
-    - core/drupal
 ```
 
-#### Step 3.3: Twig Template
+---
 
-```twig
-{#
-/**
- * @file
- * Component: [Name]
- */
-#}
+## Phase 4: Validate in Drupal
 
-{# Defaults #}
-{% set theme = theme|default('dark') %}
-{% set is_dark = theme == 'dark' %}
-
-{# Dynamic classes #}
-{% set wrapper_classes = [
-  'c-component-name',
-  is_dark ? 'bg-black text-white' : 'bg-white text-neutral-900',
-] %}
-
-<div {{ attributes.addClass(wrapper_classes) }}>
-  <div class="container">
-    {# Use project typography #}
-    {% if title %}
-      <h2 class="h-3xl">{{ title }}</h2>
-    {% endif %}
-
-    {# Render slots #}
-    {{ content }}
-  </div>
-</div>
-```
-
-#### Step 3.4: Alpine.js Interactivity
-
-Standard patterns:
-
-```twig
-{# Toggle/Dropdown #}
-<div x-data="{ open: false }">
-  <button @click="open = !open">Toggle</button>
-  <div x-show="open" x-cloak x-transition>Content</div>
-</div>
-
-{# Desktop hover menu #}
-<div x-data="{ open: false }"
-     @mouseenter="open = true"
-     @mouseleave="open = false">
-  <a href="#">Menu Item</a>
-  <div x-show="open" x-cloak
-       x-transition:enter="transition ease-out duration-200"
-       x-transition:enter-start="opacity-0 -translate-y-2"
-       x-transition:enter-end="opacity-100 translate-y-0">
-    Dropdown content
-  </div>
-</div>
-
-{# Mobile menu with backdrop #}
-<div x-data="{ mobileMenuOpen: false }">
-  <button @click="mobileMenuOpen = true">Open</button>
-
-  {# Backdrop #}
-  <div x-show="mobileMenuOpen"
-       @click="mobileMenuOpen = false"
-       class="fixed inset-0 bg-black/60 z-40">
-  </div>
-
-  {# Panel #}
-  <div x-show="mobileMenuOpen"
-       x-transition:enter="transition ease-out duration-300"
-       x-transition:enter-start="translate-x-full"
-       x-transition:enter-end="translate-x-0"
-       class="fixed top-0 right-0 w-full max-w-sm bg-white z-50">
-    <button @click="mobileMenuOpen = false">Close</button>
-  </div>
-</div>
-```
-
-### Phase 4: Drupal Integration
-
-#### Step 4.1: Preprocess Hook (if needed)
-
-For components needing Drupal data (menus, config, blocks):
-
-```php
-// adesso_cms_theme.theme
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function adesso_cms_theme_preprocess_[component_name](&$variables) {
-  // Menu data
-  $menu_tree = \Drupal::menuTree();
-  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('main');
-  $tree = $menu_tree->load('main', $parameters);
-  $manipulators = [
-    ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-    ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-  ];
-  $tree = $menu_tree->transform($tree, $manipulators);
-  $variables['menu_items'] = $menu_tree->build($tree)['#items'] ?? [];
-
-  // Theme settings
-  $variables['logo'] = theme_get_setting('logo.url');
-  $variables['site_name'] = \Drupal::config('system.site')->get('name');
-  $variables['front_page'] = Url::fromRoute('<front>')->toString();
-}
-```
-
-#### Step 4.2: Template Override (for blocks/regions)
-
-If component replaces a Drupal template, create override:
-
-```twig
-{# templates/block/block--system-menu-block--main.html.twig #}
-{% include 'adesso_cms_theme:site-header' with {
-  menu_items: content['#items'],
-  logo: logo,
-  site_name: site_name,
-} %}
-```
-
-### Phase 5: Validate in Drupal
-
-**CRITICAL: Test in actual Drupal site, not just Storybook!**
-
-#### Step 5.1: Build Theme
+### Step 4.1: Build and Clear Cache
 
 ```bash
 ddev theme build
 ddev drush cr
 ```
 
-#### Step 5.2: Browser Verification
+### Step 4.2: Visual Comparison with Chrome
 
-Use webapp-testing skill to verify:
+```
+# Navigate to Drupal site
+mcp__claude-in-chrome__navigate(url="https://[PROJECT].ddev.site", tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="wait", duration=2, tabId=<tab_id>)
 
-```python
-page.goto('https://project.ddev.site')
-page.wait_for_load_state('networkidle')
+# Take comparison screenshots at same breakpoints
+mcp__claude-in-chrome__resize_window(width=1280, height=900, tabId=<tab_id>)
+mcp__claude-in-chrome__computer(action="screenshot", tabId=<tab_id>)
 
-# Verify component renders
-assert page.locator('.c-component-name').count() > 0
-
-# Test interactivity
-page.click('button.menu-toggle')
-assert page.locator('.mobile-menu').is_visible()
-
-# Screenshot for comparison
-page.screenshot(path='/tmp/drupal-result.png')
+# Check console for errors
+mcp__claude-in-chrome__read_console_messages(tabId=<tab_id>, onlyErrors=true)
 ```
 
-#### Step 5.3: Verification Checklist
+### Step 4.3: Verification Checklist
 
-- [ ] Component renders in Drupal (not 404 or broken)
-- [ ] Drupal data displays (menu items, config values)
-- [ ] Links work (proper Drupal URL handling)
-- [ ] Images render (Drupal file paths)
-- [ ] Mobile menu works
-- [ ] Desktop dropdowns work
-- [ ] Keyboard navigation works
+- [ ] Component renders in Drupal
+- [ ] Visual appearance matches source
+- [ ] Responsive behavior works
+- [ ] Interactive elements work (dropdowns, mobile menu)
 - [ ] No console errors
+- [ ] Tailwind classes compile correctly
 
-### Phase 6: Document Result
-
-After successful validation:
-
-1. Take final screenshots at all breakpoints
-2. Note any deviations from source design
-3. Document Drupal integration requirements
-4. Optional: Create Storybook story if needed for team documentation
+---
 
 ## Quick Reference
 
-### Commands
+### JavaScript Extraction Snippets
 
-```bash
-# Build theme CSS/JS
-ddev theme build
-
-# Clear Drupal cache
-ddev drush cr
-
-# Start Storybook (optional)
-ddev theme storybook
-
-# Check for errors
-ddev drush ws
+**Get all HTML:**
+```javascript
+document.querySelector('[SELECTOR]').outerHTML
 ```
 
-### File Locations
-
-```
-web/themes/custom/adesso_cms_theme/
-├── components/          # SDC components
-├── templates/           # Drupal template overrides
-├── src/css/adesso.css   # Main stylesheet
-├── adesso_cms_theme.theme  # Preprocess hooks
+**Get all classes:**
+```javascript
+[...document.querySelector('[SELECTOR]').querySelectorAll('*')].flatMap(el => [...el.classList])
 ```
 
-### Common Issues
+**Get inline styles:**
+```javascript
+document.querySelector('[SELECTOR]').getAttribute('style')
+```
 
-1. **x-cloak elements flash** - Ensure `[x-cloak] { display: none !important; }` in CSS
-2. **Menu items empty** - Check preprocess hook, verify menu exists in Drupal
-3. **Styles missing** - Run `ddev theme build`, check Tailwind content scanning
-4. **Links broken** - Use `{{ url }}` from Drupal, not hardcoded paths
+**Get SVG icons:**
+```javascript
+[...document.querySelectorAll('svg')].map(svg => svg.outerHTML)
+```
+
+### Common Component Selectors
+
+| Component | Try These Selectors |
+|-----------|---------------------|
+| Header | `header`, `nav`, `.header`, `.navbar`, `[role="banner"]` |
+| Hero | `.hero`, `main > section:first-child`, `[class*="hero"]` |
+| Footer | `footer`, `.footer`, `[role="contentinfo"]` |
+| Card | `.card`, `article`, `[class*="card"]` |
+| Button | `.btn`, `button`, `[class*="button"]` |
+
+### Color Mapping
+
+| Tailwind Default | adesso CMS |
+|-----------------|------------|
+| `gray-50` - `gray-950` | `neutral-50` - `neutral-950` |
+| `slate-50` - `slate-950` | `neutral-50` - `neutral-950` |
+| Green/Lime accents | `primary` / `primary-*` |
