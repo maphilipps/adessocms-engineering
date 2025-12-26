@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.19.1] - 2025-12-26
+
+### Added - Parallelization Mindset Section
+
+**All three workflow commands now have a prominent "⚡ Parallelization Mindset (CRITICAL)" section.**
+
+This reminds Claude to ALWAYS ask: "Can I run multiple agents in parallel?"
+
+### Why This Matters
+
+We have 46 agents for a reason - to work in parallel and get faster, better results.
+
+```
+❌ BAD (Sequential):
+agent1 → wait → agent2 → wait → agent3
+
+✅ GOOD (Parallel):
+agent1 ┐
+agent2 ├→ ALL complete at once → synthesize
+agent3 ┘
+```
+
+### Files Updated
+
+- `commands/workflows/acms-plan.md` - Added parallelization section
+- `commands/workflows/acms-work.md` - Added parallelization section
+- `commands/workflows/acms-review.md` - Added parallelization section
+
+### Rules Emphasized
+
+1. **Independent research?** → Run agents in parallel
+2. **Multiple specialists needed?** → Spawn all at once
+3. **Different file searches?** → Execute Grep/Glob in parallel
+4. **Tests + Linting?** → Run both in parallel
+5. **Never wait for one agent when you could run four**
+
+---
+
 ## [1.19.0] - 2025-12-26
 
 ### Added - EveryInc-Inspired Workflow Enhancements

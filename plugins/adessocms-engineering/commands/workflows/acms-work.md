@@ -12,6 +12,34 @@ Execute a work plan efficiently while maintaining quality and finishing features
 
 This command takes a work document (plan file or task description) and executes it systematically. The focus is on **shipping complete features** by understanding requirements quickly, following existing patterns, and maintaining quality throughout.
 
+---
+
+## ⚡ Parallelization Mindset (CRITICAL)
+
+**Always ask yourself: Can I run multiple agents/tasks in parallel?**
+
+This is WHY we have 46 agents - to work in parallel and get faster, better results.
+
+```
+❌ BAD (Sequential):
+Task 1 → wait → consult specialist → wait → Task 2 → wait
+
+✅ GOOD (Parallel):
+┌─ Task 1 implementation
+├─ drupal-specialist consultation  ├→ ALL complete → move to next phase
+├─ security-sentinel check         │
+└─ sdc-specialist review          ─┘
+```
+
+**Rules:**
+1. **Multiple specialists needed?** → Spawn all at once
+2. **Independent implementation tasks?** → Run in parallel
+3. **Research + Implementation?** → Research in parallel, then implement
+4. **Tests + Linting?** → Run both in parallel
+5. **Never wait for one agent when you could run four**
+
+---
+
 ## Input Document
 
 <input_document> #$ARGUMENTS </input_document>

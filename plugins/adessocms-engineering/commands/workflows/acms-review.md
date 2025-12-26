@@ -18,6 +18,32 @@ Perform exhaustive code reviews using multi-agent analysis with appropriate mode
 - Clean main/master branch
 - Proper permissions to access the repository
 
+---
+
+## ⚡ Parallelization Mindset (CRITICAL)
+
+**This command is BUILT for parallel execution. Run ALL applicable specialists at once!**
+
+This is WHY we have 46 agents - to review from 10+ perspectives simultaneously.
+
+```
+❌ BAD (Sequential):
+drupal-specialist → wait → security-sentinel → wait → accessibility-specialist
+
+✅ GOOD (Parallel - This is how /acms-review works):
+drupal-specialist      ┐
+dries-drupal-specialist│
+security-sentinel      │
+accessibility-specialist├→ ALL complete at once → synthesize findings
+performance-oracle     │
+code-quality-specialist│
+git-history-analyzer   ┘
+```
+
+**This command runs 10-20 agents in parallel by design.** Don't run them one by one!
+
+---
+
 ## Main Tasks
 
 ### 1. Determine Review Target & Setup (ALWAYS FIRST)

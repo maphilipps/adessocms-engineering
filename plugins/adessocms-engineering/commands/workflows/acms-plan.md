@@ -29,6 +29,30 @@ This command creates a **documented implementation plan** saved to `plans/<slug>
 
 ---
 
+## ⚡ Parallelization Mindset (CRITICAL)
+
+**Always ask yourself: Can I run multiple agents in parallel?**
+
+This is WHY we have 46 agents - to work in parallel and get faster, better results.
+
+```
+❌ BAD (Sequential):
+drupal-specialist → wait → sdc-specialist → wait → repo-research-analyst
+
+✅ GOOD (Parallel):
+drupal-specialist    ┐
+sdc-specialist       ├→ ALL complete at once → synthesize results
+repo-research-analyst┘
+```
+
+**Rules:**
+1. **Independent research?** → Run agents in parallel
+2. **Multiple specialists needed?** → Spawn all at once
+3. **Different file searches?** → Execute Grep/Glob in parallel
+4. **Never wait for one agent when you could run three**
+
+---
+
 ## Input
 
 <feature_description> #$ARGUMENTS </feature_description>
