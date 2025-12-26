@@ -12,34 +12,6 @@ Execute a work plan efficiently while maintaining quality and finishing features
 
 This command takes a work document (plan file or task description) and executes it systematically. The focus is on **shipping complete features** by understanding requirements quickly, following existing patterns, and maintaining quality throughout.
 
----
-
-## ⚡ Parallelization Mindset (CRITICAL)
-
-**Always ask yourself: Can I run multiple agents/tasks in parallel?**
-
-This is WHY we have 46 agents - to work in parallel and get faster, better results.
-
-```
-❌ BAD (Sequential):
-Task 1 → wait → consult specialist → wait → Task 2 → wait
-
-✅ GOOD (Parallel):
-┌─ Task 1 implementation
-├─ drupal-specialist consultation  ├→ ALL complete → move to next phase
-├─ security-sentinel check         │
-└─ sdc-specialist review          ─┘
-```
-
-**Rules:**
-1. **Multiple specialists needed?** → Spawn all at once
-2. **Independent implementation tasks?** → Run in parallel
-3. **Research + Implementation?** → Research in parallel, then implement
-4. **Tests + Linting?** → Run both in parallel
-5. **Never wait for one agent when you could run four**
-
----
-
 ## Input Document
 
 <input_document> #$ARGUMENTS </input_document>
@@ -86,46 +58,9 @@ Task 1 → wait → consult specialist → wait → Task 2 → wait
    ])
    ```
 
-   **Task Breakdown Guidelines:**
-   - Include dependencies between tasks
-   - Prioritize based on what needs to be done first
-   - Include testing and quality check tasks
-   - Keep tasks specific and completable
-
 ### Phase 2: Execute
 
-1. **Read Recommended Agents from Plan (MANDATORY)**
-
-   The plan file contains a **"Recommended Agents for Implementation"** section. **You MUST use these agents.**
-
-   ```
-   # First: Read the agents section from the plan
-   Read the "## Recommended Agents for Implementation" section
-
-   # Extract the recommended agents and their purposes:
-   # - Core Agents (e.g., Oracle for escalation)
-   # - Specialist Agents (e.g., drupal-specialist, sdc-specialist)
-   # - Research Agents (e.g., framework-docs-researcher)
-   ```
-
-2. **Consult Specialists BEFORE Each Task (MANDATORY)**
-
-   **Before implementing ANY non-trivial task**, consult the recommended specialists.
-
-   Run these specialists in parallel at the same time:
-
-   - Task drupal-specialist(task_description)
-   - Task sdc-specialist(component_description)
-   - Task security-sentinel(task_description)
-   - Task accessibility-specialist(task_description)
-
-   **This is NOT optional.** Specialists provide:
-   - Correct API usage patterns
-   - Security best practices
-   - Accessibility compliance
-   - Performance optimizations
-
-3. **Task Execution Loop**
+1. **Task Execution Loop**
 
    For each task in priority order:
 
@@ -133,19 +68,14 @@ Task 1 → wait → consult specialist → wait → Task 2 → wait
    while (tasks remain):
      1. Mark task as in_progress in TodoWrite
      2. Read any referenced files from the plan
-     3. ⭐ CONSULT SPECIALISTS (from plan's Recommended Agents section)
-        - Run specialists in PARALLEL for efficiency
-        - Wait for ALL responses before implementing
-     4. Look for similar patterns in codebase
-     5. Implement following specialist guidance + existing conventions
-     6. Write tests for new functionality
-     7. Run tests after changes
-     8. Mark task as completed in TodoWrite
+     3. Look for similar patterns in codebase
+     4. Implement following existing conventions
+     5. Write tests for new functionality
+     6. Run tests after changes
+     7. Mark task as completed in TodoWrite
    ```
 
-   **Step 3 is MANDATORY** - Never implement without specialist guidance!
-
-4. **Follow Existing Patterns**
+2. **Follow Existing Patterns**
 
    - The plan should reference similar code - read those files first
    - Match naming conventions exactly
@@ -153,14 +83,14 @@ Task 1 → wait → consult specialist → wait → Task 2 → wait
    - Follow project coding standards (see CLAUDE.md)
    - When in doubt, grep for similar implementations
 
-5. **Test Continuously**
+3. **Test Continuously**
 
    - Run relevant tests after each significant change
    - Don't wait until the end to test
    - Fix failures immediately
    - Add new tests for new functionality
 
-6. **Figma Design Sync** (if applicable)
+4. **Figma Design Sync** (if applicable)
 
    For UI work with Figma designs:
 
@@ -184,21 +114,24 @@ Task 1 → wait → consult specialist → wait → Task 2 → wait
    ddev theme lint:css             # CSS/Tailwind linting
    ```
 
-2. **Use Specialists for Code Review** (Optional)
+2. **Consider Reviewer Agents** (Optional)
 
-   **Only for complex, risky, or large changes.** Run in parallel:
+   **Don't use by default.** Use reviewer agents only when:
 
-   For Drupal code changes:
+   - Large refactor affecting many files (10+)
+   - Security-sensitive changes (authentication, permissions, data access)
+   - Performance-critical code paths
+   - Complex algorithms or business logic
+   - User explicitly requests thorough review
+
+   For complex/risky changes, run in parallel:
+
    - Task drupal-specialist(changes)
    - Task security-sentinel(changes)
-
-   For frontend changes:
-   - Task twig-specialist(changes)
-   - Task tailwind-specialist(changes)
    - Task accessibility-specialist(changes)
+   - Task performance-oracle(changes)
 
-   For architecture concerns:
-   - Task architecture-strategist(changes)
+   For most features: **tests + linting + following patterns is sufficient.**
 
 3. **Final Validation**
    - All TodoWrite tasks marked completed
@@ -322,44 +255,6 @@ Before creating PR, verify:
 - [ ] Commit messages follow conventional format
 - [ ] PR description includes summary and testing notes
 
-## When to Use Specialists
-
-### For Implementation Guidance (MANDATORY)
-
-**ALWAYS consult specialists BEFORE implementing.** The plan specifies which agents to use.
-
-| Task Type | Agent | What They Provide |
-|-----------|-------|-------------------|
-| Drupal API | `drupal-specialist` | Correct patterns, caching, DI |
-| SDC Components | `sdc-specialist` | Props, slots, schema design |
-| Security-sensitive | `security-sentinel` | XSS, CSRF, access control |
-| Accessibility | `accessibility-specialist` | WCAG 2.1 AA compliance |
-| Twig templates | `twig-specialist` | Attributes, filters, best practices |
-| Tailwind styling | `tailwind-specialist` | v4 syntax, responsive design |
-| Paragraphs | `paragraphs-specialist` | Field templates, SDC integration |
-
-**How to consult (run in parallel):**
-
-- Task drupal-specialist(task_description)
-- Task sdc-specialist(component_description)
-
-### For Code Review (OPTIONAL)
-
-**Don't review by default.** Use specialists for review only when:
-
-- Large refactor affecting many files (10+)
-- Security-sensitive changes (authentication, permissions, data access)
-- Performance-critical code paths
-- User explicitly requests thorough review
-
-For most features: **tests + linting + following specialist guidance is sufficient.**
-
-## Model Selection for Agents
-
-All specialist agents run on **opus** by default (configured in agent frontmatter). Use this syntax:
-
-- Task agent-name(description)
-
 ## Common Pitfalls to Avoid
 
 - **Analysis paralysis** - Don't overthink, read the plan and execute
@@ -368,9 +263,4 @@ All specialist agents run on **opus** by default (configured in agent frontmatte
 - **Testing at the end** - Test continuously or suffer later
 - **Forgetting TodoWrite** - Track progress or lose track of what's done
 - **80% done syndrome** - Finish the feature, don't move on early
-- **Over-reviewing simple changes** - Save review specialists for complex work
-- **⚠️ SKIPPING SPECIALIST CONSULTATION** - This is MANDATORY, not optional!
-  - Read the "Recommended Agents" section from the plan
-  - Consult ALL recommended specialists BEFORE implementing each task
-  - Run specialists in PARALLEL for efficiency
-  - Never implement without specialist guidance
+- **Over-reviewing simple changes** - Save reviewer agents for complex work

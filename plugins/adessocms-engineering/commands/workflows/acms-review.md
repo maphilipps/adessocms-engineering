@@ -6,7 +6,7 @@ argument-hint: "[PR number, GitHub URL, branch name, or latest]"
 
 # Review Command
 
-Perform exhaustive code reviews using multi-agent analysis with appropriate model tiers.
+Perform exhaustive code reviews using multi-agent analysis.
 
 ## Introduction
 
@@ -18,35 +18,9 @@ Perform exhaustive code reviews using multi-agent analysis with appropriate mode
 - Clean main/master branch
 - Proper permissions to access the repository
 
----
-
-## ⚡ Parallelization Mindset (CRITICAL)
-
-**This command is BUILT for parallel execution. Run ALL applicable specialists at once!**
-
-This is WHY we have 46 agents - to review from 10+ perspectives simultaneously.
-
-```
-❌ BAD (Sequential):
-drupal-specialist → wait → security-sentinel → wait → accessibility-specialist
-
-✅ GOOD (Parallel - This is how /acms-review works):
-drupal-specialist      ┐
-dries-drupal-specialist│
-security-sentinel      │
-accessibility-specialist├→ ALL complete at once → synthesize findings
-performance-oracle     │
-code-quality-specialist│
-git-history-analyzer   ┘
-```
-
-**This command runs 10-20 agents in parallel by design.** Don't run them one by one!
-
----
-
 ## Main Tasks
 
-### 1. Determine Review Target & Setup (ALWAYS FIRST)
+### 1. Determine Review Target & Setup
 
 <review_target> #$ARGUMENTS </review_target>
 
@@ -132,9 +106,9 @@ Run ALL relevant specialists **in parallel at the same time**:
 - [ ] Remove duplicate or overlapping findings
 - [ ] Estimate effort for each finding (Small/Medium/Large)
 
-### 3.5. Simplification Review (MANDATORY)
+### 4. Simplification Review (MANDATORY)
 
-**After synthesizing findings, run the code-simplifier to check for unnecessary complexity:**
+**After synthesizing findings, run the code-simplifier:**
 
 - Task code-simplifier(changes)
 
@@ -145,10 +119,9 @@ Run ALL relevant specialists **in parallel at the same time**:
 - Dead code and unused variables
 - Opportunities to reduce LOC while maintaining functionality
 
-> ⚠️ **This is MANDATORY.** EveryInc runs code-simplicity-reviewer on every PR.
-> Simplification findings should be added to P2 or P3 categories.
+Add simplification findings to P2 or P3 categories.
 
-### 4. Review Summary Report
+### 5. Review Summary Report
 
 Present findings as markdown:
 
@@ -201,6 +174,7 @@ Present findings as markdown:
 - drupal-specialist
 - dries-drupal-specialist
 - security-sentinel
+- code-simplifier
 - [others...]
 
 ---
@@ -212,7 +186,7 @@ Present findings as markdown:
 [ ] **REQUEST CHANGES** - P1 findings must be fixed before merge
 ```
 
-### 5. Next Steps
+### 6. Next Steps
 
 After presenting findings, offer options:
 
@@ -221,22 +195,6 @@ After presenting findings, offer options:
 3. **Approve PR** - If no P1 findings, approve the PR
 
 ---
-
-## Parallel Execution
-
-Run agents in parallel to minimize review time.
-
-Bad (sequential):
-```
-agent1 → wait → agent2 → wait → agent3
-```
-
-Good (parallel):
-```
-agent1 ┐
-agent2 ├→ all complete → synthesize
-agent3 ┘
-```
 
 ## Severity Guidelines
 

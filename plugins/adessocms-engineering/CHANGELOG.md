@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.20.0] - 2025-12-26
+
+### Changed - Workflows Simplified (EveryInc-Aligned)
+
+**Major simplification of core workflows to match EveryInc Compound Engineering patterns.**
+
+**acms-work.md - Simplified from 377 to 267 lines:**
+- ❌ REMOVED "MANDATORY specialist consultation at EVERY task"
+- ❌ REMOVED excessive parallelization mindset section
+- ❌ REMOVED mandatory specialist tables
+- ✅ Changed to "Consider Reviewer Agents (Optional)"
+- ✅ Added "Don't use by default" - only for complex/risky changes
+- ✅ Simplified task execution loop (no forced specialist calls)
+
+**acms-review.md - Simplified from 281 to 239 lines:**
+- ❌ REMOVED redundant parallelization mindset section (parallel execution is already obvious)
+- ✅ Kept mandatory code-simplifier after synthesis (from EveryInc)
+- ✅ Streamlined severity guidelines
+- ✅ Cleaner report format
+
+**acms-plan.md - Already simplified in 1.19.0:**
+- 3 parallel research agents → SpecFlow Analyzer → Write plan → Done
+- No interactive AskUserQuestion at every phase
+
+**Key Philosophy Change:**
+```
+❌ OLD: "MANDATORY specialist consultation. This is NOT optional."
+✅ NEW: "Don't use by default. Use reviewer agents only for complex/risky changes."
+```
+
+**EveryInc Pattern Applied:**
+- Specialists are OPTIONAL, not mandatory
+- Most features: tests + linting + following patterns is sufficient
+- Save specialists for: 10+ files, security-sensitive, performance-critical
+- Ship complete features faster
+
+---
+
 ## [1.19.6] - 2025-12-26
 
 ### Changed - All Skills Updated to Chrome-First
