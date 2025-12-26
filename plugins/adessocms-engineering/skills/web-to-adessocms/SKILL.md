@@ -12,6 +12,8 @@ Convert website UI components into adesso CMS Single Directory Components (SDC) 
 1. **Browser-First**: Always navigate to the URL and extract real HTML/CSS
 2. **Tailwind-Aware**: Source sites use Tailwind, so extract and adapt classes directly
 3. **Drupal-First**: Component MUST work in Drupal, not just Storybook
+4. **Slots-First**: ALWAYS prefer slots over props for content. Props are ONLY for configuration (theme, variant, size)
+5. **Field Templates**: Override field templates to fill component slots - this is how Drupal content flows into SDC
 
 ---
 
@@ -237,64 +239,103 @@ components/[name]/
 ├── [name].css            # OPTIONAL: Custom styles (from extracted CSS)
 ```
 
-### Step 3.2: Convert HTML to Twig
+### Step 3.2: Slots vs Props Decision (CRITICAL)
+
+**⚠️ THIS IS MANDATORY - Always follow this decision tree:**
+
+| Content Type | Use | Reason |
+|--------------|-----|--------|
+| Text from Drupal fields | **SLOT** | Field templates render the content |
+| Images from Drupal | **SLOT** | Field templates handle responsive images |
+| Links/Buttons | **SLOT** | Field templates provide proper link handling |
+| Rich text/WYSIWYG | **SLOT** | Field templates handle formatting |
+| Menu items | **SLOT** | Menu block renders the items |
+| Theme (dark/light) | **PROP** | Configuration, not content |
+| Variant (primary/secondary) | **PROP** | Configuration, not content |
+| Size (sm/md/lg) | **PROP** | Configuration, not content |
+| Boolean flags | **PROP** | Configuration, not content |
+| Layout options | **PROP** | Configuration, not content |
+
+**Rule of Thumb:**
+- 🔴 **NEVER** use props for content that comes from Drupal fields
+- 🟢 **ALWAYS** use slots for field content → override field templates
+- 🟢 **ONLY** use props for configuration/settings
+
+### Step 3.3: Convert HTML to Twig
 
 **Rules:**
 1. Keep Tailwind classes that work with our config
 2. Replace color classes with adesso CMS variables
 3. Replace typography classes with adesso CMS classes
 4. Add `{{ attributes }}` to root element
-5. Convert hardcoded content to props/slots
-6. Keep Alpine.js patterns (we use Alpine too!)
+5. **Content → SLOTS** (not props!)
+6. **Configuration → PROPS**
+7. Keep Alpine.js patterns (we use Alpine too!)
 
 **Before (extracted):**
 ```html
-<header class="bg-slate-900 text-white">
-  <div class="max-w-7xl mx-auto px-4 py-6">
-    <h1 class="text-3xl font-bold">Company Name</h1>
-    <nav class="flex gap-4">
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-    </nav>
+<section class="bg-slate-900 text-white py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <span class="text-lime-500 uppercase">Tagline</span>
+    <h1 class="text-5xl font-bold mt-4">Hero Headline</h1>
+    <p class="text-xl mt-6 text-gray-300">Description text here</p>
+    <a href="/cta" class="mt-8 bg-lime-500 px-6 py-3 rounded">Get Started</a>
   </div>
-</header>
+</section>
 ```
 
-**After (Twig):**
+**After (Twig with SLOTS):**
 ```twig
 {% set theme = theme|default('dark') %}
 {% set is_dark = theme == 'dark' %}
 
-<header {{ attributes.addClass([
-  'c-site-header',
+<section {{ attributes.addClass([
+  'c-hero',
   is_dark ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-900'
 ]) }}>
-  <div class="container py-6">
-    {% if site_name %}
-      <h1 class="h-3xl font-bold">{{ site_name }}</h1>
+  <div class="container py-24">
+    {# SLOT: Tagline - filled by field template #}
+    {% if tagline %}
+      <div class="text-primary uppercase">
+        {{ tagline }}
+      </div>
     {% endif %}
 
-    {% if menu_items %}
-      <nav class="flex gap-4">
-        {% for item in menu_items %}
-          <a href="{{ item.url }}">{{ item.title }}</a>
-        {% endfor %}
-      </nav>
+    {# SLOT: Headline - filled by field template #}
+    {% if headline %}
+      <div class="h-5xl font-bold mt-4">
+        {{ headline }}
+      </div>
+    {% endif %}
+
+    {# SLOT: Description - filled by field template #}
+    {% if description %}
+      <div class="p-xl mt-6 text-neutral-300">
+        {{ description }}
+      </div>
+    {% endif %}
+
+    {# SLOT: CTA - filled by field template #}
+    {% if cta %}
+      <div class="mt-8">
+        {{ cta }}
+      </div>
     {% endif %}
   </div>
-</header>
+</section>
 ```
 
-### Step 3.3: Create Component Schema
+### Step 3.4: Create Component Schema (Slots-First)
 
-Based on extracted dynamic content:
+**⚠️ CRITICAL: Define slots for ALL content, props ONLY for configuration:**
 
 ```yaml
 $schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
-name: Component Name
+name: Hero Section
 description: Converted from [SOURCE_URL]
 status: stable
 
+# PROPS = Configuration ONLY
 props:
   type: object
   properties:
@@ -302,11 +343,149 @@ props:
       type: string
       enum: [dark, light]
       default: dark
-    # Add props based on extracted content
+      title: Theme
+      description: Color theme for the hero section
+    size:
+      type: string
+      enum: [sm, md, lg]
+      default: md
+      title: Size
+      description: Vertical padding size
 
+# SLOTS = Content from Drupal fields
 slots:
-  content:
-    title: Content
+  tagline:
+    title: Tagline
+    description: Small text above headline (field_tagline)
+  headline:
+    title: Headline
+    description: Main headline text (field_headline or title)
+  description:
+    title: Description
+    description: Body text below headline (field_description or body)
+  cta:
+    title: Call to Action
+    description: Button/link element (field_cta or field_link)
+  media:
+    title: Media
+    description: Image or video (field_media or field_image)
+```
+
+### Step 3.5: Create Field Templates (MANDATORY)
+
+**For EVERY slot, create a field template that fills it:**
+
+```
+templates/field/
+├── field--node--field-tagline--[content-type].html.twig
+├── field--node--field-headline--[content-type].html.twig
+├── field--node--field-description--[content-type].html.twig
+├── field--node--field-cta--[content-type].html.twig
+└── field--node--field-media--[content-type].html.twig
+```
+
+**Example field template (`field--node--field-headline--hero.html.twig`):**
+
+```twig
+{#
+/**
+ * @file
+ * Field template for hero headline.
+ *
+ * This template REMOVES all field wrappers and outputs clean content
+ * for the SDC slot. The component handles all styling.
+ */
+#}
+{% for item in items %}
+  {{- item.content -}}
+{% endfor %}
+```
+
+**Example for link field (`field--node--field-cta--hero.html.twig`):**
+
+```twig
+{#
+/**
+ * @file
+ * Field template for hero CTA button.
+ *
+ * Renders link with component-specific classes.
+ */
+#}
+{% for item in items %}
+  <a href="{{ item.content['#url'] }}"
+     class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition-colors">
+    {{ item.content['#title'] }}
+    {% include '@adesso_cms_theme/icons/arrow-right.svg' %}
+  </a>
+{% endfor %}
+```
+
+**Example for media field (`field--node--field-media--hero.html.twig`):**
+
+```twig
+{#
+/**
+ * @file
+ * Field template for hero media.
+ *
+ * Renders responsive image with proper image style.
+ */
+#}
+{% for item in items %}
+  {{ item.content|merge({
+    '#image_style': 'hero_large',
+    '#attributes': {
+      'class': ['w-full', 'h-auto', 'rounded-xl']
+    }
+  }) }}
+{% endfor %}
+```
+
+### Step 3.6: Integrate in Paragraph/Node Template
+
+**How the component gets called with slots filled:**
+
+```twig
+{# paragraph--hero.html.twig #}
+{% embed 'adesso_cms_theme:hero' with {
+  theme: content.field_theme|render|trim ?: 'dark',
+  size: content.field_size|render|trim ?: 'md',
+} %}
+  {% block tagline %}
+    {{ content.field_tagline }}
+  {% endblock %}
+
+  {% block headline %}
+    {{ content.field_headline }}
+  {% endblock %}
+
+  {% block description %}
+    {{ content.field_description }}
+  {% endblock %}
+
+  {% block cta %}
+    {{ content.field_cta }}
+  {% endblock %}
+
+  {% block media %}
+    {{ content.field_media }}
+  {% endblock %}
+{% endembed %}
+```
+
+**Alternative using include (simpler but less explicit):**
+
+```twig
+{# paragraph--hero.html.twig #}
+{% include 'adesso_cms_theme:hero' with {
+  theme: content.field_theme|render|trim ?: 'dark',
+  tagline: content.field_tagline,
+  headline: content.field_headline,
+  description: content.field_description,
+  cta: content.field_cta,
+  media: content.field_media,
+} %}
 ```
 
 ---
@@ -337,12 +516,23 @@ mcp__claude-in-chrome__read_console_messages(tabId=<tab_id>, onlyErrors=true)
 
 ### Step 4.3: Verification Checklist
 
-- [ ] Component renders in Drupal
+**Component Structure:**
+- [ ] All content uses SLOTS (not props)
+- [ ] Props are ONLY used for configuration (theme, variant, size)
+- [ ] Field templates exist for all slots
+- [ ] Field templates remove wrapper markup
+
+**Rendering:**
+- [ ] Component renders in Drupal (not just Storybook!)
 - [ ] Visual appearance matches source
-- [ ] Responsive behavior works
+- [ ] Responsive behavior works (all breakpoints)
 - [ ] Interactive elements work (dropdowns, mobile menu)
+
+**Technical:**
 - [ ] No console errors
 - [ ] Tailwind classes compile correctly
+- [ ] No PHP errors in Drupal log
+- [ ] Cache tags work (content updates reflect)
 
 ---
 
@@ -387,3 +577,56 @@ document.querySelector('[SELECTOR]').getAttribute('style')
 | `gray-50` - `gray-950` | `neutral-50` - `neutral-950` |
 | `slate-50` - `slate-950` | `neutral-50` - `neutral-950` |
 | Green/Lime accents | `primary` / `primary-*` |
+
+### Slots vs Props Quick Reference
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SLOTS (Content)                          │
+├─────────────────────────────────────────────────────────────┤
+│ ✅ Text fields (title, headline, body)                      │
+│ ✅ Rich text / WYSIWYG                                      │
+│ ✅ Images / Media                                           │
+│ ✅ Links / Buttons                                          │
+│ ✅ Menu items                                               │
+│ ✅ Any Drupal field content                                 │
+│                                                             │
+│ → Filled via field templates                                │
+│ → Component just wraps with styling                         │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    PROPS (Configuration)                    │
+├─────────────────────────────────────────────────────────────┤
+│ ✅ theme: dark | light                                      │
+│ ✅ variant: primary | secondary | outline                   │
+│ ✅ size: sm | md | lg | xl                                  │
+│ ✅ layout: horizontal | vertical | grid                     │
+│ ✅ columns: 2 | 3 | 4                                       │
+│ ✅ Boolean flags (show_icon, is_sticky, etc.)               │
+│                                                             │
+│ → Set in paragraph/node template                            │
+│ → Often from list fields or boolean fields                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Field Template Pattern
+
+```twig
+{# MINIMAL field template - removes all wrappers #}
+{% for item in items %}
+  {{- item.content -}}
+{% endfor %}
+
+{# With custom classes for links #}
+{% for item in items %}
+  <a href="{{ item.content['#url'] }}" class="btn btn-primary">
+    {{ item.content['#title'] }}
+  </a>
+{% endfor %}
+
+{# For media with image style #}
+{% for item in items %}
+  {{ item.content|merge({'#image_style': 'hero_large'}) }}
+{% endfor %}
+```

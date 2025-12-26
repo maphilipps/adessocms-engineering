@@ -1,5 +1,42 @@
 # Changelog
 
+## [1.19.4] - 2025-12-26
+
+### Changed - Slots-First Architecture in web-to-adessocms
+
+**Enforces proper Drupal SDC architecture: Slots for content, Props for configuration.**
+
+**New Core Principles:**
+- **Slots-First**: ALWAYS prefer slots over props for content
+- **Field Templates**: Override field templates to fill component slots
+
+**New Sections Added:**
+- **Step 3.2: Slots vs Props Decision (CRITICAL)** - Decision table for when to use each
+- **Step 3.5: Create Field Templates (MANDATORY)** - Examples for text, links, media
+- **Step 3.6: Integrate in Paragraph/Node Template** - `embed` vs `include` patterns
+- **Slots vs Props Quick Reference** - Visual ASCII diagram
+- **Field Template Pattern** - Copy-paste snippets
+
+**Key Rules Enforced:**
+```
+🔴 NEVER use props for content from Drupal fields
+🟢 ALWAYS use slots for field content → override field templates
+🟢 ONLY use props for configuration (theme, variant, size)
+```
+
+**Example Field Templates:**
+- Minimal (removes wrappers): `{{- item.content -}}`
+- Links with classes: `<a href="{{ item.content['#url'] }}" class="btn">`
+- Media with image style: `{{ item.content|merge({'#image_style': 'hero_large'}) }}`
+
+**Updated Verification Checklist:**
+- [ ] All content uses SLOTS (not props)
+- [ ] Props are ONLY for configuration
+- [ ] Field templates exist for all slots
+- [ ] Field templates remove wrapper markup
+
+---
+
 ## [1.19.3] - 2025-12-26
 
 ### Changed - web-to-adessocms Skill Rewrite
