@@ -8,6 +8,10 @@ argument-hint: "[plan file path or task description]"
 
 Execute a work plan efficiently while maintaining quality and finishing features.
 
+## Core Principle
+
+> **We want the simplest change possible. We don't care about migration. Code readability matters most, and we're happy to make bigger changes to achieve it.**
+
 ## Introduction
 
 This command takes a work document (plan file or task description) and executes it systematically. The focus is on **shipping complete features** by understanding requirements quickly, following existing patterns, and maintaining quality throughout.

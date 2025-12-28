@@ -1,5 +1,246 @@
 # Changelog
 
+## [1.26.0] - 2025-12-28
+
+### Changed - /acms-plan: Context Before Interview
+
+**Fixed interview order: Now scans IST-Zustand before asking questions.**
+
+### Problem
+
+The previous version asked interview questions **before** understanding the codebase. This led to:
+- Generic questions that didn't reference existing code
+- Wasted time asking about things that already exist
+- Missing opportunities to ask "extend or replace?" questions
+
+### New Flow
+
+| Step | Before | After |
+|------|--------|-------|
+| 0 | Deep Interview | **Quick Context Scan** |
+| 1 | Repository Research | **Deep Interview** (with context) |
+| 2 | Issue Planning | Repository Research |
+
+### Quick Context Scan (New Step 0)
+
+Before asking questions, Claude now:
+1. Reads relevant files mentioned in the feature
+2. Searches for existing patterns (`Grep`/`Glob`)
+3. Checks `docs/solutions/` for existing learnings
+4. Understands the scope quickly (1-2 min max)
+
+### Informed Interview Questions
+
+Interview questions now reference findings:
+- "I found `ExistingService.php` doing X. Should we extend it or create something new?"
+- "There's already a similar pattern in `ModuleY`. Follow that or diverge?"
+- "The current implementation uses caching strategy X. Keep that or change?"
+- "I see no tests for this area. Is that intentional or a gap to fill?"
+
+### Why This Change
+
+> "You can't ask good questions without knowing the current state."
+
+Better specs come from informed questions. Generic questions waste time.
+
+---
+
+## [1.25.0] - 2025-12-28
+
+### Removed - Sisyphus/Oracle Pattern (Overengineering)
+
+**Removed the never-used Sisyphus Orchestrator and Oracle escalation pattern.**
+
+### Analysis
+
+User interview revealed:
+- **Origin:** "War experimentell" - added without concrete use case
+- **Usage:** "Selten/Nie" - never actually used in practice
+- **Value add:** "Unklar" - unclear what it does beyond existing commands
+- **Oracle need:** "Oracle ist unnötig" - never needed
+- **Complexity:** "Sehr komplex" - >500 LOC for unused code
+
+### What Was Sisyphus/Oracle?
+
+**Sisyphus-Orchestrator** (336 LOC) claimed to:
+- Orchestrate Plan→Review→Work→Compound cycle
+- Delegate to specialists in parallel
+- Escalate to Oracle after 3 failures
+
+**Reality:** Just documentation of the workflow that already exists in individual commands. No actual orchestration.
+
+**Oracle** (140 LOC) claimed to:
+- Be an "elevated consultant" for hard problems
+- Require Opus model quality
+
+**Reality:** Never invoked. `architecture-strategist` already covers architecture decisions.
+
+### Removed Files
+
+- `agents/core/sisyphus-orchestrator.md` (336 LOC)
+- `agents/core/oracle.md` (140 LOC)
+
+### Updated Files
+
+- `commands/acms-init.md` - Simplified, no Sisyphus/Oracle references
+- `.claude-plugin/plugin.json` - Updated description and count
+
+### Component Counts
+
+| Component | Before | After | Removed |
+|-----------|--------|-------|---------|
+| Agents | 36 | 34 | -2 |
+
+### Why This Change
+
+> "The best code is the code you don't have to write."
+
+The existing workflow commands (`/acms-plan`, `/acms-review`, `/acms-work`, `/acms-compound`) are self-contained and handle everything. Sisyphus/Oracle added only confusion and maintenance burden.
+
+**What remains:** Clean, simple workflow that users actually use.
+
+---
+
+## [1.24.0] - 2025-12-28
+
+### Added - Deep Interview Phase in /acms-plan
+
+**Planning now starts with mandatory in-depth user interview before research.**
+
+### New Phase 0: Deep Interview
+
+Before any research or planning, Claude must interview the user using `AskUserQuestion` about:
+
+- Technical implementation details
+- UI & UX considerations
+- Concerns and edge cases
+- Tradeoffs and alternatives
+- Integration points
+- Security, performance, error handling
+- Data models and relationships
+
+**Key rules:**
+- Ask **non-obvious** questions that require thought
+- Go deep - surface-level questions waste time
+- Continue until spec is truly complete
+- Challenge assumptions with "why" and "what if"
+
+**Example questions added:**
+- "What happens if a user is mid-flow when their session expires?"
+- "Should this be reversible? What does 'undo' look like?"
+- "Who should NOT have access to this? Why?"
+- "What's the failure mode if the external API is down?"
+- "How will you know if this feature is successful?"
+
+### Why This Change
+
+Better specs come from better questions. Research is useless if we're solving the wrong problem.
+
+---
+
+## [1.23.0] - 2025-12-28
+
+### Changed - Simplified Workflows + Core Principle
+
+**Added simplicity principle to all core workflows and simplified commands.**
+
+### Core Principle Added
+
+> **We want the simplest change possible. We don't care about migration. Code readability matters most, and we're happy to make bigger changes to achieve it.**
+
+Added to:
+- `/acms-plan` - Planning workflow
+- `/acms-work` - Implementation workflow
+- `/acms-review` - Review workflow
+- `/acms-compound` - Documentation workflow
+- `code-simplifier` agent
+
+### Simplified Commands
+
+| Command | Before | After | Reduction |
+|---------|--------|-------|-----------|
+| `/acms-compound` | 220 lines | 71 lines | -68% |
+| `/acms-review` | 239 lines | 91 lines | -62% |
+
+**acms-compound:** Removed fake "parallel subagents" description, simplified to essence: analyze → extract → write.
+
+**acms-review:** Removed verbose specialist invocation examples, kept clean specialist selection table.
+
+---
+
+## [1.22.0] - 2025-12-28
+
+### Removed - Over-Engineered Components
+
+**Major cleanup based on code-simplifier review. Removed 10 agents, 1 command, 2 skills.**
+
+### Removed
+
+**Agents (10 removed):**
+- `agents/background/` - 9 orphaned agents (compound-documenter, config-drift-detector, context-summarizer, dependency-health-monitor, learning-extractor, pattern-collector, prompt-optimizer, session-insights, test-gap-detector) - never called after hooks removal
+- `agents/specialists/dries-drupal-specialist.md` - Gimmick agent, functionality covered by drupal-specialist
+
+**Commands (1 removed):**
+- `commands/workflows/acms-codify.md` - Deprecated, replaced by acms-compound
+
+**Skills (2 removed):**
+- `skills/skill-creator/` - Duplicate of create-agent-skill command
+- `skills/frontend-design/` - Nearly empty, no value
+
+### Component Counts
+
+| Component | Before | After | Removed |
+|-----------|--------|-------|---------|
+| Agents | 46 | 36 | -10 |
+| Commands | 22 | 21 | -1 |
+| Skills | 19 | 17 | -2 |
+
+### Why This Change
+
+Plugin had grown organically with YAGNI violations:
+1. Background agents were built for hooks that are now removed
+2. Dries-drupal-specialist was a fun idea but redundant
+3. Duplicate functionality across skills/commands
+4. Empty placeholder skills
+
+---
+
+## [1.21.0] - 2025-12-28
+
+### Removed - All Hooks
+
+**Removed the entire `hooks/` directory to simplify the plugin.**
+
+### Removed Files
+
+- `hooks/hooks.json` - Hook configuration
+- `hooks/compound-on-milestone.py` - Milestone detection
+- `hooks/compound-on-todo-complete.py` - Todo completion tracking
+- `hooks/compound-on-pattern-detected.py` - Pattern detection
+- `hooks/background-agents-trigger.py` - Background agent spawning
+- `hooks/session-insights-trigger.py` - Session analytics
+- `hooks/prompt-optimizer-trigger.py` - Prompt optimization
+- `hooks/sisyphus-orchestrator-trigger.py` - Orchestrator trigger
+- `hooks/context-persistence.py` - Context saving
+- `hooks/version-reminder.py` - Version reminders
+- `hooks/prevent-sleep.sh` - Mac sleep prevention
+- `hooks/allow-sleep.sh` - Mac sleep re-enable
+
+### Why This Change
+
+1. **Simplification**: Hooks added complexity without clear value
+2. **Noise reduction**: Some hooks fired frequently and cluttered context
+3. **Performance**: Fewer background processes during sessions
+4. **User request**: Direct request to remove all hooks
+
+### Impact
+
+- Plugin now operates without any automatic triggers
+- All features remain available via slash commands and agents
+- Background agents can still be invoked manually when needed
+
+---
+
 ## [1.20.0] - 2025-12-26
 
 ### Changed - Workflows Simplified (EveryInc-Aligned)
@@ -1440,13 +1681,6 @@ Gemini is now **optional and non-blocking**:
 - Strategic checkpoints during /work
 
 ---
-
-# Changelog
-
-All notable changes to the adessocms-engineering plugin will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.2.0] - 2024-12-08
 

@@ -6,6 +6,10 @@ argument-hint: "[feature description, bug report, or improvement idea]"
 
 # Create a plan for a new feature or bug fix
 
+## Core Principle
+
+> **We want the simplest change possible. We don't care about migration. Code readability matters most, and we're happy to make bigger changes to achieve it.**
+
 ## Introduction
 
 **Note: The current year is 2025.** Use this when dating plans and searching for recent documentation.
@@ -22,13 +26,57 @@ Do not proceed until you have a clear feature description from the user.
 
 ## Main Tasks
 
-### 1. Repository Research & Context Gathering
+### 0. Quick Context Scan (FIRST)
 
-<thinking>
-First, I need to understand the project's conventions and existing patterns, leveraging all available resources and use parallel subagents to do this.
-</thinking>
+**Before asking questions, understand the IST-Zustand.**
 
-Run these agents in parallel at the same time:
+You can't ask good questions without knowing the current state. Do a quick scan:
+
+1. **Read relevant files** - If the feature mentions specific areas, read those files
+2. **Search for existing patterns** - `Grep` or `Glob` for related code
+3. **Check docs/solutions/** - Look for existing learnings on this topic
+4. **Understand the scope** - How big is this change? What exists already?
+
+**This should be fast (1-2 minutes max).** Just enough to ask informed questions.
+
+### 1. Deep Interview (MANDATORY)
+
+**Now that you understand the context, interview the user in depth.**
+
+Use the **AskUserQuestion tool** to clarify:
+
+- Technical implementation details
+- UI & UX considerations
+- Concerns and edge cases
+- Tradeoffs and alternatives
+- Integration points
+- Performance requirements
+- Security considerations
+- Error handling expectations
+- User permissions and access control
+- Data models and relationships
+- Migration needs (or lack thereof)
+- Testing requirements
+
+**Rules:**
+- Ask **non-obvious** questions that require thought
+- Reference what you found in the context scan
+- Go deep - surface-level questions waste time
+- Continue interviewing until the spec is truly complete
+- Use multi-select questions when exploring options
+- Challenge assumptions - ask "why" and "what if"
+
+**Example informed questions:**
+- "I found `ExistingService.php` doing X. Should we extend it or create something new?"
+- "There's already a similar pattern in `ModuleY`. Follow that or diverge?"
+- "The current implementation uses caching strategy X. Keep that or change?"
+- "I see no tests for this area. Is that intentional or a gap to fill?"
+
+**Only proceed to deep research after the interview is complete.**
+
+### 2. Repository Research & Context Gathering
+
+Run these agents in parallel:
 
 - Task repo-research-analyst(feature_description)
 - Task best-practices-researcher(feature_description)
@@ -41,11 +89,7 @@ Run these agents in parallel at the same time:
 - [ ] Create a reference list of similar issues or PRs (e.g., `#123`, `#456`)
 - [ ] Note any team conventions discovered in `CLAUDE.md` or team documentation
 
-### 2. Issue Planning & Structure
-
-<thinking>
-Think like a product manager - what would make this issue clear and actionable?
-</thinking>
+### 3. Issue Planning & Structure
 
 **Title & Categorization:**
 
@@ -59,7 +103,7 @@ Think like a product manager - what would make this issue clear and actionable?
 - [ ] Gather supporting materials (error logs, screenshots, design mockups)
 - [ ] Prepare code examples or reproduction steps if applicable
 
-### 3. SpecFlow Analysis
+### 4. SpecFlow Analysis
 
 After planning the issue structure, run SpecFlow Analyzer to validate and refine the feature specification:
 
@@ -71,7 +115,7 @@ After planning the issue structure, run SpecFlow Analyzer to validate and refine
 - [ ] Incorporate any identified gaps or edge cases into the issue
 - [ ] Update acceptance criteria based on SpecFlow findings
 
-### 4. Choose Implementation Detail Level
+### 5. Choose Implementation Detail Level
 
 Select how comprehensive you want the issue to be. Simpler is mostly better.
 
@@ -104,7 +148,7 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - Resource requirements and timeline
 - Risk mitigation strategies
 
-### 5. Issue Creation & Formatting
+### 6. Issue Creation & Formatting
 
 **Content Formatting:**
 
@@ -120,7 +164,7 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - [ ] Reference specific commits with SHA hashes when relevant
 - [ ] Link to code using GitHub's permalink feature
 
-### 6. Final Review & Submission
+### 7. Final Review & Submission
 
 **Pre-submission Checklist:**
 
