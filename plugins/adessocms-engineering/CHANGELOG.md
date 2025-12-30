@@ -1,5 +1,267 @@
 # Changelog
 
+## [1.28.0] - 2025-12-30
+
+### Added - Beads Integration für Cross-Session Task Tracking
+
+**Integration von [Beads](https://github.com/steveyegge/beads) - Git-backed Task-Tracker für AI-Agenten.**
+
+### Das Problem
+
+| Vorher | Nachher |
+|--------|---------|
+| TodoWrite geht nach Session verloren | Beads persistiert in `.beads/` (Git-backed) |
+| Keine Dependencies zwischen Tasks | `bd dep add` für Blocker/Prerequisites |
+| Keine "Ready" Detection | `bd ready` zeigt Tasks ohne Blocker |
+| Kein Cross-Session Handoff | Beads überlebt Sessions + Compactions |
+
+### Die Lösung: CLI + Hooks Approach
+
+> **"For environments with shell access (Claude Code), the CLI + hooks approach is recommended over MCP."** - Beads Dokumentation
+
+**TodoWrite wird NICHT ersetzt!** Sie ergänzen sich:
+- **Beads** = Strategisch (Epic, Dependencies, Cross-Session)
+- **TodoWrite** = Taktisch (Session-Tasks, schnell, einfach)
+
+### Workflow-Integration
+
+```
+/acms-plan           → Markdown-Plan erstellen (wie bisher)
+      ↓
+/acms-plan-review    → Review + Interview + Plan aktualisieren
+      ↓
+★ BEAD ERSTELLEN ★   → bd create "Epic: <plan-title>" mit Subtasks
+      ↓
+/acms-work           → bd update --status in_progress
+                     → TodoWrite für Session-Tasks (BEHALTEN!)
+                     → bd close am Ende
+      ↓
+/acms-compound       → Learnings dokumentieren
+```
+
+### "Land the Plane" Protocol
+
+Alle Workflows enden jetzt mit:
+
+```bash
+bd sync
+git push  # Work is NOT complete until push succeeds
+```
+
+### Prerequisite Enforcement
+
+Workflows brechen ab ohne Beads CLI:
+
+```bash
+if ! command -v bd &> /dev/null; then
+  echo "❌ Beads CLI nicht installiert!"
+  echo "Installation: npm install -g @beads/bd"
+  exit 1
+fi
+```
+
+### TodoWrite ↔ Beads Handoff
+
+| Situation | Verwende |
+|-----------|----------|
+| Einzelne Session, < 5 Tasks | **TodoWrite** |
+| Multi-Session Epic, > 5 Tasks | **Beads** |
+| Task hat Abhängigkeiten/Blocker | **Beads** |
+| Plan wurde mit `/acms-plan` erstellt | **Beads** (Epic) + **TodoWrite** (Session-Tasks) |
+
+### Files Added
+
+- `skills/beads/SKILL.md` - Beads CLI Reference und Handoff-Matrix
+
+### Files Updated
+
+- `commands/workflows/acms-plan-review.md` - Step 4: Create Beads Epic
+- `commands/workflows/acms-work.md` - Phase 0: Check Beads Status + Phase 4: Update Beads
+- `commands/workflows/acms-compound.md` - "Land the Plane" Sektion
+- `README.md` - Prerequisites (Beads CLI Installation), Skill-Count 17→18
+
+---
+
+## [1.27.0] - 2025-12-29
+
+### Changed - Plans as Executable Specifications
+
+**Plans müssen nach Interview eine "executable specification" sein - `/acms-work` führt ohne Rückfragen aus.**
+
+### Das Problem
+
+Nach `/acms-plan` + `/plan_review` stellte `/acms-work` trotzdem Klärungsfragen wie:
+- "Soll ich die 37 Einträge wirklich löschen?"
+- "Ist das Webform vorhanden?"
+- "Soll ich auch Media Entities erstellen?"
+
+Diese Fragen waren bereits im Interview beantwortet, aber die Antworten flossen nicht in den Plan.
+
+### Die Lösung
+
+**3 Workflow-Änderungen:**
+
+| Workflow | Änderung |
+|----------|----------|
+| `/acms-plan` | Interview-Antworten müssen als **konkrete Tasks** in den Plan (nicht separate "Decisions"-Sektion) |
+| `/plan_review` | Nach Interview den **Plan aktualisieren** (nicht nur Report) |
+| `/acms-work` | **Keine Fragen für Dinge im Plan** - verifiziere selbst statt zu fragen |
+
+### Konkrete Änderungen
+
+**`/acms-plan` - Interview-Antworten → Tasks:**
+
+```
+❌ SCHLECHT: "Media Entities: klären ob nötig"
+✅ GUT: "- [ ] Erstelle Media Entity für jedes Bild aus `/assets/vacancies/`"
+
+❌ SCHLECHT: "Bestehende Daten: evtl. Clean Slate"
+✅ GUT: "- [ ] **Vorbereitung:** Lösche alle 37 bestehenden `vacancy` Nodes"
+```
+
+**`/plan_review` - Plan aktualisieren nach Interview:**
+
+- Entferne over-engineered Tasks
+- Vereinfache basierend auf Code-Simplifier Feedback
+- Konkretisiere vage Tasks
+- Öffne aktualisierten Plan in Typora
+
+**`/acms-work` - Trust the Plan:**
+
+```
+⚠️ KEINE Klärungsfragen für Dinge, die im Plan stehen!
+
+❌ "Soll ich X wirklich löschen?" → Wenn im Plan, JA
+❌ "Ist das Webform vorhanden?" → Verifiziere selbst mit DB-Query
+❌ Bestätigungen für explizit genannte Tasks
+
+✅ Nur bei echten Blockern fragen (Datei existiert nicht, widersprüchliche Angaben)
+✅ Verifiziere selbst: ddev drush sqlq "SELECT COUNT(*) FROM ..."
+```
+
+### Auswirkung
+
+| Vorher | Nachher |
+|--------|---------|
+| 5 Klärungsfragen bei jedem `/acms-work` Start | Direkte Ausführung |
+| Redundante Interviews | Ein Interview, vollständiger Plan |
+| Plan als "Diskussionsgrundlage" | Plan als "executable specification" |
+
+### Files Updated
+
+- `commands/workflows/acms-plan.md` - Interview → konkrete Tasks
+- `commands/workflows/acms-plan-review.md` - Plan aktualisieren nach Review (umbenannt von `commands/plan_review.md`)
+- `commands/workflows/acms-work.md` - Trust the Plan, keine redundanten Fragen
+
+### Renamed
+
+- `commands/plan_review.md` → `commands/workflows/acms-plan-review.md` (Konsistenz mit anderen Workflow-Commands)
+
+### Opus 4.5 Optimierung
+
+- `acms-plan.md` - "CRITICAL:" → "Wichtig:" (verhindert Tool-Overtriggering)
+
+### Workflow-Struktur: "Output (END OF WORKFLOW)"
+
+**Problem:** Nach `/acms-plan-review` wurde trotzdem implementiert - STOP-Anweisungen wurden ignoriert.
+
+**Lösung:** Neue Workflow-Struktur mit klarem Ende:
+- **Scope-Statement** am Anfang: "Keine Implementation"
+- **"## N. Output (END OF WORKFLOW)"** als letzter nummerierter Schritt
+- **"END."** Anweisung am Schluss statt separate CRITICAL-Sektion
+
+```
+Vorher:                          Nachher:
+## Output Format                 ## 4. Output (END OF WORKFLOW)
+...                              **This is the final step.**
+## CRITICAL: NO Implementation   ...
+⛔ STOP HERE                     **END.** Do not continue.
+```
+
+---
+
+## [1.26.4] - 2025-12-29
+
+### Changed - Correct Interview Placement in All Commands
+
+**Fixed interview timing: Planning interviews AFTER research, Reviews interview AFTER specialists.**
+
+### New Flow
+
+| Command | Flow |
+|---------|------|
+| `/acms-plan` | Status Quo → Grobe Research → **Interview** → (Add. Research) → Plan → STOP |
+| `/acms-review` | Setup → Specialists → **Interview** → Synthesize → Report → STOP |
+| `/plan_review` | Reviewers → **Interview** → Report → STOP |
+
+### Why Interview AFTER Research/Specialists?
+
+For **Planning**: You can't ask good questions without knowing:
+- What exists in the codebase (Status Quo)
+- What best practices say (Grobe Research)
+
+For **Reviews**: You can't ask good questions without knowing:
+- What the specialists found (security issues, accessibility gaps, etc.)
+
+### Example Informed Questions
+
+**After Research (Planning):**
+- "The docs say X is best practice, but your codebase does Y. Align or keep diverging?"
+
+**After Specialists (Reviews):**
+- "The security-sentinel flagged X. Was that intentional or an oversight?"
+- "The accessibility-specialist found missing ARIA. Is this a known limitation?"
+
+### Files Updated
+
+- `commands/workflows/acms-plan.md` - Reordered: 0→Status Quo, 1→Grobe Research, 2→Interview, 3→Add. Research
+- `commands/workflows/acms-review.md` - Interview moved to Step 3 (after specialists)
+- `commands/plan_review.md` - Interview moved to Step 2 (after reviewers)
+
+---
+
+## [1.26.1] - 2025-12-28
+
+### Fixed - /acms-plan: NO Implementation, NO Next Steps
+
+**Enforced strict planning-only behavior. No more automatic implementation suggestions.**
+
+### Problem
+
+After writing the plan, Claude would:
+- Offer "Start `/acms-work`" as an option
+- Ask "What would you like to do next?"
+- Present multiple next-step options
+
+This caused implementations to start automatically without user intent.
+
+### Solution
+
+Replaced "Post-Generation Options" with explicit STOP instructions:
+
+| Before | After |
+|--------|-------|
+| "What would you like to do next?" | ⛔ DO NOT ask this |
+| 5 options including `/acms-work` | Only confirm: "Plan erstellt" |
+| Automatic next-step suggestions | User must explicitly request implementation |
+
+### New Behavior
+
+After writing plan file:
+1. ✅ Open plan in Typora (automatic)
+2. ✅ Report completion: "Plan erstellt: `plans/xxx.md` - Datei wurde in Typora geöffnet."
+3. ⛔ NO next steps
+4. ⛔ NO implementation suggestions
+5. ⛔ NO calling other commands
+
+### Why This Change
+
+> "Planning is planning. Implementation is separate."
+
+The user decides when to implement. Claude should never assume or suggest it.
+
+---
+
 ## [1.26.0] - 2025-12-28
 
 ### Changed - /acms-plan: Context Before Interview

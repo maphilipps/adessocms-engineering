@@ -44,7 +44,26 @@ Select based on changes:
 | Large changes | architecture-strategist, performance-oracle |
 | ALL reviews | code-simplifier (after synthesis) |
 
-### 3. Synthesize Findings
+### 3. Deep Interview (MANDATORY - AFTER Specialists)
+
+**Interview me in detail using the AskUserQuestion tool about literally anything:**
+
+- What was the intent of these changes?
+- Are there concerns I should focus on?
+- Tradeoffs made during implementation?
+- Known limitations or shortcuts?
+- etc.
+
+**But make sure the questions are NOT obvious.**
+
+**Reference what the specialists found.** Example informed questions:
+- "The security-sentinel flagged X. Was that intentional or an oversight?"
+- "The accessibility-specialist found missing ARIA. Is this a known limitation?"
+- "The code-simplifier suggested Y could be simpler. Any reason for the complexity?"
+
+Be very in-depth and continue interviewing me continually until the review context is complete, then synthesize findings.
+
+### 4. Synthesize Findings
 
 Categorize by severity:
 
@@ -52,7 +71,7 @@ Categorize by severity:
 - **P2 IMPORTANT** - Performance, missing tests, accessibility → Should fix
 - **P3 NICE-TO-HAVE** - Style, docs, minor refactoring → Enhancement
 
-### 4. Report
+### 5. Report
 
 ```markdown
 ## Code Review: PR #XXX

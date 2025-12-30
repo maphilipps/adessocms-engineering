@@ -6,6 +6,8 @@ argument-hint: "[feature description, bug report, or improvement idea]"
 
 # Create a plan for a new feature or bug fix
 
+**Scope:** Erstelle einen Plan. Keine Implementation.
+
 ## Core Principle
 
 > **We want the simplest change possible. We don't care about migration. Code readability matters most, and we're happy to make bigger changes to achieve it.**
@@ -26,70 +28,81 @@ Do not proceed until you have a clear feature description from the user.
 
 ## Main Tasks
 
-### 0. Quick Context Scan (FIRST)
+### 0. Status Quo (Quick Context Scan)
 
-**Before asking questions, understand the IST-Zustand.**
-
-You can't ask good questions without knowing the current state. Do a quick scan:
+**Understand the IST-Zustand first.**
 
 1. **Read relevant files** - If the feature mentions specific areas, read those files
 2. **Search for existing patterns** - `Grep` or `Glob` for related code
 3. **Check docs/solutions/** - Look for existing learnings on this topic
 4. **Understand the scope** - How big is this change? What exists already?
 
-**This should be fast (1-2 minutes max).** Just enough to ask informed questions.
+**This should be fast (1-2 minutes max).**
 
-### 1. Deep Interview (MANDATORY)
+### 1. Grobe Research
 
-**Now that you understand the context, interview the user in depth.**
-
-Use the **AskUserQuestion tool** to clarify:
-
-- Technical implementation details
-- UI & UX considerations
-- Concerns and edge cases
-- Tradeoffs and alternatives
-- Integration points
-- Performance requirements
-- Security considerations
-- Error handling expectations
-- User permissions and access control
-- Data models and relationships
-- Migration needs (or lack thereof)
-- Testing requirements
-
-**Rules:**
-- Ask **non-obvious** questions that require thought
-- Reference what you found in the context scan
-- Go deep - surface-level questions waste time
-- Continue interviewing until the spec is truly complete
-- Use multi-select questions when exploring options
-- Challenge assumptions - ask "why" and "what if"
-
-**Example informed questions:**
-- "I found `ExistingService.php` doing X. Should we extend it or create something new?"
-- "There's already a similar pattern in `ModuleY`. Follow that or diverge?"
-- "The current implementation uses caching strategy X. Keep that or change?"
-- "I see no tests for this area. Is that intentional or a gap to fill?"
-
-**Only proceed to deep research after the interview is complete.**
-
-### 2. Repository Research & Context Gathering
-
-Run these agents in parallel:
+Run these agents in parallel to gather initial context:
 
 - Task repo-research-analyst(feature_description)
 - Task best-practices-researcher(feature_description)
 - Task framework-docs-researcher(feature_description)
 
-**Reference Collection:**
+**Keep findings ready for the interview.**
+
+### 2. Deep Interview (MANDATORY)
+
+**Interview me in detail using the AskUserQuestion tool about literally anything:**
+
+- Technical implementation
+- UI & UX
+- Concerns
+- Tradeoffs
+- etc.
+
+**But make sure the questions are NOT obvious.**
+
+Be very in-depth and continue interviewing me continually until it's complete.
+
+**Reference what you found in Status Quo AND Grobe Research.** Example informed questions:
+- "I found `ExistingService.php` doing X. Should we extend it or create something new?"
+- "There's already a similar pattern in `ModuleY`. Follow that or diverge?"
+- "The current implementation uses caching strategy X. Keep that or change?"
+- "I see no tests for this area. Is that intentional or a gap to fill?"
+- "The docs say X is best practice, but your codebase does Y. Align or keep diverging?"
+
+**Wichtig: Interview-Antworten müssen den Plan konkret machen.**
+
+Jede Interview-Antwort muss **direkt in den Plan einfließen** als:
+- **Konkrete Tasks** (nicht "klären ob X", sondern "tue X")
+- **Spezifische Angaben** (nicht "Bilder optional", sondern "Bilder: ja, aus /path/to/source")
+- **Explizite Vorbedingungen** (nicht "evtl. löschen", sondern "Schritt 0: Lösche 37 bestehende Einträge")
+
+**Der Plan muss nach dem Interview eine "executable specification" sein:**
+- Keine offenen Fragen mehr
+- Keine "falls X, dann Y" - konkrete Entscheidungen
+- `/acms-work` kann den Plan OHNE weitere Klärungsfragen ausführen
+
+**Beispiele für schlechte vs. gute Plan-Einträge:**
+
+❌ SCHLECHT: "Media Entities: klären ob nötig"
+✅ GUT: "- [ ] Erstelle Media Entity für jedes Bild aus `/assets/vacancies/`"
+
+❌ SCHLECHT: "Bestehende Daten: evtl. Clean Slate"
+✅ GUT: "- [ ] **Vorbereitung:** Lösche alle 37 bestehenden `vacancy` Nodes"
+
+❌ SCHLECHT: "Taxonomie: Terms on-the-fly oder vorab erstellen"
+✅ GUT: "- [ ] Erstelle fehlende `job_category` Terms während der Migration (Pattern: `getOrCreateTerm()`)"
+
+### 3. Additional Research (if needed)
+
+If the interview reveals gaps, run additional research:
 
 - [ ] Document all research findings with specific file paths (e.g., `web/modules/custom/example/src/Service/ExampleService.php:42`)
 - [ ] Include URLs to external documentation and best practices guides
 - [ ] Create a reference list of similar issues or PRs (e.g., `#123`, `#456`)
 - [ ] Note any team conventions discovered in `CLAUDE.md` or team documentation
 
-### 3. Issue Planning & Structure
+### 4. Issue Planning & Structure
 
 **Title & Categorization:**
 
@@ -103,7 +116,7 @@ Run these agents in parallel:
 - [ ] Gather supporting materials (error logs, screenshots, design mockups)
 - [ ] Prepare code examples or reproduction steps if applicable
 
-### 4. SpecFlow Analysis
+### 5. SpecFlow Analysis
 
 After planning the issue structure, run SpecFlow Analyzer to validate and refine the feature specification:
 
@@ -115,7 +128,7 @@ After planning the issue structure, run SpecFlow Analyzer to validate and refine
 - [ ] Incorporate any identified gaps or edge cases into the issue
 - [ ] Update acceptance criteria based on SpecFlow findings
 
-### 5. Choose Implementation Detail Level
+### 6. Choose Implementation Detail Level
 
 Select how comprehensive you want the issue to be. Simpler is mostly better.
 
@@ -148,7 +161,7 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - Resource requirements and timeline
 - Risk mitigation strategies
 
-### 6. Issue Creation & Formatting
+### 7. Issue Creation & Formatting
 
 **Content Formatting:**
 
@@ -164,7 +177,7 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - [ ] Reference specific commits with SHA hashes when relevant
 - [ ] Link to code using GitHub's permalink feature
 
-### 7. Final Review & Submission
+### 8. Final Review & Submission
 
 **Pre-submission Checklist:**
 
@@ -174,28 +187,17 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - [ ] Acceptance criteria are measurable
 - [ ] Add names of files in pseudo code examples and todo lists
 
-## Output Format
+## 9. Output (END OF WORKFLOW)
 
-Write the plan to `plans/<issue_title>.md`
+**This is the final step. After this, the command is complete.**
 
-## Post-Generation Options
+1. Write the plan to `plans/<issue_title>.md`
+2. Open in Typora:
+   ```bash
+   open -a Typora plans/<issue_title>.md
+   ```
+3. Report completion with this exact format:
 
-After writing the plan file, use the **AskUserQuestion tool** to present these options:
+> "Plan erstellt: `plans/<issue_title>.md` - Datei wurde in Typora geöffnet."
 
-**Question:** "Plan ready at `plans/<issue_title>.md`. What would you like to do next?"
-
-**Options:**
-1. **Open plan in editor** - Open the plan file for review
-2. **Run `/plan_review`** - Get feedback from reviewers
-3. **Start `/acms-work`** - Begin implementing this plan
-4. **Create Issue** - Create issue in project tracker (GitHub/Linear)
-5. **Simplify** - Reduce detail level
-
-Based on selection:
-- **Open plan in editor** → Run `open -a Typora plans/<issue_title>.md`
-- **`/plan_review`** → Call the /plan_review command with the plan file path
-- **`/acms-work`** → Call the /acms-work command with the plan file path
-- **Create Issue** → Use `gh issue create` with plan content
-- **Simplify** → Ask "What should I simplify?" then regenerate simpler version
-
-NEVER CODE! Just research and write the plan.
+**END.** Do not continue. Do not suggest next steps. Do not offer to implement. Do not call `/acms-work`. The user will explicitly request implementation in a new message when ready.

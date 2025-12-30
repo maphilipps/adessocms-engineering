@@ -68,3 +68,33 @@ How to avoid it in future.
 First fix: 30 min research → Document: 5 min → Next occurrence: 2 min lookup.
 
 **Each documented solution makes the team smarter.**
+
+---
+
+## Session End: Land the Plane
+
+Vor Session-Ende diese Schritte ausführen:
+
+1. **File follow-up issues** für verbleibende Arbeit:
+   ```bash
+   bd create "Follow-up: <title>" -d "<notes>"
+   ```
+
+2. **Update Bead Status** (wenn Beads verwendet wurde):
+   ```bash
+   bd close <id> --reason "<reason>"  # wenn fertig
+   ```
+
+3. **Sync & Push** (MANDATORY):
+   ```bash
+   git pull --rebase
+   bd sync
+   git push
+   ```
+
+4. **Verify**:
+   ```bash
+   git status  # Muss "up to date with origin" zeigen
+   ```
+
+> **"Work is NOT complete until `git push` succeeds"**

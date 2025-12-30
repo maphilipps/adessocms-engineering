@@ -22,15 +22,62 @@ This command takes a work document (plan file or task description) and executes 
 
 ## Execution Workflow
 
+### Phase 0: Check Beads Status
+
+**Prerequisite Check:**
+```bash
+if ! command -v bd &> /dev/null; then
+  echo "❌ Beads CLI nicht installiert!"
+  echo "Installation: npm install -g @beads/bd"
+  echo "Dann: bd init (im Projekt-Root)"
+  exit 1
+fi
+```
+
+Prüfe ob ein Bead für diesen Plan existiert:
+
+```bash
+bd ready  # Zeigt Tasks ohne Blocker
+bd show <epic-id>  # Details zum Plan-Epic (wenn bekannt)
+```
+
+Wenn Bead existiert:
+```bash
+bd update <id> --status in_progress
+```
+
 ### Phase 1: Quick Start
 
-1. **Read Plan and Clarify**
+1. **Read Plan and Execute**
 
    - Read the work document completely
    - Review any references or links provided in the plan
-   - If anything is unclear or ambiguous, ask clarifying questions NOW
-   - Get user approval to proceed
-   - **Do not skip this** - better to ask questions now than build the wrong thing
+   - **Trust the plan** - if it went through `/acms-plan` + `/plan_review`, it IS an executable specification
+
+   **⚠️ KEINE Klärungsfragen für Dinge, die im Plan stehen!**
+
+   Der Plan enthält bereits alle Entscheidungen. Frage NICHT nach:
+   - ❌ "Soll ich X wirklich löschen?" → Wenn es im Plan steht, JA
+   - ❌ "Ist das Webform vorhanden?" → Verifiziere selbst mit Code/DB-Queries
+   - ❌ "Soll ich auch Y machen?" → Wenn es im Plan steht, JA
+   - ❌ Bestätigungen für explizit genannte Tasks
+
+   **Nur bei echten Blockern fragen:**
+   - ✅ Datei/Pfad existiert nicht und kein Fallback im Plan
+   - ✅ Widersprüchliche Angaben im Plan selbst
+   - ✅ Technisch unmöglich (API existiert nicht, etc.)
+
+   **Verifiziere selbst statt zu fragen:**
+   ```bash
+   # Taxonomie existiert? → Prüfe selbst
+   ddev drush entity:list | grep job_category
+
+   # Webform existiert? → Prüfe selbst
+   ddev drush webform:list | grep recruiting
+
+   # Bestehende Nodes? → Zähle selbst
+   ddev drush sqlq "SELECT COUNT(*) FROM node WHERE type='vacancy'"
+   ```
 
 2. **Setup Environment**
 
@@ -205,10 +252,56 @@ This command takes a work document (plan file or task description) and executes 
    )"
    ```
 
-4. **Notify User**
+4. **Update Beads**
+
+   Nach erfolgreichem Commit:
+
+   ```bash
+   # Task als erledigt markieren
+   bd close <task-id> --reason "Implemented in commit <sha>"
+
+   # Wenn Epic komplett:
+   bd close <epic-id> --reason "All subtasks completed"
+
+   # "Land the Plane" Protocol
+   bd sync
+   git push  # Work is NOT complete until push succeeds
+   ```
+
+5. **Notify User**
    - Summarize what was completed
    - Link to PR
    - Note any follow-up work needed
+
+---
+
+## Session End: Land the Plane
+
+Vor Session-Ende diese Schritte ausführen:
+
+1. **File follow-up issues** für verbleibende Arbeit:
+   ```bash
+   bd create "Follow-up: <title>" -d "<notes>"
+   ```
+
+2. **Update Bead Status**:
+   ```bash
+   bd close <id> --reason "<reason>"  # wenn fertig
+   ```
+
+3. **Sync & Push** (MANDATORY):
+   ```bash
+   git pull --rebase
+   bd sync
+   git push
+   ```
+
+4. **Verify**:
+   ```bash
+   git status  # Muss "up to date with origin" zeigen
+   ```
+
+> **"Work is NOT complete until `git push` succeeds"**
 
 ---
 
@@ -249,7 +342,7 @@ This command takes a work document (plan file or task description) and executes 
 
 Before creating PR, verify:
 
-- [ ] All clarifying questions asked and answered
+- [ ] Plan was executed as specified (no unnecessary deviations)
 - [ ] All TodoWrite tasks marked completed
 - [ ] Tests pass (`ddev phpunit`, `ddev theme test`)
 - [ ] Linting passes (`ddev composer lint:php`)
@@ -262,9 +355,11 @@ Before creating PR, verify:
 ## Common Pitfalls to Avoid
 
 - **Analysis paralysis** - Don't overthink, read the plan and execute
-- **Skipping clarifying questions** - Ask now, not after building wrong thing
+- **Asking unnecessary questions** - If it's in the plan, it's decided. Execute it.
+- **Asking for confirmations** - "Soll ich wirklich X?" → JA, wenn im Plan steht
 - **Ignoring plan references** - The plan has links for a reason
 - **Testing at the end** - Test continuously or suffer later
 - **Forgetting TodoWrite** - Track progress or lose track of what's done
 - **80% done syndrome** - Finish the feature, don't move on early
 - **Over-reviewing simple changes** - Save reviewer agents for complex work
+- **Not verifying assumptions** - Prüfe selbst (DB queries, file exists, etc.) statt zu fragen

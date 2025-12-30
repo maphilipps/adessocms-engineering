@@ -1,7 +1,7 @@
 {
   "name": "adessocms-engineering",
-  "version": "1.26.0",
-  "description": "AI-powered Drupal development with Plan→Review→Work→Compound workflow. 34 agents, 21 commands, 17 skills.",
+  "version": "1.28.0",
+  "description": "AI-powered Drupal development with Plan→Review→Work→Compound workflow. 29 agents, 21 commands, 18 skills.",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",

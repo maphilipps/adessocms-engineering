@@ -38,8 +38,8 @@ After installation, restart Claude Code. The plugin provides:
 
 - **29 Agents** - Available via `@agent-name` in conversations
 - **21 Commands** - Available via `/command-name`
-- **17 Skills** - Available via `Skill` tool
-- **1 MCP Server** - Context7 (auto-started)
+- **18 Skills** - Available via `Skill` tool
+- **2 MCP Servers** - Context7, Playwright (auto-started, Claude in Chrome preferred)
 
 **Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
 
@@ -49,7 +49,7 @@ After installation, restart Claude Code. The plugin provides:
 |-----------|-------|
 | Agents | 29 |
 | Commands | 21 |
-| Skills | 17 |
+| Skills | 18 |
 | MCP Servers | 2 |
 
 ## Model Tier Strategy
@@ -168,6 +168,7 @@ After installation, restart Claude Code. The plugin provides:
 | `frontend-design` | Create production-grade frontend interfaces |
 | `adesso-styleguide` | adesso Corporate Design compliance |
 | `skill-creator` | Guide for creating effective Claude Code skills |
+| `beads` | Cross-Session Task Tracking mit Beads CLI |
 
 ### Workflow
 
@@ -187,7 +188,30 @@ After installation, restart Claude Code. The plugin provides:
 
 MCP servers start automatically when the plugin is enabled.
 
-## Prerequisites: dev-browser Skill
+## Prerequisites
+
+### Beads CLI (Cross-Session Task Tracking)
+
+Beads enables persistent task tracking across Claude sessions. Install the CLI:
+
+```bash
+# Option 1: npm (recommended)
+npm install -g @beads/bd
+
+# Option 2: Homebrew
+brew install steveyegge/beads/bd
+
+# Option 3: Go
+go install github.com/steveyegge/beads/cmd/bd@latest
+```
+
+After installation, initialize in your project:
+```bash
+cd <project-root>
+bd init
+```
+
+### dev-browser Skill
 
 This plugin relies on the `dev-browser` skill for browser automation (screenshots, form filling, UI testing). Install it from the dev-browser marketplace:
 
