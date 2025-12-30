@@ -10,92 +10,47 @@ match_path: "**/paragraph--*.html.twig"
 
 Spezifische Validierung für Paragraph Templates.
 
-## Validation Checks
+## Action
 
-### 1. Kein direkter Entity Access
+**Invoke the Paragraphs Specialist Agent:**
 
-```twig
-{# ❌ FALSCH #}
-{{ paragraph.field_title.value }}
-{{ paragraph.field_image.entity.uri.value }}
+```
+Task(
+  subagent_type="adessocms-engineering:specialists:paragraphs-specialist",
+  prompt="Review this Paragraph template for best practices compliance.
 
-{# ✅ RICHTIG #}
-{{ content.field_title }}
-{{ content.field_image }}
+Check specifically:
+1. No .value access (paragraph.field_x.value) - use content.field_x
+2. No render array destructuring (content.field_x.0['#item'])
+3. SDC delegation via embed/include with 'only' keyword
+4. Semantic HTML (<h1>-<h6>, <figure>) only in SDC, not here
+5. Scalar props extracted with |render|trim
+6. Cache metadata preserved through render arrays
+
+File: <changed_file_path>",
+  description="Paragraph validation"
+)
 ```
 
-### 2. SDC Integration Pattern
+## Agent Knowledge
 
-Paragraph Templates sollten an SDC delegieren:
-
-```twig
-{# ✅ EMPFOHLEN: embed für Slot-basierte SDC #}
-{% embed 'my_theme:hero' with {
-  variant: content.field_variant|render|trim,
-} only %}
-  {% block title %}{{ content.field_title }}{% endblock %}
-  {% block content %}{{ content.field_body }}{% endblock %}
-{% endembed %}
-```
-
-### 3. Keine Semantic HTML Tags
-
-Paragraph Templates sollten KEINE `<h1>`-`<h6>`, `<figure>`, `<blockquote>` etc. enthalten:
-
-```twig
-{# ❌ FALSCH - Markup gehört in SDC #}
-<section class="hero">
-  <h2>{{ content.field_title }}</h2>
-  <figure>{{ content.field_image }}</figure>
-</section>
-
-{# ✅ RICHTIG - SDC kontrolliert Markup #}
-{% embed 'my_theme:hero' only %}
-  {% block title %}{{ content.field_title }}{% endblock %}
-  {% block image %}{{ content.field_image }}{% endblock %}
-{% endembed %}
-```
-
-### 4. Scalar Props korrekt extrahieren
-
-```twig
-{# Für Props die Strings brauchen #}
-{% set variant = content.field_variant|render|trim %}
-
-{# Oder in Preprocess (besser) #}
-```
-
-### 5. Cache Metadata erhalten
-
-Slots müssen komplette Render Arrays erhalten:
-
-```twig
-{# ✅ RICHTIG - Cache metadata bleibt erhalten #}
-{% block image %}
-  {{ content.field_image }}
-{% endblock %}
-
-{# ❌ FALSCH - Cache metadata verloren #}
-{% block image %}
-  <img src="{{ paragraph.field_image.entity.uri.value }}">
-{% endblock %}
-```
+Der Paragraphs Specialist hat eingebaut:
+- Field Templates vs .value Access patterns
+- SDC Integration patterns (embed vs include)
+- Preprocess function best practices
+- View Mode usage
+- Cache metadata preservation
+- Common issues & solutions
 
 ## Bei Problemen
 
-```
-⚠️ Paragraph Template Validation:
-
-1. Line 5: Direct entity access
-   → Use {{ content.field_name }} to preserve cache metadata
-
-2. Line 12: <h2> tag in paragraph template
-   → Delegate to SDC component for semantic HTML
-
-3. Line 8: Missing 'only' in embed
-   → Add 'only' to prevent context leaking
-
-📖 See: docs/solutions/paragraphs/best-practices.md
+Der Agent liefert:
+```markdown
+## Critical Issues (Cache/Data Integrity)
+### Direct Value Access (line X)
+**Issue**: `{{ paragraph.field_title.value }}`
+**Impact**: Bypasses caching
+**Fix**: Use `{{ content.field_title }}`
 ```
 
-Informiere den User und biete Korrekturen an.
+Informiere den User über kritische Issues und biete Fixes an.

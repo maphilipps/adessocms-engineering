@@ -1,7 +1,10 @@
 # SDC Best Practices - Quick Reference
 
+> ⚠️ **HUMAN QUICK REFERENCE** - Nicht für Claude!
+> Claude nutzt `@agent-sdc-specialist` direkt (enthält alle Best Practices).
+> Dieses Doc ist für Entwickler zur schnellen manuellen Referenz.
+>
 > **Source:** Extracted from `agents/specialists/sdc-specialist.md`
-> **Use:** Reference during `/acms-work` for SDC tasks
 
 ---
 

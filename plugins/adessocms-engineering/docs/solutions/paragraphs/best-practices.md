@@ -1,7 +1,10 @@
 # Paragraphs Best Practices - Quick Reference
 
+> ⚠️ **HUMAN QUICK REFERENCE** - Nicht für Claude!
+> Claude nutzt `@agent-paragraphs-specialist` direkt (enthält alle Best Practices).
+> Dieses Doc ist für Entwickler zur schnellen manuellen Referenz.
+>
 > **Source:** Extracted from `agents/specialists/paragraphs-specialist.md`
-> **Use:** Reference during `/acms-work` for Paragraph tasks
 
 ---
 

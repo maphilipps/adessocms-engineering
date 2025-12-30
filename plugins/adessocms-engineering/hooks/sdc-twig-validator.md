@@ -10,41 +10,26 @@ match_path: "**/*.component.yml"
 
 Validiere SDC component.yml Dateien nach Schreiben/Bearbeiten.
 
-## Validation
+## Action
 
-Prüfe die geänderte Datei auf:
+**Invoke the SDC Specialist Agent for validation:**
 
-1. **Schema-Referenz vorhanden?**
-   ```yaml
-   $schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
-   ```
+```
+Task(
+  subagent_type="adessocms-engineering:specialists:sdc-specialist",
+  prompt="Review this SDC component.yml file for best practices compliance. Check: schema reference, props structure, slots vs prop drilling, defaults. File: <changed_file_path>",
+  description="SDC validation"
+)
+```
 
-2. **Name und Description?**
-   ```yaml
-   name: Component Name
-   description: Clear description
-   ```
-
-3. **Props-Schema korrekt?**
-   - Alle Props haben `type`
-   - Alle Props haben `title`
-   - Enums für begrenzte Optionen
-   - Defaults wo sinnvoll
-
-4. **Slots statt Prop-Drilling?**
-   - Keine `image_url`, `image_alt` Props
-   - HTML Content als Slot, nicht als Prop
+Der Agent hat alle Best Practices eingebaut und liefert:
+- Critical Issues
+- High/Medium/Low Priority Findings
+- Konkrete Fix-Vorschläge
 
 ## Bei Problemen
 
-Wenn Validierung fehlschlägt:
-
-```
-⚠️ SDC Validation Warning:
-- Missing $schema reference
-- Prop 'image_url' should probably be a slot
-
-📖 See: docs/solutions/sdc/best-practices.md
-```
-
-Frage den User ob er die Probleme beheben möchte, aber blockiere nicht.
+Der Agent gibt strukturiertes Feedback. Bei Critical Issues:
+- Informiere den User
+- Biete an, die Probleme zu beheben
+- Blockiere NICHT den Workflow

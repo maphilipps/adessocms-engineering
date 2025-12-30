@@ -107,27 +107,31 @@ Vor `bd close`:
 
 ### Bei SDC-Änderungen (*.component.yml, components/*.twig)
 
-Konsultiere `docs/solutions/sdc/best-practices.md` und prüfe:
-- [ ] `$schema` Reference vorhanden
-- [ ] Props haben `type`, `title`, `description`
-- [ ] HTML/Render Arrays als Slots (kein Prop Drilling)
-- [ ] `{% set x = x|default(...) %}` für alle Props
-- [ ] `with_context = false` bei includes
-- [ ] `only` bei embeds
+**Invoke @agent-sdc-specialist für Review:**
+```
+Task(
+  subagent_type="adessocms-engineering:specialists:sdc-specialist",
+  prompt="Review these SDC changes for best practices: <list_of_changed_files>",
+  description="SDC review"
+)
+```
 
-### Bei Twig-Änderungen (*.html.twig)
+### Bei Twig/Paragraph-Änderungen (*.html.twig)
 
-Konsultiere `docs/solutions/paragraphs/best-practices.md` und prüfe:
-- [ ] Kein `.value` Access (`paragraph.field_x.value`)
-- [ ] Kein Render Array Destructuring (`content.field_x.0['#item']`)
-- [ ] Semantic HTML (`<h1>`-`<h6>`, `<figure>`) nur in SDC
-- [ ] Fields via `{{ content.field_name }}`
+**Invoke @agent-paragraphs-specialist für Review:**
+```
+Task(
+  subagent_type="adessocms-engineering:specialists:paragraphs-specialist",
+  prompt="Review these template changes for best practices: <list_of_changed_files>",
+  description="Template review"
+)
+```
 
-### Bei Paragraph-Templates (paragraph--*.html.twig)
+### Agent-Feedback verarbeiten
 
-- [ ] Delegiert an SDC Component (embed/include)
-- [ ] Scalar Props mit `|render|trim` extrahiert
-- [ ] Cache Metadata erhalten (keine Entity-Destrukturierung)
+- **Critical Issues**: MÜSSEN behoben werden vor `bd close`
+- **High Priority**: Sollten behoben werden
+- **Medium/Low**: Optional, nach Ermessen
 
 ## Land the Plane
 

@@ -10,97 +10,56 @@ match_path: "**/*.twig"
 
 Validiere Twig Templates nach Schreiben/Bearbeiten.
 
-## Validation Checks
+## Action
 
-### 1. Kein `.value` Access
+**Determine the appropriate specialist based on file type:**
 
-```twig
-{# ❌ FALSCH #}
-{{ paragraph.field_title.value }}
-{{ node.field_body.0.value }}
+### Für SDC Templates (components/*.twig)
 
-{# ✅ RICHTIG #}
-{{ content.field_title }}
+```
+Task(
+  subagent_type="adessocms-engineering:specialists:sdc-specialist",
+  prompt="Review this SDC Twig template for best practices. Check: defaults for props, attributes.addClass(), with_context=false, only in embeds, no render array destructuring. File: <changed_file_path>",
+  description="SDC Twig validation"
+)
 ```
 
-**Regex Pattern:** `\.(field_\w+)\.value` oder `\.0\.value`
+### Für Paragraph Templates (paragraph--*.twig)
 
-### 2. Kein Render Array Destructuring
-
-```twig
-{# ❌ FALSCH #}
-{{ content.field_image.0['#item'].entity.uri.value }}
-
-{# ✅ RICHTIG #}
-{{ content.field_image }}
+```
+Task(
+  subagent_type="adessocms-engineering:specialists:paragraphs-specialist",
+  prompt="Review this Paragraph template for best practices. Check: no .value access, SDC delegation, cache metadata preservation, proper slot usage. File: <changed_file_path>",
+  description="Paragraph template validation"
+)
 ```
 
-**Pattern:** `\['#\w+'\]` in field access
+### Für Field Templates (field--*.twig)
 
-### 3. Semantic HTML nur in SDC
-
-In `paragraph--*.html.twig` oder `field--*.html.twig`:
-
-```twig
-{# ❌ FALSCH - <h2> gehört in SDC #}
-<h2 class="hero__title">{{ content.field_title }}</h2>
-
-{# ✅ RICHTIG - SDC kontrolliert Markup #}
-{{ include('my_theme:heading', {
-  heading_html_tag: 'h2',
-  content: content.field_title
-}, with_context = false) }}
+```
+Task(
+  subagent_type="adessocms-engineering:specialists:paragraphs-specialist",
+  prompt="Review this Field template for best practices. Check: proper item rendering, SDC delegation where appropriate, no semantic HTML (belongs in SDC). File: <changed_file_path>",
+  description="Field template validation"
+)
 ```
 
-**Pattern:** `<h[1-6]` in paragraph/field templates
+### Für andere Twig Templates
 
-### 4. `with_context = false` bei Include
-
-```twig
-{# ❌ FALSCH - Context leaking #}
-{{ include('my_theme:button', { label: 'Click' }) }}
-
-{# ✅ RICHTIG #}
-{{ include('my_theme:button', { label: 'Click' }, with_context = false) }}
 ```
-
-### 5. `only` bei Embed
-
-```twig
-{# ❌ FALSCH - Context leaking #}
-{% embed 'my_theme:card' %}
-
-{# ✅ RICHTIG #}
-{% embed 'my_theme:card' only %}
-```
-
-### 6. Defaults für Props (in SDC Templates)
-
-```twig
-{# ❌ FALSCH - Kann undefined sein #}
-<div class="card--{{ variant }}">
-
-{# ✅ RICHTIG #}
-{% set variant = variant|default('default') %}
-<div class="card--{{ variant }}">
+Task(
+  subagent_type="adessocms-engineering:specialists:twig-specialist",
+  prompt="Review this Twig template for best practices. Check: security (autoescape), performance, accessibility, proper Drupal patterns. File: <changed_file_path>",
+  description="Twig validation"
+)
 ```
 
 ## Bei Problemen
 
-```
-⚠️ Twig Validation Warning:
+Der Agent gibt strukturiertes Feedback mit Prioritäten:
+- **Critical**: Cache-breaking, Security issues
+- **High**: Best practice violations
+- **Medium**: Style, maintainability
+- **Low**: Suggestions
 
-1. Line 12: .value access detected
-   → Use {{ content.field_name }} instead
-
-2. Line 25: <h2> in paragraph template
-   → Move semantic HTML to SDC component
-
-3. Line 18: embed without 'only'
-   → Add 'only' to prevent context leaking
-
-📖 See: docs/solutions/sdc/best-practices.md
-📖 See: docs/solutions/paragraphs/best-practices.md
-```
-
-Informiere den User über die Probleme und biete an, sie zu beheben.
+Informiere den User und biete Fixes an, blockiere aber nicht.
