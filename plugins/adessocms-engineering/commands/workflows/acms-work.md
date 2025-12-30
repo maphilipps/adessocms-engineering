@@ -22,7 +22,7 @@ This command takes a work document (plan file or task description) and executes 
 
 ## Execution Workflow
 
-### Phase 0: Check Beads Status
+### Phase 0: Select Bead to Work On
 
 **Prerequisite Check:**
 ```bash
@@ -34,17 +34,34 @@ if ! command -v bd &> /dev/null; then
 fi
 ```
 
-Prüfe ob ein Bead für diesen Plan existiert:
-
+**1. Hole verfügbare Tasks:**
 ```bash
 bd ready  # Zeigt Tasks ohne Blocker
-bd show <epic-id>  # Details zum Plan-Epic (wenn bekannt)
 ```
 
-Wenn Bead existiert:
-```bash
-bd update <id> --status in_progress
+**2. Frage User mit AskUserQuestion:**
+
+Basierend auf `bd ready` Output, frage den User welchen Task er bearbeiten möchte:
+
 ```
+AskUserQuestion(questions=[{
+  "question": "Welchen Bead möchtest du bearbeiten?",
+  "header": "Bead",
+  "options": [
+    {"label": "bd-a3f8.1", "description": "Task-Titel aus bd ready"},
+    {"label": "bd-a3f8.2", "description": "Anderer Task-Titel"},
+    {"label": "Keinen", "description": "Nur mit Plan-File arbeiten"}
+  ],
+  "multiSelect": false
+}])
+```
+
+**3. Markiere als in_progress:**
+```bash
+bd update <selected-id> --status in_progress
+```
+
+**Hinweis:** Wenn kein Bead gewählt wird oder `bd ready` leer ist, arbeite nur mit dem Plan-File weiter.
 
 ### Phase 1: Quick Start
 
