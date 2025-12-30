@@ -22,7 +22,7 @@ This command takes a work document (plan file or task description) and executes 
 
 ## Execution Workflow
 
-### Phase 0: Select Bead to Work On
+### Phase 0: Select Epic & Start Ralph Wiggum Loop
 
 **Prerequisite Check:**
 ```bash
@@ -34,34 +34,51 @@ if ! command -v bd &> /dev/null; then
 fi
 ```
 
-**1. Hole verfügbare Tasks:**
+**1. Hole verfügbare Epics (nur Epics, keine einzelnen Tasks):**
 ```bash
-bd ready  # Zeigt Tasks ohne Blocker
+bd list --type epic --status open  # Zeigt nur offene Epics
 ```
 
-**2. Frage User mit AskUserQuestion:**
-
-Basierend auf `bd ready` Output, frage den User welchen Task er bearbeiten möchte:
+**2. Frage User welches Epic bearbeitet werden soll:**
 
 ```
 AskUserQuestion(questions=[{
-  "question": "Welchen Bead möchtest du bearbeiten?",
-  "header": "Bead",
+  "question": "Welches Epic möchtest du bearbeiten?",
+  "header": "Epic",
   "options": [
-    {"label": "bd-a3f8.1", "description": "Task-Titel aus bd ready"},
-    {"label": "bd-a3f8.2", "description": "Anderer Task-Titel"},
-    {"label": "Keinen", "description": "Nur mit Plan-File arbeiten"}
+    {"label": "bd-a3f8", "description": "Epic: Feature X (3 Subtasks)"},
+    {"label": "bd-b2c4", "description": "Epic: Feature Y (5 Subtasks)"},
+    {"label": "Keines", "description": "Nur mit Plan-File arbeiten, ohne Beads"}
   ],
   "multiSelect": false
 }])
 ```
 
-**3. Markiere als in_progress:**
+**3. Starte Ralph Wiggum Loop für das Epic:**
+
 ```bash
-bd update <selected-id> --status in_progress
+bd update <epic-id> --status in_progress
 ```
 
-**Hinweis:** Wenn kein Bead gewählt wird oder `bd ready` leer ist, arbeite nur mit dem Plan-File weiter.
+Dann starte den Ralph Wiggum Loop:
+
+```
+Skill ralph-wiggum:ralph-loop
+```
+
+**Ralph Wiggum arbeitet das Epic ab:**
+```
+LOOP:
+  1. bd ready --parent <epic-id>     # Nächster Task ohne Blocker
+  2. bd update <task-id> --status in_progress
+  3. Implementiere den Task
+  4. bd close <task-id> --reason "Done"
+  5. Wenn noch Tasks offen → zurück zu 1.
+  6. Wenn alle Tasks done → bd close <epic-id>
+END LOOP
+```
+
+**Hinweis:** Wenn kein Epic gewählt wird, arbeite mit Phase 1 (manuelle Ausführung) weiter.
 
 ### Phase 1: Quick Start
 
