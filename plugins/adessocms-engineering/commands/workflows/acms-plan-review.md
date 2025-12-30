@@ -60,18 +60,32 @@ fi
 Nach erfolgreichem Review, erstelle einen Bead für Cross-Session Tracking:
 
 ```bash
-# Epic erstellen
+# Epic erstellen → bekommt ID bd-<hash>
 bd create "Epic: <plan-title>" -t epic -p 1 -d "<plan-summary>"
 
-# Subtasks aus dem Plan extrahieren und als Dependencies hinzufügen
+# Subtasks aus dem Plan extrahieren (hierarchische IDs automatisch)
 # Für jeden Task im Plan:
-bd create "<task-title>" --parent <epic-id>
+bd create "<task-title>" --parent bd-<hash>
+# → bekommt ID bd-<hash>.1, bd-<hash>.2, ...
+
+# Optional: Sub-tasks für komplexe Tasks
+bd create "<subtask-title>" --parent bd-<hash>.1
+# → bekommt ID bd-<hash>.1.1
+```
+
+**Hierarchische ID-Struktur:**
+```
+bd-a3f8           Epic: <plan-title>
+├── bd-a3f8.1     Task 1 aus Plan
+│   └── bd-a3f8.1.1   Sub-task (falls komplex)
+├── bd-a3f8.2     Task 2 aus Plan
+└── bd-a3f8.3     Task 3 aus Plan
 ```
 
 **Output Format:**
 ```
 Bead erstellt: bd-<hash> - Epic: <plan-title>
-Subtasks: bd-<hash>.1, bd-<hash>.2, ...
+Subtasks: bd-<hash>.1, bd-<hash>.2, bd-<hash>.3, ...
 ```
 
 ## 5. Output (END OF WORKFLOW)

@@ -7,6 +7,30 @@ description: Cross-Session Task Tracking mit Beads CLI. Verwende für persistent
 
 Cross-Session Persistenz für AI-Agent Workflows. Beads speichert Tasks in `.beads/` (Git-backed).
 
+## Hierarchical IDs
+
+Beads verwendet hierarchische IDs für Epics und deren Subtasks:
+
+```
+bd-a3f8       (Epic)
+bd-a3f8.1     (Task)
+bd-a3f8.1.1   (Sub-task)
+bd-a3f8.2     (Task)
+```
+
+**Beispiel-Workflow:**
+```bash
+# Epic erstellen → bekommt ID bd-a3f8
+bd create "Epic: Beads Integration" -t epic -p 1
+
+# Tasks unter Epic → bekommen IDs bd-a3f8.1, bd-a3f8.2, ...
+bd create "Add Beads Skill" --parent bd-a3f8
+bd create "Update Workflows" --parent bd-a3f8
+
+# Sub-task unter Task → bekommt ID bd-a3f8.1.1
+bd create "Write SKILL.md" --parent bd-a3f8.1
+```
+
 ## Quick Reference
 
 | Command | Beschreibung |
@@ -14,7 +38,7 @@ Cross-Session Persistenz für AI-Agent Workflows. Beads speichert Tasks in `.bea
 | `bd init` | Initialisiert `.beads/` im Repo |
 | `bd ready` | Tasks ohne Blocker anzeigen |
 | `bd create "Title" -t epic -p 1` | Epic erstellen |
-| `bd create "Task" --parent <epic-id>` | Subtask erstellen |
+| `bd create "Task" --parent <epic-id>` | Subtask erstellen (ID: `<epic>.N`) |
 | `bd update <id> --status in_progress` | Status ändern |
 | `bd close <id> --reason "..."` | Task schließen |
 | `bd dep add <child> <parent>` | Dependency erstellen |
