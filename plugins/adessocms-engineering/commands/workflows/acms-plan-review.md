@@ -10,7 +10,7 @@ argument-hint: "[plan file path or plan content]"
 
 ## 1. Run Reviewers (Parallel)
 
-Have @agent-dries-drupal-reviewer @agent-drupal-reviewer @agent-code-simplicity-reviewer @agent-sdc-specialist review this plan in parallel.
+Have @agent-dries-drupal-reviewer @agent-drupal-reviewer @agent-code-simplicity-reviewer @agent-sdc-specialist @agent-tailwind-specialist review this plan in parallel.
 
 ## 2. Deep Interview (AFTER Reviewers)
 
@@ -29,6 +29,7 @@ Have @agent-dries-drupal-reviewer @agent-drupal-reviewer @agent-code-simplicity-
 - "The drupal-reviewer suggested Y pattern. Any reason you chose Z instead?"
 - "The code-simplifier found duplication. Intentional or oversight?"
 - "The SDC-specialist noted missing slots/props. Should components be more flexible?"
+- "The Tailwind-specialist found custom CSS where utilities exist. Prefer Tailwind v4?"
 
 Be very in-depth and continue interviewing me continually until the review context is complete.
 
