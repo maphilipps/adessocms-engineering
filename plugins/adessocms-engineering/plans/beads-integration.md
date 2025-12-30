@@ -1,7 +1,7 @@
 # feat: Beads Integration für Cross-Session Task Tracking
 
 **Erstellt:** 2025-12-30
-**Status:** Geplant
+**Status:** ✅ Implementiert (v1.28.0)
 **Typ:** Enhancement
 
 ---
