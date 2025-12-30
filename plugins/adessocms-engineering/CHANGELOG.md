@@ -1,5 +1,57 @@
 # Changelog
 
+## [1.29.0] - 2025-12-30
+
+### Added - SDC/Paragraphs/Twig Best Practices Enforcement
+
+**Sicherstellung von Best Practices während `/acms-work`.**
+
+### Neue Dokumentation
+
+| Datei | Beschreibung |
+|-------|--------------|
+| `docs/solutions/sdc/best-practices.md` | Quick Reference für SDC Development |
+| `docs/solutions/paragraphs/best-practices.md` | Quick Reference für Paragraphs + SDC |
+
+### Neue Hooks (Auto-Validation)
+
+| Hook | Trigger | Prüft |
+|------|---------|-------|
+| `sdc-twig-validator.md` | `*.component.yml` Write/Edit | Schema, Props, Slots |
+| `twig-template-validator.md` | `*.twig` Write/Edit | .value, Destructuring, Semantic HTML |
+| `paragraph-template-validator.md` | `paragraph--*.twig` Write/Edit | SDC Delegation, Cache Metadata |
+
+### Erweiterte Quality Gates in `/acms-work`
+
+Vor `bd close` werden jetzt geprüft:
+
+**Bei SDC-Änderungen:**
+- `$schema` Reference
+- Props mit `type`, `title`, `description`
+- Slots statt Prop Drilling
+- `with_context = false` bei includes
+- `only` bei embeds
+
+**Bei Twig-Änderungen:**
+- Kein `.value` Access
+- Kein Render Array Destructuring
+- Semantic HTML nur in SDC
+
+**Bei Paragraph-Templates:**
+- Delegation an SDC Component
+- Cache Metadata erhalten
+
+### Erweiterte `/acms-plan-review` Reviewer
+
+Jetzt 5 parallele Reviewer:
+- Dries-style (Over-Engineering)
+- Drupal (Patterns)
+- Code-Simplicity (Duplication)
+- **SDC-Specialist** (Slots, Props, Component-Architektur)
+- **Tailwind-Specialist** (v4 Syntax, Utilities)
+
+---
+
 ## [1.28.0] - 2025-12-30
 
 ### Added - Beads Integration für Cross-Session Task Tracking

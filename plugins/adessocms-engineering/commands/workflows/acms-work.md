@@ -99,9 +99,35 @@ bd update <task-id> --status blocked -d "Grund: <beschreibung>"
 ## Quality Gates (pro Task)
 
 Vor `bd close`:
+
+### Basis-Checks
 - [ ] Code kompiliert/läuft
 - [ ] Tests passen (falls vorhanden)
 - [ ] Commit erstellt
+
+### Bei SDC-Änderungen (*.component.yml, components/*.twig)
+
+Konsultiere `docs/solutions/sdc/best-practices.md` und prüfe:
+- [ ] `$schema` Reference vorhanden
+- [ ] Props haben `type`, `title`, `description`
+- [ ] HTML/Render Arrays als Slots (kein Prop Drilling)
+- [ ] `{% set x = x|default(...) %}` für alle Props
+- [ ] `with_context = false` bei includes
+- [ ] `only` bei embeds
+
+### Bei Twig-Änderungen (*.html.twig)
+
+Konsultiere `docs/solutions/paragraphs/best-practices.md` und prüfe:
+- [ ] Kein `.value` Access (`paragraph.field_x.value`)
+- [ ] Kein Render Array Destructuring (`content.field_x.0['#item']`)
+- [ ] Semantic HTML (`<h1>`-`<h6>`, `<figure>`) nur in SDC
+- [ ] Fields via `{{ content.field_name }}`
+
+### Bei Paragraph-Templates (paragraph--*.html.twig)
+
+- [ ] Delegiert an SDC Component (embed/include)
+- [ ] Scalar Props mit `|render|trim` extrahiert
+- [ ] Cache Metadata erhalten (keine Entity-Destrukturierung)
 
 ## Land the Plane
 
