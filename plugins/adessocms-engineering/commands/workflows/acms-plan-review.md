@@ -8,11 +8,37 @@ argument-hint: "[plan file path or plan content]"
 
 **Scope:** Review und Update des Plans. Keine Implementation.
 
-## 1. Run Reviewers (Parallel)
+## 1. Dynamic Reviewer Selection
 
-Have @agent-dries-drupal-reviewer @agent-drupal-reviewer @agent-code-simplicity-reviewer @agent-sdc-specialist @agent-tailwind-specialist review this plan in parallel.
+First, call the **reviewer-selector** agent with the plan content to determine which specialists should review:
 
-## 2. Deep Interview (AFTER Reviewers)
+```
+Task(subagent_type="adessocms-engineering:core:reviewer-selector", prompt="Analyze this plan and select appropriate reviewers: <plan_content>")
+```
+
+The reviewer-selector returns:
+```json
+{
+  "selected_reviewers": ["drupal-specialist", "sdc-specialist", ...],
+  "matched_patterns": {...},
+  "reason": "...",
+  "confidence": "high|medium|low",
+  "fallback_used": false
+}
+```
+
+## 2. Run Selected Reviewers (Parallel)
+
+Launch the selected reviewers in parallel to analyze the plan.
+
+**Fallback Reviewers** (if reviewer-selector can't match patterns):
+- @code-simplifier - YAGNI, over-engineering detection
+- @librarian - Evidence verification with GitHub permalinks
+- @architecture-strategist - Structural analysis
+
+**Librarian verifies:** Are the plan's claims backed by actual documentation? Provides evidence with GitHub permalinks.
+
+## 3. Deep Interview (AFTER Reviewers)
 
 **Interview me in detail using the AskUserQuestion tool about literally anything:**
 
@@ -25,15 +51,15 @@ Have @agent-dries-drupal-reviewer @agent-drupal-reviewer @agent-code-simplicity-
 **But make sure the questions are NOT obvious.**
 
 **Reference what the reviewers found.** Example informed questions:
-- "Dries-reviewer flagged X as over-engineered. Is that complexity necessary?"
-- "The drupal-reviewer suggested Y pattern. Any reason you chose Z instead?"
+- "The drupal-specialist flagged X as not following Drupal patterns. Is that intentional?"
 - "The code-simplifier found duplication. Intentional or oversight?"
 - "The SDC-specialist noted missing slots/props. Should components be more flexible?"
 - "The Tailwind-specialist found custom CSS where utilities exist. Prefer Tailwind v4?"
+- "The paragraphs-specialist detected .value access. Is there a reason to bypass caching?"
 
 Be very in-depth and continue interviewing me continually until the review context is complete.
 
-## 3. Update the Plan
+## 4. Update the Plan
 
 **Nach dem Interview den Plan aktualisieren!**
 
@@ -47,60 +73,52 @@ Basierend auf Reviewer-Feedback UND Interview-Antworten:
 - Keine offenen Fragen mehr
 - `/acms-work` kann den Plan OHNE weitere Klärungsfragen ausführen
 
-## 4. Create Beads Epic
-
-**Prerequisite Check:**
-```bash
-if ! command -v bd &> /dev/null; then
-  echo "❌ Beads CLI nicht installiert!"
-  echo "Installation: npm install -g @beads/bd"
-  echo "Dann: bd init (im Projekt-Root)"
-  exit 1
-fi
-```
-
-Nach erfolgreichem Review, erstelle einen Bead für Cross-Session Tracking:
-
-```bash
-# Epic erstellen → bekommt ID bd-<hash>
-bd create "Epic: <plan-title>" -t epic -p 1 -d "<plan-summary>"
-
-# Subtasks aus dem Plan extrahieren (hierarchische IDs automatisch)
-# Für jeden Task im Plan:
-bd create "<task-title>" --parent bd-<hash>
-# → bekommt ID bd-<hash>.1, bd-<hash>.2, ...
-
-# Optional: Sub-tasks für komplexe Tasks
-bd create "<subtask-title>" --parent bd-<hash>.1
-# → bekommt ID bd-<hash>.1.1
-```
-
-**Hierarchische ID-Struktur:**
-```
-bd-a3f8           Epic: <plan-title>
-├── bd-a3f8.1     Task 1 aus Plan
-│   └── bd-a3f8.1.1   Sub-task (falls komplex)
-├── bd-a3f8.2     Task 2 aus Plan
-└── bd-a3f8.3     Task 3 aus Plan
-```
-
-**Output Format:**
-```
-Bead erstellt: bd-<hash> - Epic: <plan-title>
-Subtasks: bd-<hash>.1, bd-<hash>.2, bd-<hash>.3, ...
-```
-
-## 5. Output (END OF WORKFLOW)
-
-**This is the final step. After this, the command is complete.**
+## 5. Save & Present Plan
 
 1. Save the updated plan file
 2. Open in Typora:
    ```bash
    open -a Typora <plan_file_path>
    ```
-3. Report completion with this exact format:
+3. Report completion:
 
 > "Plan aktualisiert: `plans/<filename>.md` - Änderungen: [kurze Liste der Änderungen]. Datei wurde in Typora geöffnet."
 
-**END.** Do not continue. Do not suggest next steps. Do not offer to implement. Do not call `/acms-work`. The user will explicitly request implementation in a new message when ready.
+## 6. Next Steps (MANDATORY)
+
+**Frage den User was als nächstes passieren soll:**
+
+```
+AskUserQuestion(questions=[{
+  "question": "Plan ist fertig. Was möchtest du als nächstes tun?",
+  "header": "Next",
+  "options": [
+    {"label": "Beads erstellen", "description": "Epic + Features + Tasks aus Plan generieren (/acms-beads)"},
+    {"label": "Plan vertiefen", "description": "Weitere Details und Recherche hinzufügen (/acms-deepen-plan)"},
+    {"label": "Fertig", "description": "Nichts weiter, Plan ist komplett"}
+  ],
+  "multiSelect": false
+}])
+```
+
+### Bei "Beads erstellen"
+
+Rufe `/acms-beads` mit dem Plan-Pfad auf:
+
+```
+Skill("acms-beads", args="<plan_file_path>")
+```
+
+### Bei "Plan vertiefen"
+
+Rufe `/acms-deepen-plan` mit dem Plan-Pfad auf:
+
+```
+Skill("acms-deepen-plan", args="<plan_file_path>")
+```
+
+### Bei "Fertig"
+
+> "Plan abgeschlossen. Starte später `/acms-beads <plan>` für Beads oder `/acms-work` für Implementation."
+
+**END.**

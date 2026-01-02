@@ -120,6 +120,72 @@ Epic: Feature X
 2. `/acms-work` → erstellt TodoWrite aus aktuellem Task (feine Ebene)
 3. Session-Ende → `bd close` für erledigte Beads, TodoWrite wird verworfen
 
+## Notes-Format für UI-Tasks
+
+Bei UI-Tasks (Label: `ui`, `frontend`, `twig`, `sdc`) ist eine **Verification mit Screenshot MANDATORY**.
+
+### Struktur
+
+```markdown
+COMPLETED:
+- [x] Component implementiert
+- [x] Twig-Template angepasst
+- [x] Styling fertig
+
+IN PROGRESS:
+- [ ] Verification läuft
+
+VERIFIED:
+- Screenshot: screenshots/bd-a3f8.1-verified.png
+- URL: https://project.ddev.site/node/123
+- Timestamp: 2026-01-02T14:30:00Z
+
+NEXT:
+- PR erstellen
+```
+
+### Update Notes mit bd
+
+```bash
+# Nach erfolgreicher Verification
+bd update <task-id> --notes "VERIFIED: screenshots/<task-id>-verified.png at $(date -Iseconds)"
+
+# Bei Compaction (automatisch via PreCompact Hook)
+bd update <task-id> --notes "SESSION COMPACTED: See .beads/session-state.md"
+```
+
+### Warum?
+
+- **Evidence:** Screenshot beweist, dass UI funktioniert
+- **Audit Trail:** Wann, wo, was verifiziert
+- **Recovery:** Nächste Session weiß, was getan wurde
+
+## Session State (PreCompact Hook)
+
+Bei Context-Compaction wird automatisch `.beads/session-state.md` erstellt:
+
+```markdown
+# Session State - 2026-01-02T14:30:00Z
+
+## Active Task
+ID: bd-a3f8.1
+Title: Component implementieren
+Status: in_progress
+
+## Session Summary
+- Was wurde erreicht: [Punkte]
+- Aktuelle Arbeit: [Status]
+- Offene Fragen: [falls vorhanden]
+
+## Files Modified
+[Liste der geänderten Dateien]
+
+## Next Steps
+[Empfehlung für nächste Session]
+```
+
+**Recovery:** `/acms-work` erkennt session-state.md und bietet Fortsetzung an.
+
 ## Session End: Land the Plane
 
 Vor Session-Ende:

@@ -1,7 +1,7 @@
 {
   "name": "adessocms-engineering",
-  "version": "1.29.0",
-  "description": "AI-powered Drupal development with Plan→Review→Work→Compound workflow. 29 agents, 21 commands, 18 skills.",
+  "version": "1.38.0",
+  "description": "AI-powered Drupal development with Plan→Review→Work→Compound workflow. 32 agents (DRY consolidated), 27 commands, 18 skills.",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",
@@ -36,6 +36,14 @@
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "exa": {
+      "type": "http",
+      "url": "https://mcp.exa.ai/mcp"
+    },
+    "grep": {
+      "type": "http",
+      "url": "https://mcp.grep.app"
     }
   }
 }

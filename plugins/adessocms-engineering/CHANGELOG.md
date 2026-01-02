@@ -1,5 +1,546 @@
 # Changelog
 
+## [1.38.0] - 2026-01-02
+
+### Changed - Agent Consolidation (DRY Principle)
+
+**Reduced from 35 to 32 agents through consolidation while improving clarity through cross-references.**
+
+#### Cluster 1: Research Agents (4 → 2)
+
+- **DELETED:** `best-practices-researcher` → merged into `librarian`
+- **DELETED:** `framework-docs-researcher` → merged into `librarian`
+- **ENHANCED:** `librarian` now includes:
+  - Framework documentation research
+  - Best practices gathering with authority levels
+  - Version-specific documentation
+  - Categorization: Must Have / Recommended / Optional
+
+#### Cluster 2: Code Quality (3 → 2)
+
+- **DELETED:** `pattern-recognition-specialist` → merged into `code-simplifier`
+- **ENHANCED:** `code-simplifier` now includes:
+  - Design pattern detection (Factory, Singleton, Observer, Strategy)
+  - Anti-pattern detection with severity levels
+  - Naming convention analysis
+  - Code duplication detection (jscpd, phpcpd)
+  - Architectural boundary review
+
+#### Cluster 3: Frontend Agents (DRY Cross-References)
+
+**No agents deleted, but clear Source of Truth established:**
+
+| Agent | Source of Truth For |
+|-------|---------------------|
+| `sdc-specialist` | component.yml, Props/Slots, SDC caching |
+| `twig-specialist` | Twig security, attributes, translations |
+| `paragraphs-specialist` | Field templates, cache bubbling |
+| `drupal-theme-specialist` | Theme orchestration, references specialists |
+
+Each frontend specialist now includes cross-reference tables for when to defer to other specialists.
+
+### Changed - Plan Review Workflow
+
+`/acms-plan-review` now ends with mandatory next step selection:
+
+```
+AskUserQuestion(questions=[{
+  "question": "Plan ist fertig. Was möchtest du als nächstes tun?",
+  "options": [
+    {"label": "Beads erstellen", "description": "Epic + Features + Tasks aus Plan generieren"},
+    {"label": "Plan vertiefen", "description": "Weitere Details und Recherche"},
+    {"label": "Fertig", "description": "Nichts weiter"}
+  ]
+}])
+```
+
+### Changed - Model Tier Updates
+
+- `code-simplifier`: opus → sonnet (pattern detection doesn't need opus)
+- `librarian`: Added Exa + grep.app MCP tools for enhanced research
+
+---
+
+## [1.37.0] - 2026-01-02
+
+### Added - Anthropic Long-Running Agent Best Practices
+
+**Optimization based on [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).**
+
+#### PreCompact Hook (`hooks/PreCompact/beads-state-export.md`)
+
+Automatische State-Konsolidierung vor Context-Compaction:
+
+- Exportiert aktiven Beads-Task Status nach `.beads/session-state.md`
+- Verwendet **Haiku Agent** für schnelle Session-Summaries (günstig, schnell)
+- Updates Beads Notes mit `SESSION COMPACTED` Marker
+- Ermöglicht Session-Recovery beim nächsten `/acms-work`
+
+#### Environment Initialization (Anthropic's `init.sh` Pattern)
+
+`/acms-work` enthält jetzt automatische Environment-Initialisierung:
+
+- **DDEV Auto-Start:** Startet DDEV automatisch wenn nicht läuft
+- **Session Recovery:** Erkennt `session-state.md` und bietet Fortsetzung an
+
+#### Auto-Select Task Pattern
+
+Automatische Auswahl des wichtigsten unblocked Tasks:
+
+```bash
+next_task=$(bd ready --json | jq -r 'sort_by(.priority) | .[0].id')
+```
+
+- Reduziert User-Interaktion
+- Konsistente Task-Priorisierung
+- Anthropic Pattern: "Identify highest-priority incomplete feature"
+
+#### Quality Gate 3: Mandatory UI Verification
+
+**CRITICAL: UI-Tasks dürfen NICHT ohne Screenshot geschlossen werden.**
+
+- Trigger: Task hat Label `ui`, `frontend`, `twig`, `sdc` ODER Twig/CSS-Dateien geändert
+- Verwendet `webapp-testing` Skill für Playwright-basierte Verification
+- Screenshot-Pfad wird in Beads Notes dokumentiert: `VERIFIED: screenshots/<id>-verified.png`
+
+#### Model Selection Pattern
+
+Dokumentiert welches Modell für welchen Task-Typ:
+
+| Task-Typ | Model | Begründung |
+|----------|-------|------------|
+| Dokumentation/Summaries | `haiku` | Schnell, günstig, ausreichend |
+| Code Review | `sonnet` | Reasoning für Code-Analyse |
+| Architektur | `opus` | Komplexes Reasoning, Trade-offs |
+
+---
+
+### Changed - Beads Skill Documentation
+
+`skills/beads/SKILL.md` enthält jetzt:
+
+- **Notes-Format für UI-Tasks** mit VERIFIED Section
+- **Session State Documentation** für PreCompact Hook
+- **Recovery Pattern** für Cross-Session Kontinuität
+
+---
+
+## [1.36.0] - 2026-01-01
+
+### Added - /acms-beads Plan to Beads Converter
+
+**New command to create Beads from an existing plan.**
+
+```
+/acms-beads [plan-path]
+```
+
+| Plan-Element | Bead-Typ |
+|--------------|----------|
+| Plan-Titel `# ...` | Epic |
+| Sections `## Phase X` | Feature |
+| Checkboxen `- [ ] ...` | Task |
+
+**Flow:**
+1. Plan lesen und Struktur analysieren
+2. Tree-Preview zeigen (Epic → Features → Tasks)
+3. Bestätigung abfragen
+4. `bd create` für jedes Element ausführen
+5. `bd sync`
+
+---
+
+### Changed - /acms-plan-review Beads Removal
+
+**Beads creation removed from /acms-plan-review.**
+
+- Beads werden jetzt explizit über `/acms-beads` erstellt
+- `/acms-plan-review` fokussiert sich nur noch auf: Review → Interview → Plan Update
+- Separation of Concerns: Review ≠ Beads Creation
+
+---
+
+### Changed - /acms-deepen-plan Power Enhancement Mode
+
+**Complete rewrite inspired by compound-engineering-plugin.**
+
+| Feature | Description |
+|---------|-------------|
+| **ALL Skills** | Discover and apply skills from project, user, ALL plugins |
+| **Learnings Discovery** | Search docs/patterns/, docs/adr/, docs/solutions/ with frontmatter filtering |
+| **Context7 MCP** | Query framework documentation (Drupal, Tailwind, Alpine, etc.) |
+| **WebSearch** | Find current (2024-2025) best practices |
+| **ALL Agents** | Run 40+ agents in parallel - NO filtering! |
+| **Post-Enhancement** | Options: diff, review, work, deepen more, done |
+
+**Philosophy Change:**
+- Before: "4-8 targeted agents"
+- After: "Run EVERYTHING. Let agents decide relevance."
+
+---
+
+### Changed - /acms-compound Pattern & ADR Focus
+
+**`/acms-compound` now asks what to extract and focuses on abstract patterns.**
+
+| Compound Type | Output Location | Purpose |
+|---------------|-----------------|---------|
+| **Pattern** | `docs/patterns/` | Wiederverwendbare Muster |
+| **ADR** | `docs/adr/` | Architecture Decision Records |
+| **Anti-Pattern** | `docs/anti-patterns/` | Was man NICHT tun sollte |
+| **Checklist** | `docs/checklists/` | Prüflisten |
+
+**Wichtige Änderung:**
+- ❌ Keine konkreten Code-Snippets mehr
+- ❌ Keine detaillierten Lösungen
+- ✅ Abstrakte, wiederverwendbare Patterns
+- ✅ Entscheidungen mit Trade-offs
+
+---
+
+### Changed - /acms-work Multi-Bean Selection (Sonderzeichen-Fix)
+
+**`/acms-work` now supports selecting multiple Beans at once.**
+
+| Before | After |
+|--------|-------|
+| Single Epic selection | Multi-select Epics AND/OR Tasks |
+| Bean-Titel als Argument | **Nur Bean-IDs** (keine Sonderzeichen!) |
+| Direkte Übergabe | IDs in `.beads/selected-beans.txt` |
+
+**Sonderzeichen-Problem gelöst:**
+- Labels in AskUserQuestion sind NUR die Bean-IDs
+- Details werden erst im Loop via `bd show <id>` geholt
+- **Statischer Prompt:** `"Beads work queue loop"` (keine Variablen!)
+- Alle Daten in `.beads/work-queue.txt`, nicht im Prompt
+
+**New Flow:**
+1. `bd list --status open` → Bean-IDs extrahieren
+2. User wählt IDs (nicht Titel!) mit Checkboxen
+3. IDs in `.beads/selected-beans.txt` schreiben
+4. Ralph Wiggum liest IDs aus Datei, holt Details pro Bean
+5. `sed -i '1d'` entfernt bearbeitete ID aus Liste
+
+---
+
+## [1.35.0] - 2026-01-01
+
+### Added - Design System Guardian Agent
+
+**New specialist agent for design token documentation and component discovery.**
+
+| Feature | Description |
+|---------|-------------|
+| **Design Token Documentation** | Spacing scales, typography, colors, container widths |
+| **Component Oracle** | Discovers existing components before creating new ones |
+| **Pattern Enforcement** | Validates design decisions against established patterns |
+| **Variant Recommendation** | Suggests extending existing components vs. creating new |
+
+**Workflow Integration:**
+- `/acms-plan`: Added to Step 0 for UI/Frontend features
+- `/acms-deepen-plan`: Added to agent selection matrix for SDC, Tailwind, Frontend/UI plans
+
+---
+
+## [1.34.0] - 2026-01-01
+
+### Added - Skills Discovery & Deepen-Plan Command
+
+**Inspired by compound-engineering-plugin improvements for deeper planning.**
+
+### /acms-plan Enhancements
+
+| Feature | Description |
+|---------|-------------|
+| **Knowledge Discovery (MANDATORY)** | Step 0: Systematically search `docs/solutions/**/*.md` for learnings |
+| **Skills Discovery** | Step 1: Dynamically find and apply skills from project, global, and plugin sources |
+| **Renumbered Steps** | All subsequent steps renumbered (Interview → Step 3, Research → Step 4, etc.) |
+
+### New Command: /acms-deepen-plan
+
+**Enhance existing plans with maximum research depth without altering structure.**
+
+```
+/acms-deepen-plan [path to existing plan file]
+```
+
+| Feature | Description |
+|---------|-------------|
+| **Smart Agent Selection** | Match 4-8 relevant agents to plan content (not all 30+) |
+| **Skills Discovery** | Match and apply relevant skills |
+| **Knowledge Discovery** | Integrate learnings from `docs/solutions/` |
+| **Research Insights** | Add subsections without changing original content |
+| **Enhancement Summary** | Metadata block with agents used, skills applied, learnings integrated |
+
+### Fixed
+
+- **Command count:** Corrected from 25 to 22 in plugin.json description
+
+---
+
+## [1.33.0] - 2025-12-31
+
+### Changed - Color Scheme & Frontmatter Standardization
+
+**Review-driven improvements based on /acms-review feedback.**
+
+### Semantic Color Scheme
+
+Replaced monotone blue (18 agents) with function-based colors:
+
+| Category | Color | Agents | Purpose |
+|----------|-------|--------|---------|
+| **Backend/Drupal** | green | 4 | Server-side specialists |
+| **Frontend/UI** | cyan | 5 | Template & styling |
+| **Architecture** | purple | 4 | Strategic/conceptual |
+| **Quality/Testing** | yellow | 2 | Code review |
+| **Data/Security** | red | 3 | Critical systems |
+| **Core** | blue | 4 | Infrastructure |
+| **Documentation** | white | 1 | Text/docs |
+| **Design** | magenta | 3 | Visual work |
+| **Research** | yellow | 4 | Exploration |
+| **Workflow** | yellow | 4 | Automation |
+
+**Before:** 18 blue, 4 yellow, 3 magenta, 2 red, 1 cyan, 1 purple
+**After:** 10 yellow, 5 cyan, 4 purple, 4 green, 4 blue, 3 red, 3 magenta, 1 white
+
+### Frontmatter Field Order Standardization
+
+All 34 agents now follow canonical order:
+```yaml
+---
+name: agent-name
+description: Agent description
+tools: Read, Glob, Grep
+model: opus
+color: blue
+---
+```
+
+### Files Changed
+
+34 agent files updated for color and/or field order standardization.
+
+---
+
+## [1.32.0] - 2025-12-31
+
+### Added - Plugin Quality Improvements
+
+**Comprehensive plugin quality improvements for Architecture Health Score 10/10.**
+
+### Structural Improvements
+
+| Change | Impact |
+|--------|--------|
+| **Command Naming Convention** | Migrated from underscore to hyphen (`resolve_parallel` → `resolve-parallel`) |
+| **Deprecation Aliases** | 4 backward-compatible aliases with removal timeline (v1.35.0) |
+| **reviewer-selector Agent** | New AI-based dynamic reviewer selection for `/acms-plan-review` |
+| **Duplicate Removal** | Removed `code-quality-specialist` (merged into `code-simplifier`) |
+
+### Tools Field for All Agents
+
+All 34 agents now have explicit `tools` field in frontmatter:
+
+| Agent Category | Tools | Count |
+|----------------|-------|-------|
+| **Research** | Read, Glob, Grep, WebFetch, WebSearch, Context7 | 4 |
+| **Workflow** | Read, Write, Edit, Glob, Grep, Bash | 4 |
+| **Specialists** | Read, Glob, Grep (Least Privilege) | 18 |
+| **Design** | Read, Write, Edit, Glob, Grep, Chrome, Figma | 3 |
+| **Core** | Varies by purpose | 5 |
+
+### Color Scheme Consistency
+
+| Category | Color | Purpose |
+|----------|-------|---------|
+| **Core** | blue | Primary functionality |
+| **Research** | yellow | Passive analysis |
+| **Workflow** | yellow | Automation |
+| **Specialists** | blue | Code review |
+| **Design** | magenta | Visual work |
+| **Security** | red | Critical alerts |
+
+### Opus 4.5 Optimization
+
+Removed anti-patterns from agent prompts:
+- `CRITICAL:` → Natural emphasis
+- `MUST` (caps) → `should` / `needs to`
+- `ALWAYS` (caps) → Removed or contextual
+- `NEVER` (caps) → `avoid` / `do not`
+
+Fixed malformed frontmatter in librarian agent.
+
+### Files Changed
+
+**Commands Renamed (with deprecation aliases):**
+- `resolve_parallel.md` → `resolve-parallel.md`
+- `resolve_pr_parallel.md` → `resolve-pr-parallel.md`
+- `resolve_todo_parallel.md` → `resolve-todo-parallel.md`
+- `generate_command.md` → `generate-command.md`
+
+**New Agent:**
+- `agents/core/reviewer-selector.md` - AI-based reviewer selection
+
+**Agents Moved:**
+- `agents/review/*` → `agents/specialists/*`
+
+---
+
+## [1.31.0] - 2025-12-31
+
+### Added - Exa & grep.app MCP Servers + Enhanced Librarian
+
+**Neue MCP-Server für erweiterte Code- und Dokumentationssuche.**
+
+### New MCP Servers
+
+| MCP Server | URL | Purpose |
+|------------|-----|---------|
+| **Exa** | `https://mcp.exa.ai/mcp` | Web search, code context search |
+| **grep.app** | `https://mcp.grep.app` | GitHub code search (500k+ repos) |
+
+Beide sind HTTP-basiert und benötigen keine Authentifizierung.
+
+### Enhanced Librarian Agent
+
+**Komplettes Rewrite basierend auf dem open-source-librarian Pattern:**
+
+| Vorher | Nachher |
+|--------|---------|
+| 146 Zeilen | 368 Zeilen |
+| Model: opus | Model: sonnet |
+| 6 Tools | 11 Tools (+Bash, +Exa, +grep.app) |
+| Einfache Classification | 4 Request Types (A/B/C/D) mit Parallel Execution |
+| Keine Parallel-Anforderungen | Minimum 3-6 parallel calls pro Request Type |
+
+**Neue Librarian-Fähigkeiten:**
+
+- `gh repo clone` für Deep Source Analysis
+- `mcp__exa__web_search_exa` für aktuelle Web-Ergebnisse
+- `mcp__exa__get_code_context_exa` für Code-Kontext
+- `mcp__grep__searchGitHub` für schnelle GitHub-Codesuche
+- `git log`, `git blame` für History-Analyse
+- Detaillierte Phasenstruktur (0-2) mit Request Classification
+
+### Workflow Integration
+
+**`/acms-plan` - Grobe Research Phase:**
+```
+- Task repo-research-analyst(feature_description)
+- Task best-practices-researcher(feature_description)
+- Task framework-docs-researcher(feature_description)
+- Task librarian(feature_description) → Evidence-based docs mit GitHub permalinks ← NEU
+```
+
+**`/acms-plan-review` - Parallel Reviewers:**
+```
+@drupal-specialist @code-simplifier @sdc-specialist @tailwind-specialist @paragraphs-specialist @librarian ← NEU
+```
+
+**Librarian in Plan-Review:** Verifiziert Claims im Plan gegen tatsächliche Dokumentation.
+
+### Quality Enforcement
+
+Der Librarian hat jetzt:
+- **Parallel Execution Requirements:** Minimum 3-6 Tool-Calls pro Request
+- **Failure Recovery Table:** Klare Fallbacks bei Tool-Fehlern
+- **Citation Format:** Jeder Claim mit GitHub Permalink
+- **Date Awareness:** Verwendet 2025+ in allen Suchanfragen
+
+### Files Changed
+
+- `.claude-plugin/plugin.json` - 2 neue MCP-Server (exa, grep)
+- `agents/core/librarian.md` - Komplettes Rewrite (146 → 368 Zeilen)
+- `commands/workflows/acms-plan.md` - Librarian zu Research hinzugefügt
+- `commands/workflows/acms-plan-review.md` - Librarian zu Reviewers hinzugefügt
+
+### References
+
+- [Exa MCP](https://docs.exa.ai/reference/exa-mcp)
+- [grep.app MCP (Vercel)](https://vercel.com/blog/grep-a-million-github-repositories-via-mcp)
+
+---
+
+## [1.30.0] - 2025-12-30
+
+### Reviewer-Agents Audit & Standardisierung
+
+Umfassende Überarbeitung aller Reviewer-Agents mit Best Practices aus dem venneker-drupal Projekt.
+
+### Fixed - Broken Workflow References
+
+**`/acms-plan-review` repariert:**
+```
+# VORHER (broken)
+@agent-dries-drupal-reviewer @agent-drupal-reviewer @agent-code-simplicity-reviewer
+
+# NACHHER (fixed)
+@drupal-specialist @code-simplifier @sdc-specialist @tailwind-specialist @paragraphs-specialist
+```
+
+### Added - 7 neue SDC-Specialist Patterns
+
+Basierend auf 60+ Component Audit im venneker-drupal Projekt:
+
+| Pattern | Problem | Lösung |
+|---------|---------|--------|
+| Slot-Variable-Rendering | `{% block %}` in SDC | `{{ media }}` als Variable |
+| Props für Render Arrays | `type: string` bricht | Kein strict type |
+| Twig Default Filter | `??` nur für null | `\|default()` für alle |
+| Alpine.js Syntax | `@click` Probleme | `x-on:click` immer |
+| Embed Variable Scoping | `only` Kontext | Explizit übergeben |
+| UI Icons Pack | `term.field_*` Fehler | `content.field_icon` |
+| Vite HMR Behavior | Broken nach HMR | Auto-initialization |
+
+### Added - Standardisierte Agent-Struktur
+
+Alle Specialists haben jetzt einheitliche Sections:
+
+```markdown
+<common_issues>     - BAD/GOOD Beispiele mit "Why"
+<review_focus_areas> - Implementierungs-Guidelines
+<review_checklist>   - Priorisiert (Critical/High/Medium/Low)
+<output_format>      - Strukturiertes Report-Format
+<references>         - Offizielle Dokumentation
+<code_exploration>   - Exploration-Limits
+```
+
+### Enhanced - Agent-Erweiterungen
+
+| Agent | Vorher | Nachher | Änderungen |
+|-------|--------|---------|------------|
+| sdc-specialist | 509 | ~760 | +7 Focus Areas, 31 Checklist Items |
+| drupal-specialist | 441 | ~600 | +`<common_issues>`, +`<review_checklist>` |
+| tailwind-specialist | 361 | ~450 | +`<output_format>` mit Beispielen |
+| security-sentinel | 134 | ~400 | +BAD/GOOD, OWASP, CVSS Scores |
+| twig-specialist | 293 | ~350 | +5 neue Patterns (venneker) |
+| code-simplifier | 179 | ~250 | +`<review_checklist>`, +`<output_format>` |
+| agent-native-reviewer | 230 | ~280 | +`<review_checklist>`, +`<output_format>` |
+
+### Changed - Folder Consolidation
+
+```
+# VORHER
+agents/review/
+├── agent-native-reviewer.md
+└── code-simplifier.md
+
+# NACHHER
+agents/specialists/
+├── agent-native-reviewer.md  # Moved
+├── code-simplifier.md        # Moved
+└── ... (19 specialists total)
+```
+
+### Quality Metrics
+
+- **Review Checklist Items:** 18 → 31 (SDC), 0 → 22 (Drupal), 9 → 17 (Tailwind)
+- **BAD/GOOD Examples:** Jetzt in allen Specialists
+- **Output Formats:** Standardisiert mit Summary Metrics + Verdict
+
+---
+
 ## [1.29.0] - 2025-12-30
 
 ### Added - SDC/Paragraphs/Twig Best Practices Enforcement

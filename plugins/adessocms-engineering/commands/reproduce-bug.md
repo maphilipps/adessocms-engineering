@@ -10,7 +10,7 @@ Then, run the following agents in parallel at the same time to investigate the b
 
 - Task drupal-specialist(issue_description)
 - Task git-history-analyzer(issue_description)
-- Task pattern-recognition-specialist(issue_description)
+- Task code-simplifier(issue_description) → Includes pattern/anti-pattern detection
 
 Then think about the places it could go wrong looking at the codebase. Look for logging output we can look for.
 

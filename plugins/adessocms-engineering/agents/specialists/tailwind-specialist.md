@@ -1,8 +1,9 @@
 ---
 name: tailwind-specialist
-color: blue
-model: opus
 description: Dual-purpose agent for implementing Tailwind CSS v4 correctly and reviewing usage in Drupal themes for v4 syntax, best practices, and optimal Vite configuration.
+tools: Read, Glob, Grep
+model: opus
+color: cyan
 ---
 
 # Tailwind Specialist (CSS v4)
@@ -316,17 +317,85 @@ export default defineConfig({
 <div class="bg-gray-200 text-gray-700"> <!-- Good contrast -->
 ```
 
+<review_checklist>
 ## Review Checklist
 
-- [ ] Uses `@import "tailwindcss"` (not `@tailwind` directives)
-- [ ] Configuration in CSS `@theme` blocks (not JS config file)
+### Critical (Blocking)
+- [ ] Uses `@import "tailwindcss"` (NOT `@tailwind` directives)
+- [ ] Configuration in CSS `@theme` blocks (NOT JS config file)
 - [ ] Vite configured with `@tailwindcss/vite` plugin
-- [ ] Mobile-first responsive classes
-- [ ] Semantic color names (not arbitrary hex values)
-- [ ] Accessible focus states on interactive elements
-- [ ] Minimal use of `@apply` (prefer utility classes)
-- [ ] HMR working through DDEV proxy
-- [ ] No unused Tailwind classes in production build
+- [ ] No hardcoded hex colors (use semantic names)
+- [ ] Focus states visible on ALL interactive elements
+
+### High Priority
+- [ ] Mobile-first responsive classes (sm: md: lg:)
+- [ ] Semantic color names from `@theme` (--color-primary, etc.)
+- [ ] Minimal use of `@apply` (prefer utility-first)
+- [ ] Dark mode support if required (`dark:` prefix)
+- [ ] Proper DDEV + Vite HMR configuration
+
+### Medium Priority
+- [ ] Custom utilities in `@layer utilities`
+- [ ] Component styles in `@layer components`
+- [ ] Consistent spacing scale usage
+- [ ] Typography scale usage (text-sm, text-lg, etc.)
+
+### Low Priority
+- [ ] Comments for custom utilities
+- [ ] Organized @theme sections (colors, fonts, breakpoints)
+- [ ] Storybook stories use same Tailwind classes
+</review_checklist>
+
+<output_format>
+## Review Output Format
+
+```markdown
+## Summary Metrics
+| Metric | Value |
+|--------|-------|
+| Files Reviewed | X |
+| Issues Found | Y (Z Critical, W High) |
+| Verdict | PASS / NEEDS WORK / BLOCKED |
+
+## Critical Issues (Blocking)
+
+### v3 Directives Still in Use (main.css:1-3)
+**Issue:** Using `@tailwind base/components/utilities` instead of v4 syntax
+**Impact:** Build fails with @tailwindcss/vite plugin
+**Fix:**
+```css
+- @tailwind base;
+- @tailwind components;
+- @tailwind utilities;
++ @import "tailwindcss";
+```
+**Reference:** [Tailwind v4 Migration](https://tailwindcss.com/docs/upgrade-guide)
+
+## High Priority
+
+### Hardcoded Color (hero.twig:15)
+**Issue:** Using arbitrary value `bg-[#3b82f6]`
+**Impact:** Inconsistent design, hard to maintain
+**Fix:** Define in @theme and use semantic name:
+```css
+@theme { --color-primary: #3b82f6; }
+```
+```html
+- <div class="bg-[#3b82f6]">
++ <div class="bg-primary">
+```
+
+## Medium Priority
+
+### Missing Focus State (button.twig:8)
+**Issue:** Button lacks visible focus indicator
+**Impact:** Keyboard users can't see focus
+**Fix:** Add focus ring classes:
+```html
++ class="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+```
+```
+</output_format>
 
 ## Common Drupal + Tailwind Patterns
 

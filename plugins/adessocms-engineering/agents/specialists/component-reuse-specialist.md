@@ -1,8 +1,9 @@
 ---
 name: component-reuse-specialist
-color: blue
 description: Dual-purpose agent for leveraging existing components and reviewing code for DRY adherence, identifying duplicate patterns and ensuring existing components are used before creating new ones.
+tools: Read, Glob, Grep
 model: opus
+color: purple
 ---
 
 # Component Reuse Specialist (DRY)

@@ -54,14 +54,12 @@ Use for domain-specific expertise (format: `adessocms-engineering:specialists:<n
 
 ### Research Agents (Parallel Analysis)
 
-- `repo-research-analyst` - Codebase research
-- `best-practices-researcher` - External best practices
-- `framework-docs-researcher` - Framework documentation
+- `repo-research-analyst` - Codebase research (local)
+- `librarian` - External docs, framework research, best practices (consolidated)
 - `git-history-analyzer` - Git history analysis
 
 ### Core Agents
 
-- `librarian` - Documentation lookup, evidence-based answers
 - `frontend-engineer` - Visual changes, UI/UX, Tailwind, Alpine.js
 - `document-writer` - README, API docs, user guides
 

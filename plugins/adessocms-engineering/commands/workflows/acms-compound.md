@@ -1,100 +1,198 @@
 ---
 name: acms-compound
-description: Document a recently solved problem to compound your team's knowledge
-argument-hint: "[optional: brief context about the fix]"
+description: Extract patterns and ADRs from solved problems - focus on reusable knowledge, not detailed solutions
+argument-hint: "[optional: brief context]"
 ---
 
-# /acms-compound
+# /acms-compound - Pattern & ADR Extractor
 
-Document a recently solved problem in `docs/solutions/`.
+Extrahiert **wiederverwendbare Patterns** und **Architecture Decision Records** aus gelösten Problemen.
 
 ## Core Principle
 
-> **We want the simplest change possible. We don't care about migration. Code readability matters most, and we're happy to make bigger changes to achieve it.**
+> **Patterns, nicht Lösungen. Abstrakt, nicht konkret. Wiederverwendbar, nicht einmalig.**
 
-## Usage
+## 1. Was soll compounded werden?
 
-```bash
-/acms-compound                    # Document the most recent fix
-/acms-compound [brief context]    # Provide additional context
+Frage User mit AskUserQuestion:
+
+```
+AskUserQuestion(questions=[{
+  "question": "Was möchtest du aus dieser Session extrahieren?",
+  "header": "Compound",
+  "options": [
+    {"label": "Pattern", "description": "Wiederverwendbares Muster (z.B. 'Caching für Views')"},
+    {"label": "ADR", "description": "Architecture Decision Record (z.B. 'Warum SDC statt Block')"},
+    {"label": "Anti-Pattern", "description": "Was man NICHT tun sollte"},
+    {"label": "Checklist", "description": "Prüfliste für wiederkehrende Aufgaben"}
+  ],
+  "multiSelect": true
+}])
 ```
 
-## What It Does
+## 2. Pattern-Typ spezifizieren
 
-1. **Analyze** the conversation for the solved problem
-2. **Extract** root cause, solution, and prevention strategies
-3. **Write** to `docs/solutions/[category]/[slug].md`
+Falls "Pattern" gewählt:
 
-## Categories
+```
+AskUserQuestion(questions=[{
+  "question": "Welche Art von Pattern?",
+  "header": "Pattern-Typ",
+  "options": [
+    {"label": "Design Pattern", "description": "Architektur/Code-Struktur"},
+    {"label": "UI Pattern", "description": "Spacing, Typography, Layout"},
+    {"label": "Integration Pattern", "description": "API, Services, Module"},
+    {"label": "Testing Pattern", "description": "Test-Strategien, Mocks"}
+  ],
+  "multiSelect": false
+}])
+```
 
-- `build-errors/`
-- `runtime-errors/`
-- `performance-issues/`
-- `security-issues/`
-- `test-failures/`
-- `ui-bugs/`
+## 3. Output-Formate
 
-## Document Structure
+### Pattern (docs/patterns/)
 
 ```markdown
 ---
-title: Brief descriptive title
-category: performance-issues
-tags: [drupal, caching, views]
-date: 2025-01-15
+title: [Pattern Name]
+type: design|ui|integration|testing
+tags: [drupal, sdc, caching]
+date: 2025-01-01
 ---
 
-# Problem
-What went wrong (error messages, symptoms).
+# [Pattern Name]
 
-# Root Cause
-Why it happened (technical explanation).
+## Kontext
+Wann dieses Pattern anwenden?
 
-# Solution
-How to fix it (code examples).
+## Problem
+Welches wiederkehrende Problem löst es?
 
-# Prevention
-How to avoid it in future.
+## Lösung (abstrakt)
+```
+[Schematische Darstellung, KEIN konkreter Code]
 ```
 
-## When to Use
+## Konsequenzen
+- ✅ Vorteile
+- ⚠️ Trade-offs
 
-- After fixing a non-trivial bug
-- After solving a problem that took research
-- When you'd want to remember this solution later
+## Verwandte Patterns
+- [Link zu ähnlichen Patterns]
+```
 
-## The Compound Effect
+### ADR (docs/adr/)
 
-First fix: 30 min research → Document: 5 min → Next occurrence: 2 min lookup.
+```markdown
+---
+title: ADR-XXX: [Entscheidung]
+status: accepted|proposed|deprecated
+date: 2025-01-01
+deciders: [Namen]
+---
 
-**Each documented solution makes the team smarter.**
+# ADR-XXX: [Entscheidung]
+
+## Kontext
+Was war die Situation? Welche Faktoren spielten eine Rolle?
+
+## Entscheidung
+Was haben wir entschieden? (1-2 Sätze)
+
+## Alternativen
+| Option | Pro | Contra |
+|--------|-----|--------|
+| A | ... | ... |
+| B | ... | ... |
+
+## Konsequenzen
+Was wird einfacher/schwieriger durch diese Entscheidung?
+```
+
+### Anti-Pattern (docs/anti-patterns/)
+
+```markdown
+---
+title: [Anti-Pattern Name]
+severity: critical|high|medium
+tags: [security, performance]
+date: 2025-01-01
+---
+
+# ❌ [Anti-Pattern Name]
+
+## Das Problem
+Was sieht man oft falsch gemacht?
+
+## Warum schlecht?
+Konkrete Konsequenzen (Performance, Security, Maintainability)
+
+## Stattdessen
+→ Verweis auf korrektes Pattern (KEIN Code hier)
+
+## Erkennung
+Wie findet man dieses Anti-Pattern im Code?
+```
+
+### Checklist (docs/checklists/)
+
+```markdown
+---
+title: [Checklist Name]
+scope: pre-commit|review|deployment
+tags: [quality, testing]
+date: 2025-01-01
+---
+
+# ✅ [Checklist Name]
+
+## Wann verwenden?
+[Kontext]
+
+## Checkliste
+
+### Kategorie A
+- [ ] Punkt 1
+- [ ] Punkt 2
+
+### Kategorie B
+- [ ] Punkt 3
+- [ ] Punkt 4
+```
+
+## 4. Wichtige Regeln
+
+### ❌ NICHT dokumentieren:
+- Konkrete Code-Snippets (gehören in Skills, nicht Patterns)
+- Einmalige Bugfixes ohne Muster
+- Projekt-spezifische Details
+- Implementierungs-Details
+
+### ✅ Dokumentieren:
+- Abstrakte, wiederverwendbare Erkenntnisse
+- Entscheidungen mit Begründung
+- Wiederkehrende Probleme und ihre Struktur
+- Trade-offs und Konsequenzen
+
+## 5. Abschluss
+
+1. **Datei schreiben** in entsprechendes Verzeichnis
+2. **In Typora öffnen:**
+   ```bash
+   open -a Typora docs/[type]/[filename].md
+   ```
+3. **Melden:**
+   > "[Type] dokumentiert: `docs/[type]/[filename].md`"
 
 ---
 
 ## Session End: Land the Plane
 
-Vor Session-Ende diese Schritte ausführen:
+```bash
+git add docs/
+git commit -m "docs: Add [pattern|adr|anti-pattern|checklist] - [title]"
+bd sync
+git push
+```
 
-1. **File follow-up issues** für verbleibende Arbeit:
-   ```bash
-   bd create "Follow-up: <title>" -d "<notes>"
-   ```
-
-2. **Update Bead Status** (wenn Beads verwendet wurde):
-   ```bash
-   bd close <id> --reason "<reason>"  # wenn fertig
-   ```
-
-3. **Sync & Push** (MANDATORY):
-   ```bash
-   git pull --rebase
-   bd sync
-   git push
-   ```
-
-4. **Verify**:
-   ```bash
-   git status  # Muss "up to date with origin" zeigen
-   ```
-
-> **"Work is NOT complete until `git push` succeeds"**
+> **"Knowledge compounds. Each pattern makes the team smarter."**

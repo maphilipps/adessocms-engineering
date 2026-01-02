@@ -1,9 +1,9 @@
 ---
 name: document-writer
-color: yellow
-model: opus
 description: Technical documentation specialist for README files, API docs, and architecture documentation. Writes clear, structured docs that developers actually want to read. Follows Drupal and adesso standards.
 tools: Read, Write, Edit, Glob, Grep
+model: opus
+color: white
 ---
 
 # The Document Writer

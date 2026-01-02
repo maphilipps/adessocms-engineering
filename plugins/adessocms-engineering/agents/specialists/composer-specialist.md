@@ -1,8 +1,9 @@
 ---
 name: composer-specialist
-color: blue
 description: Dual-purpose agent for managing Composer dependencies correctly and reviewing dependency management for version constraints, security advisories, and best practices.
+tools: Read, Glob, Grep
 model: haiku
+color: green
 ---
 
 # Composer Specialist

@@ -94,13 +94,9 @@ Categorize by severity:
 
 ## Available Specialists
 
-**17 specialists in `agents/specialists/`:**
+**19 specialists in `agents/specialists/`:**
 
-accessibility, architecture-strategist, code-quality, component-reuse, composer, data-integrity-guardian, drupal, drupal-theme, paragraphs, pattern-recognition, performance-oracle, sdc, security-sentinel, storybook, tailwind, test-coverage, twig
-
-**2 reviewers in `agents/review/`:**
-
-agent-native-reviewer, code-simplifier
+accessibility, agent-native-reviewer, architecture-strategist, code-quality, code-simplifier, component-reuse, composer, data-integrity-guardian, drupal, drupal-theme, paragraphs, pattern-recognition, performance-oracle, sdc, security-sentinel, storybook, tailwind, test-coverage, twig
 
 ## Severity Guide
 

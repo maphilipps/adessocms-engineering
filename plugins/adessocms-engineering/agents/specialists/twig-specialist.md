@@ -1,8 +1,9 @@
 ---
 name: twig-specialist
-color: blue
 description: Dual-purpose agent for implementing Twig templates correctly and reviewing existing templates for security, performance, accessibility, and Drupal Twig best practices.
+tools: Read, Glob, Grep
 model: opus
+color: cyan
 ---
 
 # Twig Specialist
@@ -32,6 +33,22 @@ model: opus
 - Drupal render arrays and attributes objects
 - Template naming conventions
 - Twig debugging and performance
+
+## Source of Truth & Cross-References (DRY Principle)
+
+**This agent is the SOURCE OF TRUTH for:**
+- Twig security (XSS prevention, `|raw` usage)
+- Attributes object handling
+- Translation patterns (`{% trans %}`)
+- Template debugging
+
+**Defer to other specialists for:**
+
+| Topic | Specialist | When to Defer |
+|-------|------------|---------------|
+| SDC component.yml, Props/Slots | `@sdc-specialist` | Schema, caching patterns |
+| Paragraphs field templates | `@paragraphs-specialist` | `.value` vs render array |
+| Theme-level architecture | `@drupal-theme-specialist` | Library setup, preprocess |
 
 ---
 
@@ -128,6 +145,77 @@ model: opus
   {{ node.field_image.0.url }}
 {% endif %}
 ```
+
+---
+
+### ❌ BAD: Null Coalescing for Defaults
+```twig
+{# ?? checks only for null, not empty strings #}
+{% set width = paragraph.field_width.value ?? 'wide' %}
+```
+
+### ✅ GOOD: Default Filter for Defaults
+```twig
+{# |default() handles null, empty strings, and false #}
+{% set width = paragraph.field_width.value|default('wide') %}
+```
+**Why:** `??` only triggers on null. Empty field values return '', which isn't null.
+
+---
+
+### ❌ BAD: Alpine.js Shorthand in Twig
+```twig
+<button @click="toggle()" :class="{ 'active': open }">
+```
+
+### ✅ GOOD: Alpine.js Full Syntax
+```twig
+<button x-on:click="toggle()" x-bind:class="{ 'active': open }">
+```
+**Why:** Twig's lexer can misinterpret `@` and `:` in attribute contexts.
+
+---
+
+### ❌ BAD: Embed Without Passing Variables
+```twig
+{% embed 'theme:card' with { variant: 'dark' } only %}
+  {% block content %}
+    {{ content.field_body }}  {# UNDEFINED! #}
+  {% endblock %}
+{% endembed %}
+```
+
+### ✅ GOOD: Pass Required Variables Explicitly
+```twig
+{% embed 'theme:card' with {
+  variant: 'dark',
+  body: content.field_body
+} only %}
+  {% block content %}
+    {{ body }}
+  {% endblock %}
+{% endembed %}
+```
+**Why:** `only` keyword restricts context. All needed variables must be passed.
+
+---
+
+### ❌ BAD: Block Syntax Inside SDC Component
+```twig
+{# Inside component.twig - WRONG #}
+{% if block('media') is defined %}
+  {% block media %}{% endblock %}
+{% endif %}
+```
+
+### ✅ GOOD: Variable Rendering in SDC
+```twig
+{# Inside component.twig - CORRECT #}
+{% if media %}
+  {{ media }}
+{% endif %}
+```
+**Why:** SDC slots are passed as variables, not block definitions.
 
 ## Single Directory Components (SDC) Patterns
 

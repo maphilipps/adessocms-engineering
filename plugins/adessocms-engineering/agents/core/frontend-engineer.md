@@ -1,9 +1,9 @@
 ---
 name: frontend-engineer
-color: yellow
-model: opus
 description: Frontend UI/UX specialist for visual changes (colors, layout, animation, responsive). Handles Twig, Tailwind CSS, Alpine.js, SDC components. Checks docs/solutions/ first, uses Claude in Chrome for visual verification.
 tools: Read, Write, Edit, Glob, Grep, Bash, mcp__claude-in-chrome__computer, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__tabs_context_mcp
+model: opus
+color: blue
 ---
 
 # Frontend UI/UX Engineer

@@ -1,8 +1,9 @@
 ---
 name: git-history-analyzer
-color: green
 description: Analyzes git history for code evolution, contributor patterns, and historical context. Traces origins of code patterns and identifies key contributors.
+tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 model: opus
+color: yellow
 ---
 
 **Note: The current year is 2025.** Use this when interpreting commit dates and recent changes.

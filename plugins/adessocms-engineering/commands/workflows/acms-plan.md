@@ -28,28 +28,69 @@ Do not proceed until you have a clear feature description from the user.
 
 ## Main Tasks
 
-### 0. Status Quo (Quick Context Scan)
+### 0. Status Quo & Knowledge Discovery (MANDATORY)
 
-**Understand the IST-Zustand first.**
+**Understand the IST-Zustand and gather institutional knowledge first.**
 
 1. **Read relevant files** - If the feature mentions specific areas, read those files
 2. **Search for existing patterns** - `Grep` or `Glob` for related code
-3. **Check docs/solutions/** - Look for existing learnings on this topic
+3. **Systematic Knowledge Discovery:**
+   ```
+   Glob("docs/solutions/**/*.md")  # All documented solutions
+   ```
+   - Read frontmatter (tags, category, module, symptoms)
+   - Filter for learnings relevant to this feature
+   - Extract insights and pitfalls from past work
 4. **Understand the scope** - How big is this change? What exists already?
+5. **Component & Design Token Discovery (for UI/Frontend features):**
+   ```
+   Task(subagent_type="design-system-guardian", prompt="Analyze existing components and design tokens for: <feature_description>")
+   ```
+   - What components already exist that could be reused?
+   - What are the established spacing/typography/color patterns?
+   - Are there variants to extend rather than new components to create?
 
-**This should be fast (1-2 minutes max).**
+**Always run Knowledge Discovery.** Document findings even if no relevant learnings exist.
 
-### 1. Grobe Research
+### 1. Skills Discovery
+
+**Dynamically find and apply relevant skills to the feature.**
+
+1. **Discover all available skills:**
+   ```
+   Glob(".claude/skills/*.md")           # Project-local skills
+   Glob("~/.claude/skills/*.md")         # User global skills
+   Glob for skills/ in all installed plugins
+   ```
+
+2. **Read each skill's description** (frontmatter or first paragraph)
+
+3. **Match skills to feature description:**
+   - Does this skill's domain relate to the feature?
+   - Would this skill provide useful patterns or guidance?
+
+4. **Spawn matched skills in parallel:**
+   ```
+   For each matched skill:
+     Task(subagent_type="general-purpose", prompt="Apply skill guidance to: <feature_description>")
+   ```
+
+5. **Collect skill insights** for use in the plan
+
+**Always run this step.** Even if no skills match, document that no relevant skills were found.
+
+### 2. Grobe Research
 
 Run these agents in parallel to gather initial context:
 
-- Task repo-research-analyst(feature_description)
-- Task best-practices-researcher(feature_description)
-- Task framework-docs-researcher(feature_description)
+- Task repo-research-analyst(feature_description) → Local codebase patterns and conventions
+- Task librarian(feature_description) → Evidence-based docs, framework research, best practices with GitHub permalinks
+
+**Note:** The `librarian` agent consolidates functionality from former `best-practices-researcher` and `framework-docs-researcher` agents.
 
 **Keep findings ready for the interview.**
 
-### 2. Deep Interview (MANDATORY)
+### 3. Deep Interview (MANDATORY)
 
 **Interview me in detail using the AskUserQuestion tool about literally anything:**
 
@@ -93,7 +134,7 @@ Jede Interview-Antwort muss **direkt in den Plan einfließen** als:
 ❌ SCHLECHT: "Taxonomie: Terms on-the-fly oder vorab erstellen"
 ✅ GUT: "- [ ] Erstelle fehlende `job_category` Terms während der Migration (Pattern: `getOrCreateTerm()`)"
 
-### 3. Additional Research (if needed)
+### 4. Additional Research (if needed)
 
 If the interview reveals gaps, run additional research:
 
@@ -102,7 +143,7 @@ If the interview reveals gaps, run additional research:
 - [ ] Create a reference list of similar issues or PRs (e.g., `#123`, `#456`)
 - [ ] Note any team conventions discovered in `CLAUDE.md` or team documentation
 
-### 4. Issue Planning & Structure
+### 5. Issue Planning & Structure
 
 **Title & Categorization:**
 
@@ -116,7 +157,7 @@ If the interview reveals gaps, run additional research:
 - [ ] Gather supporting materials (error logs, screenshots, design mockups)
 - [ ] Prepare code examples or reproduction steps if applicable
 
-### 5. SpecFlow Analysis
+### 6. SpecFlow Analysis
 
 After planning the issue structure, run SpecFlow Analyzer to validate and refine the feature specification:
 
@@ -128,7 +169,7 @@ After planning the issue structure, run SpecFlow Analyzer to validate and refine
 - [ ] Incorporate any identified gaps or edge cases into the issue
 - [ ] Update acceptance criteria based on SpecFlow findings
 
-### 6. Choose Implementation Detail Level
+### 7. Choose Implementation Detail Level
 
 Select how comprehensive you want the issue to be. Simpler is mostly better.
 
@@ -161,7 +202,7 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - Resource requirements and timeline
 - Risk mitigation strategies
 
-### 7. Issue Creation & Formatting
+### 8. Issue Creation & Formatting
 
 **Content Formatting:**
 
@@ -177,7 +218,7 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - [ ] Reference specific commits with SHA hashes when relevant
 - [ ] Link to code using GitHub's permalink feature
 
-### 8. Final Review & Submission
+### 9. Final Review & Submission
 
 **Pre-submission Checklist:**
 
@@ -187,7 +228,7 @@ Select how comprehensive you want the issue to be. Simpler is mostly better.
 - [ ] Acceptance criteria are measurable
 - [ ] Add names of files in pseudo code examples and todo lists
 
-## 9. Output (END OF WORKFLOW)
+## 10. Output (END OF WORKFLOW)
 
 **This is the final step. After this, the command is complete.**
 

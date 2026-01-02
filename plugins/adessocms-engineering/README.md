@@ -36,8 +36,8 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 
 After installation, restart Claude Code. The plugin provides:
 
-- **29 Agents** - Available via `@agent-name` in conversations
-- **21 Commands** - Available via `/command-name`
+- **32 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
+- **27 Commands** - Available via `/command-name`
 - **18 Skills** - Available via `Skill` tool
 - **2 MCP Servers** - Context7, Playwright (auto-started, Claude in Chrome preferred)
 
@@ -47,8 +47,8 @@ After installation, restart Claude Code. The plugin provides:
 
 | Component | Count |
 |-----------|-------|
-| Agents | 29 |
-| Commands | 21 |
+| Agents | 32 |
+| Commands | 27 |
 | Skills | 18 |
 | MCP Servers | 2 |
 
@@ -58,13 +58,13 @@ After installation, restart Claude Code. The plugin provides:
 
 | Model | Use Case | Agents |
 |-------|----------|--------|
-| *(none)* | Critical analysis, design review - uses session model | 8 agents |
-| **sonnet** | Standard reviews, external research | 17 agents |
-| **haiku** | Local research, simple tasks | 4 agents |
+| *(none)* | Critical analysis, design review - uses session model | 6 agents |
+| **sonnet** | Standard reviews, external research | 21 agents |
+| **haiku** | Local research, simple tasks | 5 agents |
 
-**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `dries-drupal-specialist`, `pattern-recognition-specialist`, `acms-bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
+**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `acms-bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
 
-**Haiku:** `acms-lint`, `composer-specialist`, `git-history-analyzer`, `repo-research-analyst`
+**Haiku:** `acms-lint`, `composer-specialist`, `git-history-analyzer`, `repo-research-analyst`, `reviewer-selector`
 
 ## Agents
 
@@ -77,7 +77,6 @@ After installation, restart Claude Code. The plugin provides:
 | Agent | Model | Description |
 |-------|-------|-------------|
 | `drupal-specialist` | sonnet | Drupal coding standards, API usage, DI patterns, Entity Query |
-| `dries-drupal-specialist` | - | The Drupal Way - philosophy, contrib vs custom decisions |
 | `twig-specialist` | sonnet | Twig templates, security, SDC embed patterns, attributes |
 | `drupal-theme-specialist` | sonnet | Theme implementations, SDC, preprocess functions, libraries |
 | `tailwind-specialist` | sonnet | Tailwind CSS v4 syntax, @theme, responsive patterns |
@@ -86,23 +85,32 @@ After installation, restart Claude Code. The plugin provides:
 | `composer-specialist` | haiku | Composer dependencies, security, Drupal contrib |
 | `test-coverage-specialist` | sonnet | PHPUnit, Kernel, Functional, Playwright, Vitest coverage |
 | `architecture-strategist` | - | Architectural decisions and compliance |
-| `code-quality-specialist` | sonnet | Simplicity, minimalism, code quality |
+| `code-simplifier` | sonnet | Simplicity, YAGNI, pattern detection (consolidated) |
 | `data-integrity-guardian` | sonnet | Database migrations and data integrity |
-| `pattern-recognition-specialist` | - | Code patterns and anti-patterns |
 | `performance-oracle` | - | Performance analysis and optimization |
 | `security-sentinel` | - | Security implementation and audits (OWASP) |
 | `sdc-specialist` | sonnet | SDC props/slots, component.yml schema, cache patterns |
 | `paragraphs-specialist` | sonnet | Field templates, SDC integration, cache metadata |
 | `component-reuse-specialist` | sonnet | DRY principle, component reuse, atomic design |
+| `agent-native-reviewer` | sonnet | Agent-native design, agent-user parity |
+| `design-system-guardian` | sonnet | Design tokens, component discovery, reuse |
 
-### Research (4)
+### Research (2)
 
 | Agent | Model | Description |
 |-------|-------|-------------|
-| `best-practices-researcher` | sonnet | Gather external best practices and examples |
-| `framework-docs-researcher` | sonnet | Research framework documentation and best practices |
 | `git-history-analyzer` | haiku | Analyze git history and code evolution |
 | `repo-research-analyst` | haiku | Research repository structure and conventions |
+
+### Core (5)
+
+| Agent | Model | Description |
+|-------|-------|-------------|
+| `librarian` | sonnet | External docs, framework research, best practices (consolidated) |
+| `frontend-engineer` | sonnet | Visual changes, UI/UX, Tailwind, Alpine.js |
+| `document-writer` | sonnet | README, API docs, user guides |
+| `reviewer-selector` | haiku | Dynamic reviewer selection for plan review |
+| `skill-invoker` | sonnet | Skill matching and invocation |
 
 ### Design (3)
 
@@ -210,6 +218,28 @@ After installation, initialize in your project:
 cd <project-root>
 bd init
 ```
+
+**Anthropic Best Practices (v1.37.0):**
+
+The `/acms-work` workflow now implements patterns from [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents):
+
+- **Environment Init:** DDEV auto-starts if not running
+- **Session Recovery:** PreCompact Hook exports state to `.beads/session-state.md`
+- **Auto-Select:** Highest priority unblocked task is auto-selected
+- **Quality Gates:** Mandatory browser verification for UI-Tasks (via webapp-testing)
+
+### webapp-testing Skill
+
+Required for UI verification in Quality Gates. Install from the claude-plugins marketplace:
+
+```bash
+/plugin marketplace add claude-plugins-official
+```
+
+The `/acms-work` workflow uses webapp-testing for:
+- **Mandatory UI Verification:** Screenshot evidence before closing UI-Tasks
+- Playwright-based E2E testing
+- Visual regression checks
 
 ### dev-browser Skill
 

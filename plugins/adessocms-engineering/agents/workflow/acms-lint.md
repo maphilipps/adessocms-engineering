@@ -1,6 +1,7 @@
 ---
 name: acms-lint
 description: Runs linting and code quality checks on PHP, Twig, CSS, and JavaScript files via DDEV. Use before pushing to origin.
+tools: Read, Write, Edit, Glob, Grep, Bash
 model: haiku
 color: yellow
 ---
