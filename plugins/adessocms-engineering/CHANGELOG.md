@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.38.1] - 2026-01-02
+
+### Improved - Design Agent Descriptions
+
+Enhanced all three design agents with detailed usage examples from compound-engineering-plugin:
+
+- **`figma-design-sync`**: Added 4 examples showing iterative design-to-code synchronization workflow
+- **`design-iterator`**: Added 4 proactive usage examples demonstrating when to suggest N-iteration refinement
+- **`design-implementation-reviewer`**: Added 2 examples for post-implementation design verification
+
+**Key improvement:** Agents now include proactive trigger guidance, making it clearer when Claude should automatically suggest using these agents without explicit user request.
+
 ## [1.38.0] - 2026-01-02
 
 ### Changed - Agent Consolidation (DRY Principle)
