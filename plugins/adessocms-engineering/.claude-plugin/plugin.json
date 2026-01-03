@@ -27,12 +27,6 @@
     "browser-automation"
   ],
   "mcpServers": {
-    "pw": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest", "--isolated"],
-      "env": {}
-    },
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
