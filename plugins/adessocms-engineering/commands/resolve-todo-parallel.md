@@ -16,7 +16,7 @@ Get all unresolved TODOs from the /todos/\*.md directory
 
 Create a TodoWrite list of all unresolved items grouped by type.Make sure to look at dependencies that might occur and prioritize the ones needed by others. For example, if you need to change a name, you must wait to do the others. Output a mermaid flow diagram showing how we can do this. Can we do everything in parallel? Do we need to do one first that leads to others in parallel? I'll put the to-dos in the mermaid diagram flow‑wise so the agent knows how to proceed in order.
 
-### 3. Implement (PARALLEL)
+### 3. Implement (parallel)
 
 Spawn a pr-comment-resolver agent for each unresolved item in parallel.
 

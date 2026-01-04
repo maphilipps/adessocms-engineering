@@ -75,16 +75,16 @@ Extract from conversation history:
 - OS version
 - File/line references
 
-**BLOCKING REQUIREMENT:** If critical context is missing (module name, exact error, stage, or resolution steps), ask user and WAIT for response before proceeding to Step 3:
+**Erforderliche Informationen:** Falls kritischer Kontext fehlt (Modulname, exakte Fehlermeldung, Stage oder Lösungsschritte), frage den User und warte auf Antwort bevor du zu Step 3 fortfährst:
 
 ```
-I need a few details to document this properly:
+Ich benötige einige Details für die Dokumentation:
 
-1. Which module had this issue? [ModuleName]
-2. What was the exact error message or symptom?
-3. What stage were you in? (0-6 or post-implementation)
+1. Welches Modul hatte das Problem? [ModuleName]
+2. Was war die genaue Fehlermeldung oder das Symptom?
+3. In welchem Stage warst du? (0-6 oder post-implementation)
 
-[Continue after user provides details]
+[Fortfahren nach User-Antwort]
 ```
 </step>
 
@@ -145,7 +145,7 @@ Format: `[sanitized-symptom]-[module]-[YYYYMMDD].md`
 <step number="5" required="true" depends_on="4" blocking="true">
 ### Step 5: Validate YAML Schema
 
-**CRITICAL:** All docs require validated YAML frontmatter with enum validation.
+**Wichtig:** Alle Docs benötigen validiertes YAML Frontmatter mit Enum-Validierung.
 
 <validation_gate name="yaml-schema" blocking="true">
 
@@ -165,7 +165,7 @@ Errors:
 Please provide corrected values.
 ```
 
-**GATE ENFORCEMENT:** Do NOT proceed to Step 6 (Create Documentation) until YAML frontmatter passes all validation rules defined in `schema.yaml`.
+**Hinweis:** Fahre erst mit Step 6 (Create Documentation) fort, wenn das YAML Frontmatter alle Validierungsregeln aus `schema.yaml` erfüllt.
 
 </validation_gate>
 </step>
@@ -407,17 +407,17 @@ Documentation is successful when ALL of the following are true:
 
 ## Execution Guidelines
 
-**MUST do:**
-- Validate YAML frontmatter (BLOCK if invalid per Step 5 validation gate)
-- Extract exact error messages from conversation
-- Include code examples in solution section
-- Create directories before writing files (`mkdir -p`)
-- Ask user and WAIT if critical context missing
+**Empfohlen:**
+- YAML Frontmatter validieren (bei Validierungsfehler Step 5 wiederholen)
+- Exakte Fehlermeldungen aus der Konversation extrahieren
+- Code-Beispiele in der Solution-Section einbinden
+- Verzeichnisse vor dem Schreiben erstellen (`mkdir -p`)
+- User fragen und warten, falls kritischer Kontext fehlt
 
-**MUST NOT do:**
-- Skip YAML validation (validation gate is blocking)
-- Use vague descriptions (not searchable)
-- Omit code examples or cross-references
+**Vermeide:**
+- YAML-Validierung überspringen
+- Vage Beschreibungen (nicht suchbar)
+- Code-Beispiele oder Cross-References weglassen
 
 ---
 

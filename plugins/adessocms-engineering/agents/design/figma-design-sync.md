@@ -96,7 +96,7 @@ Common Tailwind values to prefer:
 - Use `flex-col lg:flex-row` to stack on mobile and go horizontal on large screens
 - Use `gap-10 lg:gap-[100px]` for responsive gaps
 - Use `w-full lg:w-auto lg:flex-1` to make sections responsive
-- Don't use `flex-shrink-0` unless absolutely necessary
+- Avoid `flex-shrink-0` unless clearly necessary
 - Remove `overflow-hidden` from components - handle overflow at wrapper level if needed
 
 ### Example of Good Component Structure
@@ -150,7 +150,7 @@ Common Tailwind values to prefer:
 - **Code Quality**: Follow CLAUDE.md guidelines for Tailwind, responsive design, and dark mode
 - **Communication**: Be specific about what changed and why
 - **Iteration-Ready**: Design your fixes to allow the agent to run again for verification
-- **Responsive First**: Always implement mobile-first responsive designs with appropriate breakpoints
+- **Responsive First**: Implement mobile-first responsive designs with appropriate breakpoints
 
 ## Handling Edge Cases
 

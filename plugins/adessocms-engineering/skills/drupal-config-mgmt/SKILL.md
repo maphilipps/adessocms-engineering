@@ -20,7 +20,7 @@ Activates when working with Drupal configuration management including:
 
 ## Problem: Avoid Accidental Config Imports
 
-**CRITICAL**: Some hosting platforms default drush commands to `--yes` (auto-confirm). Commands like `config:import` or `cim` may AUTO-CONFIRM and import configuration even when you only want to inspect differences.
+**Wichtig**: Einige Hosting-Plattformen setzen bei drush-Befehlen standardmäßig `--yes` (Auto-Bestätigung). Befehle wie `config:import` oder `cim` können automatisch bestätigen und Konfiguration importieren, auch wenn nur Unterschiede angezeigt werden sollen.
 
 ### Dangerous vs Safe Patterns
 

@@ -84,7 +84,7 @@ Basierend auf Reviewer-Feedback UND Interview-Antworten:
 
 > "Plan aktualisiert: `plans/<filename>.md` - Änderungen: [kurze Liste der Änderungen]. Datei wurde in Typora geöffnet."
 
-## 6. Next Steps (MANDATORY)
+## 6. Next Steps
 
 **Frage den User was als nächstes passieren soll:**
 

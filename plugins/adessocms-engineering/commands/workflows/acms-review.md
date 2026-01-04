@@ -44,7 +44,7 @@ Select based on changes:
 | Large changes | architecture-strategist, performance-oracle |
 | ALL reviews | code-simplifier (after synthesis) |
 
-### 3. Deep Interview (MANDATORY - AFTER Specialists)
+### 3. Deep Interview (nach den Specialists)
 
 **Interview me in detail using the AskUserQuestion tool about literally anything:**
 

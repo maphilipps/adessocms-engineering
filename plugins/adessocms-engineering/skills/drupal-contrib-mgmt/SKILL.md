@@ -19,13 +19,13 @@ composer require drupal/module_name:^3.0 --with-all-dependencies
 # Update multiple modules
 composer require drupal/module_a drupal/module_b --with-all-dependencies
 
-# After any update, ALWAYS run database updates
+# Nach jedem Update die Datenbank-Updates ausführen
 drush updb -y
 
 # Clear cache if needed
 drush cr
 
-# CRITICAL: Test by visiting pages to check for fatal errors
+# Wichtig: Seiten besuchen und auf fatale Fehler prüfen
 # Visit at least one page that uses the updated module
 ```
 

@@ -23,7 +23,7 @@ The 1xInternet CMS (Quartz design system, Volcano/Granite theme) serves as our b
 - **Board**: https://adesso-app-mgt.atlassian.net/jira/software/projects/DS/boards/186
 - **Project Key**: DS
 - **CLI**: `acli` (Atlassian CLI) - siehe `references/acli-reference.md`
-- **Workflow**: Tickets MUST be proposed and approved before creation
+- **Workflow**: Tickets sollten vorgeschlagen und genehmigt werden, bevor sie erstellt werden
 - Never create tickets directly - always propose first
 
 Available acli operations:
@@ -54,7 +54,7 @@ Every component/feature must meet:
 - Consolidate similar paragraph types
 
 ## Atomic Design Hierarchy
-Components MUST follow Atomic Design:
+Komponenten sollten Atomic Design folgen:
 - **Atoms**: Basic elements (button, badge, icon, heading)
 - **Molecules**: Groups of atoms (card, accordion-item, form-field)
 - **Organisms**: Complex sections (header, hero, card-group)
@@ -62,14 +62,14 @@ Components MUST follow Atomic Design:
 - **Pages**: Specific instances
 
 ## Translation Requirements (i18n)
-ALL user-facing strings MUST be translatable:
+Stelle sicher, dass alle benutzerorientierten Strings übersetzbar sind:
 - Twig: `{{ 'Text'|t }}` or `{{ 'Hello @name'|t({'@name': name}) }}`
 - JS: `Drupal.t('Text')` or `Drupal.t('Hello @name', {'@name': name})`
 - PHP: `$this->t('Text')` or `$this->t('Hello @name', ['@name' => $name])`
-- NO hardcoded strings in templates!
+- Vermeide hardcodierte Strings in Templates
 
 ## Paragraph Standards
-ALL paragraph types MUST have:
+Stelle sicher, dass alle Paragraph-Typen folgendes haben:
 - Consistent field naming (`field_heading`, `field_subheading`, etc.)
 - Standard options: `field_background`, `field_spacing`
 - Multi-column support where applicable

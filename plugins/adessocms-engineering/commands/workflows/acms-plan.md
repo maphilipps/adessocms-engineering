@@ -28,7 +28,7 @@ Do not proceed until you have a clear feature description from the user.
 
 ## Main Tasks
 
-### 0. Status Quo & Knowledge Discovery (MANDATORY)
+### 0. Status Quo & Knowledge Discovery (Empfohlen)
 
 **Understand the IST-Zustand and gather institutional knowledge first.**
 
@@ -50,7 +50,7 @@ Do not proceed until you have a clear feature description from the user.
    - What are the established spacing/typography/color patterns?
    - Are there variants to extend rather than new components to create?
 
-**Always run Knowledge Discovery.** Document findings even if no relevant learnings exist.
+**Knowledge Discovery sollte durchgeführt werden.** Document findings even if no relevant learnings exist.
 
 ### 1. Skills Discovery
 
@@ -77,7 +77,7 @@ Do not proceed until you have a clear feature description from the user.
 
 5. **Collect skill insights** for use in the plan
 
-**Always run this step.** Even if no skills match, document that no relevant skills were found.
+**Dieser Schritt sollte durchgeführt werden.** Even if no skills match, document that no relevant skills were found.
 
 ### 2. Grobe Research
 
@@ -90,7 +90,7 @@ Run these agents in parallel to gather initial context:
 
 **Keep findings ready for the interview.**
 
-### 3. Deep Interview (MANDATORY)
+### 3. Deep Interview (Empfohlen)
 
 **Interview me in detail using the AskUserQuestion tool about literally anything:**
 

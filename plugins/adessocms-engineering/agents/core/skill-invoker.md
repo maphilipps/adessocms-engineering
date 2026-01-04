@@ -22,7 +22,8 @@ Given a user request, analyze it and determine:
 ### Design & Components
 | Skill | Trigger Patterns | Use When |
 |-------|-----------------|----------|
-| `sdc-design-factory` | "create component", "design SDC", "beautiful button", "hero section" | Creating new Drupal SDC components with design philosophy |
+| `tailwindplus-sdc-builder` | "ich brauche", "I need a", "tailwindplus", "paragraph erstellen", "component from tailwind" | Building SDC + Paragraph from TailwindPlus templates (DRY-first) |
+| `sdc-design-factory` | "create component", "design SDC", "beautiful button", "design philosophy" | Creating new Drupal SDC components with design philosophy (no TailwindPlus) |
 | `frontend-design` | "design page", "landing page", "visual design" | General frontend design tasks |
 | `landing-page-optimizer` | "optimize landing page", "conversion", "CRO" | Landing page optimization |
 | `adesso-styleguide` | "brand colors", "adesso style", "styleguide" | Applying adesso brand guidelines |
@@ -60,7 +61,10 @@ Given a user request, analyze it and determine:
 ## Decision Logic
 
 ```
-IF request mentions "component", "SDC", "twig", "CVA":
+IF request mentions "ich brauche", "I need a", "tailwindplus", "paragraph" + component:
+  → tailwindplus-sdc-builder (TailwindPlus-based component + paragraph creation)
+
+IF request mentions "component", "SDC", "twig", "CVA", "design philosophy":
   → sdc-design-factory (design-focused component creation)
 
 IF request mentions "drupal" + technical term:
@@ -94,14 +98,25 @@ Return JSON:
 
 ## Examples
 
-**User:** "Erstelle eine Hero-Komponente für die Startseite"
+**User:** "Ich brauche ein Hero für die Startseite"
+```json
+{
+  "should_invoke": true,
+  "skill": "tailwindplus-sdc-builder",
+  "confidence": 0.95,
+  "arguments": "hero section for homepage",
+  "reasoning": "Component request with 'ich brauche' - uses TailwindPlus for selection"
+}
+```
+
+**User:** "Erstelle eine Hero-Komponente mit Design-Philosophy"
 ```json
 {
   "should_invoke": true,
   "skill": "sdc-design-factory",
   "confidence": 0.95,
-  "arguments": "hero component for homepage",
-  "reasoning": "Clear SDC component creation request"
+  "arguments": "hero component with design philosophy",
+  "reasoning": "Design philosophy mentioned - use sdc-design-factory"
 }
 ```
 

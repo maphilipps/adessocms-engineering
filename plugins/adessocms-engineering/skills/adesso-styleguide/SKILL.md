@@ -6,7 +6,7 @@ description: Guardian für adesso Corporate Design Compliance. Prüft, korrigier
 <essential_principles>
 
 <principle name="adesso-Blau ist heilig">
-**#006ec7** - KEINE Abstufungen erlaubt. Niemals aufhellen oder abdunkeln. Bei Kontrast-Problemen: Weiß oder adesso-Grau verwenden.
+**#006ec7** - Keine Abstufungen erlaubt. Vermeide Aufhellen oder Abdunkeln. Bei Kontrast-Problemen: Weiß oder adesso-Grau verwenden.
 </principle>
 
 <principle name="Akzentfarben sparsam">
@@ -14,7 +14,7 @@ Akzentfarben (Gelb, Orange, Pink, Violett, Türkis, Grün) nur als Highlights. M
 </principle>
 
 <principle name="Farbverläufe brauchen adesso-Blau">
-Jeder Gradient MUSS adesso-Blau enthalten. Keine Verläufe nur aus Akzentfarben.
+Jeder Gradient sollte adesso-Blau enthalten. Vermeide Verläufe nur aus Akzentfarben.
 </principle>
 
 <principle name="FontAwesome Thin">
@@ -57,7 +57,7 @@ Icons ausschließlich im "Thin" Style (fa-thin). Keine anderen Stärken (solid, 
 
 <color_quick_reference>
 **Primärfarben:**
-- `adesso-blau`: #006ec7 (KEINE Tints!)
+- `adesso-blau`: #006ec7 (keine Tints)
 - `adesso-grau`: #887d75 (Tints 10-90% erlaubt)
 
 **Akzentfarben:**

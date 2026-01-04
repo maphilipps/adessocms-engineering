@@ -2,7 +2,7 @@
 name: design-system-guardian
 description: Documents and enforces design tokens (spacing, typography, widths) and serves as Component Oracle to prevent duplication. Consulted during planning to ensure pattern consistency.
 tools: Read, Glob, Grep
-model: opus
+model: sonnet
 color: magenta
 ---
 

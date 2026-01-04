@@ -43,9 +43,9 @@ Create a new slash command in `.claude/commands/` for the requested task.
 5. **Think first** - use "think hard" or "plan" keywords for complex problems
 6. **Iterate** - guide the process step by step
 
-## Required: YAML Frontmatter
+## YAML Frontmatter
 
-**EVERY command MUST start with YAML frontmatter:**
+**Jeder Command sollte mit YAML Frontmatter beginnen:**
 
 ```yaml
 ---

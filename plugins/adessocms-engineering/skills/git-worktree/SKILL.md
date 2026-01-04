@@ -17,20 +17,20 @@ This skill provides a unified interface for managing Git worktrees across your d
 - **Automatic .gitignore management** for worktree directory
 - **Automatic .env file copying** from main repo to new worktrees
 
-## CRITICAL: Always Use the Manager Script
+## Empfohlen: Verwende das Manager Script
 
-**NEVER call `git worktree add` directly.** Always use the `worktree-manager.sh` script.
+**Vermeide direktes `git worktree add`.** Bevorzuge das `worktree-manager.sh` Script.
 
-The script handles critical setup that raw git commands don't:
-1. Copies `.env`, `.env.local`, `.env.test`, etc. from main repo
-2. Ensures `.worktrees` is in `.gitignore`
-3. Creates consistent directory structure
+Das Script übernimmt wichtiges Setup, das rohe Git-Befehle nicht bieten:
+1. Kopiert `.env`, `.env.local`, `.env.test`, etc. vom Main Repo
+2. Stellt sicher, dass `.worktrees` in `.gitignore` ist
+3. Erstellt konsistente Verzeichnisstruktur
 
 ```bash
-# ✅ CORRECT - Always use the script
+# ✅ Empfohlen - Verwende das Script
 bash ${CLAUDE_PLUGIN_ROOT}/skills/git-worktree/scripts/worktree-manager.sh create feature-name
 
-# ❌ WRONG - Never do this directly
+# ❌ Nicht empfohlen - Direkter Git-Befehl ohne Setup
 git worktree add .worktrees/feature-name -b feature-name main
 ```
 

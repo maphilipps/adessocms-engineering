@@ -151,7 +151,7 @@ Mobile-first approach with consistent breakpoints:
 
 ## Anti-Patterns to Avoid
 
-**DO NOT create components with:**
+**Vermeide Komponenten mit:**
 
 - Centered layouts everywhere (use intentional asymmetry)
 - Purple gradients (choose purposeful color palettes)

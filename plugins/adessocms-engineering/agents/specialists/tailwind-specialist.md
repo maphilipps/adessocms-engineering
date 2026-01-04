@@ -2,7 +2,7 @@
 name: tailwind-specialist
 description: Dual-purpose agent for implementing Tailwind CSS v4 correctly and reviewing usage in Drupal themes for v4 syntax, best practices, and optimal Vite configuration.
 tools: Read, Glob, Grep
-model: opus
+model: sonnet
 color: cyan
 ---
 
@@ -325,7 +325,7 @@ export default defineConfig({
 - [ ] Configuration in CSS `@theme` blocks (NOT JS config file)
 - [ ] Vite configured with `@tailwindcss/vite` plugin
 - [ ] No hardcoded hex colors (use semantic names)
-- [ ] Focus states visible on ALL interactive elements
+- [ ] Focus states visible on interactive elements
 
 ### High Priority
 - [ ] Mobile-first responsive classes (sm: md: lg:)

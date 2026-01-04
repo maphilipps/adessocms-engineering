@@ -6,20 +6,20 @@ argument-hint: "[path to existing plan file]"
 
 # /acms-deepen-plan - Power Enhancement Mode
 
-**Scope:** Vertiefen mit MAXIMALER Recherche-Tiefe. Keine Implementation.
+**Scope:** Vertiefen mit umfassender Recherche-Tiefe. Keine Implementation.
 
 ## Core Principle
 
-> **Run EVERYTHING in parallel. Skills, Learnings, ALL Agents, Context7, WebSearch. 40+ parallel tasks ist okay. Maximum coverage, nicht Effizienz.**
+> **Run everything in parallel. Skills, Learnings, all Agents, Context7, WebSearch. 40+ parallel tasks are fine. Comprehensive coverage over efficiency.**
 
 ## Introduction
 
 **Note: The current year is 2025.** Use this when searching for documentation.
 
 Nimmt einen existierenden Plan und reichert ihn an mit:
-- **ALL Skills** aus allen Quellen
-- **ALL Learnings** aus `docs/solutions/`, `docs/patterns/`, `docs/adr/`
-- **ALL Review Agents** (keine Filterung!)
+- **Alle Skills** aus allen Quellen
+- **Alle Learnings** aus `docs/solutions/`, `docs/patterns/`, `docs/adr/`
+- **All Review Agents** (alle verfügbaren einbeziehen)
 - **Context7 MCP** für Framework-Dokumentation
 - **WebSearch** für aktuelle Best Practices
 
@@ -50,9 +50,9 @@ Section 2: [Titel] - [Was zu recherchieren]
 
 ---
 
-## 2. Skills Discovery (PARALLEL)
+## 2. Skills Discovery (Parallel)
 
-**Finde ALL Skills aus ALLEN Quellen:**
+**Finde alle Skills aus allen Quellen:**
 
 ```bash
 # 1. Projekt-lokal
@@ -65,7 +65,7 @@ ls ~/.claude/skills/
 find ~/.claude/plugins/cache -type d -name "skills" 2>/dev/null
 ```
 
-**Für JEDEN gefundenen Skill:**
+**Für jeden gefundenen Skill:**
 1. Lies `SKILL.md` für Beschreibung
 2. Prüfe ob relevant für Plan
 3. Spawne Sub-Agent
@@ -80,11 +80,11 @@ Skill: [skill-path]/SKILL.md
 "
 ```
 
-**PARALLEL spawnen - 10, 20, 30 Skill-Agents ist okay.**
+**Parallel spawnen - 10, 20, 30 Skill-Agents sind unbedenklich.**
 
 ---
 
-## 3. Learnings Discovery (PARALLEL)
+## 3. Learnings Discovery (Parallel)
 
 **Durchsuche dokumentierte Learnings:**
 
@@ -112,7 +112,7 @@ category: performance
 - Category passt zum Plan-Domain?
 - Symptom/Problem könnte auftreten?
 
-**Für JEDES relevante Learning - Sub-Agent spawnen:**
+**Für jedes relevante Learning - Sub-Agent spawnen:**
 
 ```
 Task general-purpose: "
@@ -162,12 +162,12 @@ WebSearch: "[problem from plan] solution"
 
 ---
 
-## 6. Run ALL Review Agents (PARALLEL)
+## 6. Run All Review Agents (Parallel)
 
-**Finde ALLE verfügbaren Agents:**
+**Finde alle verfügbaren Agents:**
 
 ```bash
-# Plugin Agents (ALLE außer workflow/)
+# Plugin Agents (alle außer workflow/)
 find agents/review -name "*.md"
 find agents/research -name "*.md"
 find agents/specialists -name "*.md"
@@ -181,14 +181,14 @@ find .claude/agents -name "*.md" 2>/dev/null
 find ~/.claude/agents -name "*.md" 2>/dev/null
 ```
 
-**KRITISCH: Spawne ALLE Agents - KEINE Filterung!**
+**Wichtig: Alle verfügbaren Agents einbeziehen für umfassende Coverage.**
 
 ```
-Für JEDEN gefundenen Agent:
+Für jeden gefundenen Agent:
   Task [agent-name]: "Review diesen Plan mit deiner Expertise: [plan content]"
 ```
 
-**40+ parallele Agents ist OKAY. Maximum Coverage.**
+**40+ parallele Agents sind unbedenklich. Umfassende Coverage anstreben.**
 
 **Erwartete Agents:**
 - drupal-specialist
@@ -209,13 +209,13 @@ Für JEDEN gefundenen Agent:
 - composer-specialist
 - drupal-theme-specialist
 - agent-native-reviewer
-- ... und ALLE anderen
+- ... und alle weiteren verfügbaren
 
 ---
 
 ## 7. Wait and Synthesize
 
-**Sammle Outputs von ALLEN Quellen:**
+**Sammle Outputs von allen Quellen:**
 
 | Quelle | Was extrahieren |
 |--------|-----------------|
@@ -330,4 +330,4 @@ AskUserQuestion(questions=[{
 
 ---
 
-> **"Maximum research depth. Run everything. Let agents decide relevance."**
+> **"Comprehensive research depth. Run everything. Let agents decide relevance."**

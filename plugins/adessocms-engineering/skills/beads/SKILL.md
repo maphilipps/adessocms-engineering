@@ -122,7 +122,7 @@ Epic: Feature X
 
 ## Notes-Format für UI-Tasks
 
-Bei UI-Tasks (Label: `ui`, `frontend`, `twig`, `sdc`) ist eine **Verification mit Screenshot MANDATORY**.
+Bei UI-Tasks (Label: `ui`, `frontend`, `twig`, `sdc`) wird eine **Verification mit Screenshot empfohlen**.
 
 ### Struktur
 
@@ -197,7 +197,7 @@ bd create "Follow-up: <title>" -d "<notes>"
 # 2. Erledigte Tasks schließen
 bd close <id> --reason "Implemented in commit <sha>"
 
-# 3. Sync & Push (MANDATORY)
+# 3. Sync & Push (empfohlen)
 git pull --rebase
 bd sync
 git push

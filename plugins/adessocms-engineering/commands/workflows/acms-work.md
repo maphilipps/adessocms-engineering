@@ -146,7 +146,7 @@ done
 
 ## 3. Ralph Wiggum Loop starten
 
-**WICHTIG: Prompt MUSS statisch sein - KEINE Variablen, KEINE Bean-IDs!**
+**Hinweis: Der Prompt sollte statisch sein - keine Variablen, keine Bean-IDs.**
 
 ```
 Skill ralph-wiggum:ralph-loop
@@ -158,7 +158,7 @@ Skill ralph-wiggum:ralph-loop
 Beads work queue loop
 ```
 
-Das ist der GESAMTE Prompt. Keine IDs, keine Details. Alles steht in `.beads/work-queue.txt`.
+Das ist der gesamte Prompt. Keine IDs, keine Details. Alles steht in `.beads/work-queue.txt`.
 
 **Was Claude im Loop tut:**
 
@@ -211,7 +211,7 @@ bd update <task-id> --status blocked -d "Grund: <beschreibung>"
 
 Vor `bd close`:
 
-### Gate 1: Basis-Checks (IMMER)
+### Gate 1: Basis-Checks
 
 ```bash
 # Code kompiliert/läuft
@@ -240,9 +240,9 @@ Task(
 )
 ```
 
-### Gate 3: UI Verification (MANDATORY für UI-Tasks)
+### Gate 3: UI Verification (bei UI-Tasks)
 
-**CRITICAL: Task darf NICHT geschlossen werden ohne Verification-Screenshot bei UI-Tasks!**
+**Hinweis: UI-Tasks sollten vor dem Schliessen einen Verification-Screenshot haben.**
 
 **Trigger:** Task hat Label `ui`, `frontend`, `twig`, `sdc` ODER Twig/CSS-Dateien wurden geändert.
 
@@ -281,7 +281,7 @@ bd update <task-id> --notes "VERIFIED: screenshots/<task-id>-verified.png at $(d
 
 ### Agent-Feedback verarbeiten
 
-- **Critical Issues**: MÜSSEN behoben werden vor `bd close`
+- **Critical Issues**: Sollten behoben werden vor `bd close`
 - **High Priority**: Sollten behoben werden
 - **Medium/Low**: Optional, nach Ermessen
 
@@ -307,7 +307,7 @@ Nach Epic-Abschluss:
 
 ```bash
 bd sync
-git push  # MANDATORY
+git push
 git status  # "up to date with origin"
 ```
 

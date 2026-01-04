@@ -37,8 +37,8 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 After installation, restart Claude Code. The plugin provides:
 
 - **32 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
-- **27 Commands** - Available via `/command-name`
-- **18 Skills** - Available via `Skill` tool
+- **28 Commands** - Available via `/command-name`
+- **19 Skills** - Available via `Skill` tool
 - **2 MCP Servers** - Context7, Playwright (auto-started, Claude in Chrome preferred)
 
 **Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
@@ -48,8 +48,8 @@ After installation, restart Claude Code. The plugin provides:
 | Component | Count |
 |-----------|-------|
 | Agents | 32 |
-| Commands | 27 |
-| Skills | 18 |
+| Commands | 28 |
+| Skills | 19 |
 | MCP Servers | 2 |
 
 ## Model Tier Strategy
@@ -135,6 +135,7 @@ After installation, restart Claude Code. The plugin provides:
 
 | Command | Description |
 |---------|-------------|
+| `/acms-spec` | Interview-driven specification creation (pre-planning) |
 | `/acms-plan` | Create implementation plans (parallel research agents) |
 | `/acms-review` | Run comprehensive code reviews (~15 parallel agents) |
 | `/acms-work` | Execute work items systematically (TodoWrite tracking) |
@@ -171,6 +172,8 @@ After installation, restart Claude Code. The plugin provides:
 
 | Skill | Description |
 |-------|-------------|
+| `tailwindplus-sdc-builder` | Build SDC + Paragraphs from TailwindPlus templates (DRY-first) |
+| `sdc-design-factory` | Create beautiful SDC components with design philosophy |
 | `compound-docs` | Capture solved problems as categorized documentation |
 | `create-agent-skills` | Expert guidance for creating Claude Code skills |
 | `frontend-design` | Create production-grade frontend interfaces |

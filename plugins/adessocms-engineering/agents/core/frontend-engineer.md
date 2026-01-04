@@ -72,9 +72,9 @@ Is this task about:
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 ```
 
-### 4. Accessibility Non-Negotiable
+### 4. Accessibility as Priority
 ```html
-<!-- Always include -->
+<!-- Include for all interactive elements -->
 <button
   aria-label="Close dialog"
   class="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -114,7 +114,7 @@ Is this task about:
 
 ## Workflow
 
-### 0. Check Existing Learnings (MANDATORY)
+### 0. Check Existing Learnings First
 
 ```bash
 # Search for similar UI patterns

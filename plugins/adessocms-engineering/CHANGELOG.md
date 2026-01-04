@@ -1,5 +1,150 @@
 # Changelog
 
+## [1.41.0] - 2026-01-04
+
+### Changed - Opus 4.5 Optimization
+
+**Comprehensive optimization of all plugin components for Claude Opus 4.5 compatibility.**
+
+This release applies systematic prompt optimizations based on Opus 4.5 best practices to reduce tool overtriggering and improve response quality.
+
+#### Language Softening (79 files modified)
+
+Aggressive language patterns were replaced with softer alternatives:
+
+| Pattern | Replacement | Files Affected |
+|---------|-------------|----------------|
+| `ALWAYS` | `prefer`, `should` | 25+ |
+| `NEVER` | `avoid`, `should not` | 20+ |
+| `MUST` | `recommended`, `should` | 30+ |
+| `CRITICAL` | `Important`, `Wichtig` | 15+ |
+| `MANDATORY` | `Empfohlen`, `recommended` | 12+ |
+| `elite` | `experienced`, `specialized` | 3 |
+
+#### Model Tier Optimizations
+
+Downgraded non-critical agents from `opus` to `sonnet` for cost efficiency:
+
+| Agent | Change | Rationale |
+|-------|--------|-----------|
+| `repo-research-analyst` | opus → sonnet | Research doesn't require top-tier reasoning |
+| `performance-oracle` | opus → sonnet | Performance analysis is pattern-based |
+| `design-system-guardian` | opus → sonnet | Pattern matching, not complex decisions |
+| `accessibility-specialist` | opus → sonnet | WCAG rules are well-defined |
+| `tailwind-specialist` | opus → sonnet | CSS v4 patterns are documented |
+| `drupal-specialist` | opus → sonnet | Drupal patterns are standardized |
+| `test-coverage-specialist` | opus → sonnet | Test patterns are predictable |
+| `document-writer` | opus → sonnet | Documentation is structured |
+
+**Note:** `security-sentinel` remains at `opus` - security analysis requires maximum reasoning capability.
+
+#### Command Optimizations
+
+Critical workflow commands received major softening:
+
+- **`/acms-deepen-plan`**: `MAXIMUM` → `Umfassend`, `KRITISCH` → `Wichtig`
+- **`/acms-spec`**: Replaced ❌ negative framing with ✅ positive framing
+- **`/acms-plan`**: `MANDATORY` → `Empfohlen`, `Always run` → `Sollte durchgeführt werden`
+- **`/acms-work`**: `CRITICAL: Task darf NICHT` → `Hinweis: sollte`
+- **`/acms-review`**: `MANDATORY - AFTER` → `nach den`
+
+#### Skill Optimizations
+
+Top skills with aggressive language were softened:
+
+- **`web-to-adessocms`**: `ALWAYS use` → `Bevorzuge`, `NEVER use` → `Vermeide`
+- **`git-worktree`**: `CRITICAL: Always Use` → `Empfohlen: Verwende`
+- **`compound-docs`**: `BLOCKING REQUIREMENT` → `Erforderliche Informationen`
+- **`adesso-styleguide`**: `KEINE Abstufungen` → `Keine Abstufungen`
+- **`project-ownership`**: `ALL...MUST` → `Stelle sicher, dass...`
+
+#### Agent Optimizations
+
+All 32 agents reviewed and optimized:
+
+- **`frontend-engineer`**: `Non-Negotiable` → `as Priority`
+- **`figma-design-sync`**: `IMPORTANT` headers softened
+- **`design-iterator`**: `you must:` → implicit, `Avoid this:` → `Aim instead for`
+- **`security-sentinel`**: `BAD:` → `Avoid:`, but kept `model: opus`
+- **`librarian`**: `MANDATORY CITATION FORMAT` → `Recommended Citation Format`
+- **`code-simplifier`**: `ruthlessly simplify` → `effectively simplify`
+
+#### Technical Details
+
+- **79 files modified** across agents/, commands/, skills/
+- **100+ individual edits** for language patterns
+- **8 model downgrades** (opus → sonnet)
+- **0 functionality changes** - only prompt language affected
+- **Backward compatible** - no breaking changes
+
+---
+
+## [1.40.0] - 2026-01-04
+
+### Added - TailwindPlus SDC Builder Skill
+
+**New skill: `tailwindplus-sdc-builder`** - Build Drupal SDC components and Paragraphs using TailwindPlus templates.
+
+**Key Features:**
+- **DRY-First Workflow**: Always checks existing components before creating new ones
+- **TailwindPlus MCP Integration**: Searches, previews, and retrieves components via MCP
+- **Interactive Selection**: Presents component options to user via `AskUserQuestion`
+- **Complete Generation**: Creates SDC + Paragraph type + field configs + templates
+
+**Workflow:**
+```
+1. DRY Check → "Do we already have a hero?"
+2. TailwindPlus Search → mcp__tailwindplus__search_component_names("hero")
+3. User Selection → AskUserQuestion with preview options
+4. SDC Generation → component.yml, .twig, .css
+5. Paragraph Config → paragraphs_type.yml, field configs
+6. Template → paragraph--{name}.html.twig with SDC embed
+```
+
+**Trigger Patterns:**
+- "Ich brauche ein Hero" / "I need a features section"
+- "Create a component from TailwindPlus"
+- "Paragraph erstellen" with component type
+
+**References included:**
+- `sdc-schema-patterns.md` - Complete schema examples for all component types
+- `paragraph-field-mapping.md` - Field type recommendations for SDC slots
+- `tailwindplus-component-map.md` - Common TailwindPlus → SDC mappings
+
+**Updated skill-invoker.md** to route requests appropriately between `tailwindplus-sdc-builder` and `sdc-design-factory`.
+
+---
+
+## [1.39.0] - 2026-01-04
+
+### Added - Pre-Planning Specification Interview
+
+**New command: `/acms-spec`** - Interview-driven specification creation before planning phase.
+
+**Purpose:** Creates comprehensive specifications through deep, iterative questioning before `/acms-plan` runs.
+
+**Key Features:**
+- Reads existing SPEC.md files and identifies gaps
+- Continuous interview loop using `AskUserQuestion`
+- Covers 5 categories: Technical, UI/UX, Concerns, Tradeoffs, Acceptance Criteria
+- Focuses on **non-obvious questions** (probing, context-aware)
+- Produces structured spec document ready for `/acms-plan`
+
+**Updated Workflow:**
+```
+/acms-spec → /acms-plan → /acms-work → /acms-review → /acms-compound
+     ↑
+   (new)
+```
+
+**Interview Technique:**
+- Avoids obvious questions ("Should we handle errors?" → obviously yes)
+- Asks probing questions ("The existing UserService has softDelete but you want hard delete. Migrate first?")
+- Follow-up questions based on answers
+- Continues until no "TBD" items remain
+
+---
+
 ## [1.38.1] - 2026-01-02
 
 ### Improved - Design Agent Descriptions

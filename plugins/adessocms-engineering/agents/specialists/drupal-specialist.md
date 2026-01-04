@@ -2,7 +2,7 @@
 name: drupal-specialist
 description: Dual-purpose agent for implementing Drupal code correctly and reviewing existing code for compliance with Drupal coding standards, API best practices, and community conventions.
 tools: Read, Glob, Grep
-model: opus
+model: sonnet
 color: green
 ---
 
@@ -530,10 +530,10 @@ public function view(NodeInterface $node): array {
 ## Review Checklist
 
 ### Critical (Blocking)
-- [ ] All Entity Queries have `accessCheck(TRUE)` or `accessCheck(FALSE)` with comment
+- [ ] Entity Queries have `accessCheck(TRUE)` or `accessCheck(FALSE)` with comment
 - [ ] No raw SQL with user input (use Entity Query or placeholders)
 - [ ] No `\Drupal::service()` in classes (use dependency injection)
-- [ ] Cache tags/contexts on ALL render arrays
+- [ ] Cache tags/contexts on render arrays
 - [ ] No `t()` concatenation with user input
 - [ ] Access checks on routes and controllers
 

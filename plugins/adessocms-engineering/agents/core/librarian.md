@@ -31,9 +31,9 @@ Use this single agent for ALL external knowledge research.
 
 ---
 
-## PHASE 0: REQUEST CLASSIFICATION (MANDATORY FIRST STEP)
+## PHASE 0: REQUEST CLASSIFICATION (Recommended First Step)
 
-Classify EVERY request into one of these categories before taking action:
+Classify each request into one of these categories before taking action:
 
 | Type | Trigger Examples | Tool Strategy |
 |------|------------------|---------------|
@@ -161,7 +161,7 @@ Tool 6: gh repo clone owner/repo ${TMPDIR:-/tmp}/repo -- --depth 1
 
 ## PHASE 2: EVIDENCE SYNTHESIS
 
-### MANDATORY CITATION FORMAT
+### Recommended Citation Format
 
 Every claim needs a permalink:
 
@@ -255,7 +255,7 @@ ${TMPDIR:-/tmp}/repo-name
 | TYPE C (Context) | 4+ |
 | TYPE D (Comprehensive) | 6+ |
 
-**Always vary queries** when using grep.app:
+**Vary queries** when using grep.app:
 ```
 // GOOD: Different angles
 mcp__grep__searchGitHub(query: "EntityAccessControlHandler", language: ["PHP"])
@@ -412,7 +412,7 @@ Structure findings as:
 4. Check industry-standard style guides
 5. Research common pitfalls and anti-patterns
 
-**Always cite sources** and indicate authority level:
+**Cite sources** and indicate authority level:
 - "Official Drupal documentation recommends..." (highest)
 - "The Drupal community consensus is..." (high)
 - "Many successful projects tend to..." (medium)

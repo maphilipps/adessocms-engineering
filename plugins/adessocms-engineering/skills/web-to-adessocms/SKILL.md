@@ -9,12 +9,12 @@ Convert website UI components into adesso CMS Single Directory Components (SDC) 
 
 ## Core Principles
 
-1. **Claude in Chrome**: ALWAYS use `mcp__claude-in-chrome__*` tools. Playwright MCP is ONLY a last-resort fallback!
-2. **Browser-First**: Always navigate to the URL and extract real HTML/CSS
-3. **Tailwind-Aware**: Source sites use Tailwind, so extract and adapt classes directly
-4. **Drupal-First**: Component MUST work in Drupal, not just Storybook
-5. **Slots-First**: ALWAYS prefer slots over props for content. Props are ONLY for configuration (theme, variant, size)
-6. **Field Templates**: Override field templates to fill component slots - this is how Drupal content flows into SDC
+1. **Claude in Chrome**: Bevorzuge `mcp__claude-in-chrome__*` Tools. Playwright MCP als Alternative, falls Chrome nicht verfügbar.
+2. **Browser-First**: Navigiere zur URL und extrahiere echtes HTML/CSS
+3. **Tailwind-Aware**: Quellseiten nutzen Tailwind, extrahiere und adaptiere Klassen direkt
+4. **Drupal-First**: Komponenten sollen in Drupal funktionieren, nicht nur in Storybook
+5. **Slots-First**: Bevorzuge Slots statt Props für Content. Props nur für Konfiguration (theme, variant, size)
+6. **Field Templates**: Überschreibe Field Templates um Component Slots zu befüllen - so fließt Drupal Content in SDC
 
 ---
 
@@ -22,20 +22,20 @@ Convert website UI components into adesso CMS Single Directory Components (SDC) 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  1. Claude in Chrome (PRIMARY - ALWAYS USE FIRST)           │
+│  1. Claude in Chrome (Bevorzugt)                            │
 │     mcp__claude-in-chrome__tabs_context_mcp                 │
 │     mcp__claude-in-chrome__navigate                         │
 │     mcp__claude-in-chrome__javascript_tool                  │
 │     mcp__claude-in-chrome__computer (screenshot, wait)      │
 │     mcp__claude-in-chrome__resize_window                    │
 ├─────────────────────────────────────────────────────────────┤
-│  2. Playwright MCP (FALLBACK ONLY)                          │
-│     ⚠️ Only use if Chrome extension is unavailable          │
+│  2. Playwright MCP (Alternative)                            │
+│     Falls Chrome Extension nicht verfügbar                  │
 │     mcp__plugin_adessocms-engineering_pw__*                 │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Why Chrome First?**
+**Warum Chrome bevorzugen?**
 - Direct browser control via extension
 - Better JavaScript execution context
 - More reliable for complex sites
@@ -265,9 +265,9 @@ components/[name]/
 ├── [name].css            # OPTIONAL: Custom styles (from extracted CSS)
 ```
 
-### Step 3.2: Slots vs Props Decision (CRITICAL)
+### Step 3.2: Slots vs Props Decision (Wichtig)
 
-**⚠️ THIS IS MANDATORY - Always follow this decision tree:**
+**Empfohlener Entscheidungsbaum:**
 
 | Content Type | Use | Reason |
 |--------------|-----|--------|
@@ -282,10 +282,10 @@ components/[name]/
 | Boolean flags | **PROP** | Configuration, not content |
 | Layout options | **PROP** | Configuration, not content |
 
-**Rule of Thumb:**
-- 🔴 **NEVER** use props for content that comes from Drupal fields
-- 🟢 **ALWAYS** use slots for field content → override field templates
-- 🟢 **ONLY** use props for configuration/settings
+**Faustregel:**
+- 🔴 Vermeide Props für Content aus Drupal Fields
+- 🟢 Bevorzuge Slots für Field Content → überschreibe Field Templates
+- 🟢 Nutze Props nur für Konfiguration/Settings
 
 ### Step 3.3: Convert HTML to Twig
 
@@ -353,7 +353,7 @@ components/[name]/
 
 ### Step 3.4: Create Component Schema (Slots-First)
 
-**⚠️ CRITICAL: Define slots for ALL content, props ONLY for configuration:**
+**Wichtig: Definiere Slots für Content, Props nur für Konfiguration:**
 
 ```yaml
 $schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
@@ -397,9 +397,9 @@ slots:
     description: Image or video (field_media or field_image)
 ```
 
-### Step 3.5: Create Field Templates (MANDATORY)
+### Step 3.5: Create Field Templates (Empfohlen)
 
-**For EVERY slot, create a field template that fills it:**
+**Für jeden Slot ein Field Template erstellen:**
 
 ```
 templates/field/

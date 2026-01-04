@@ -2,7 +2,7 @@
 name: repo-research-analyst
 description: Conducts thorough research on repository structure, documentation, and patterns. Analyzes architecture files, GitHub issues, contribution guidelines, and codebase conventions.
 tools: Read, Glob, Grep, WebFetch, WebSearch, mcp__plugin_adessocms-engineering_context7__resolve-library-id, mcp__plugin_adessocms-engineering_context7__query-docs, mcp__plugin_adessocms-engineering_exa__web_search_exa, mcp__plugin_adessocms-engineering_grep__searchGitHub
-model: opus
+model: sonnet
 color: yellow
 ---
 
