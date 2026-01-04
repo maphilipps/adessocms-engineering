@@ -174,15 +174,61 @@ date: 2025-01-01
 - Wiederkehrende Probleme und ihre Struktur
 - Trade-offs und Konsequenzen
 
-## 5. Abschluss
+## 5. Abschluss (Lokal)
 
 1. **Datei schreiben** in entsprechendes Verzeichnis
 2. **In Typora öffnen:**
    ```bash
    open -a Typora docs/[type]/[filename].md
    ```
-3. **Melden:**
-   > "[Type] dokumentiert: `docs/[type]/[filename].md`"
+
+---
+
+## 6. Push to Engineering-KB (Auto-Draft)
+
+Nach dem lokalen Speichern wird das Knowledge Item automatisch als Draft zum Engineering-KB gepusht.
+
+### 6.1 Type-Mapping
+
+| Lokaler Type | KB Type |
+|--------------|---------|
+| Pattern | `pattern` |
+| ADR | `adr` |
+| Anti-Pattern | `anti-pattern` |
+| Checklist | `best-practice` |
+
+### 6.2 Draft erstellen
+
+```
+mcp__plugin_adessocms-engineering_engineering-kb__generate_draft({
+  type: "<mapped_type>",
+  title: "<title from frontmatter>",
+  context: "<full markdown content>",
+  projectId: "adessocms"  // fest konfiguriert
+})
+```
+
+### 6.3 Draft zur Review übermitteln
+
+```
+mcp__plugin_adessocms-engineering_engineering-kb__submit_for_review({
+  id: "<draft_id from generate_draft>"
+})
+```
+
+### 6.4 User informieren
+
+Nach erfolgreichem Push:
+
+> "[Type] dokumentiert: `docs/[type]/[filename].md`"
+> "📤 Draft in Engineering-KB erstellt (ID: `<id>`)"
+> "Review-Status: Pending - Ein Team-Mitglied muss den Draft genehmigen."
+
+Bei Fehler (z.B. MCP nicht erreichbar):
+
+> "[Type] dokumentiert: `docs/[type]/[filename].md`"
+> "⚠️ Engineering-KB Push fehlgeschlagen: <error>"
+> "Lokale Datei wurde gespeichert. Nutze `/sync-knowledge` für manuellen Upload."
 
 ---
 

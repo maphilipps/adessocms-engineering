@@ -36,10 +36,10 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 
 After installation, restart Claude Code. The plugin provides:
 
-- **32 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
-- **28 Commands** - Available via `/command-name`
+- **33 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
+- **29 Commands** - Available via `/command-name`
 - **19 Skills** - Available via `Skill` tool
-- **2 MCP Servers** - Context7, Playwright (auto-started, Claude in Chrome preferred)
+- **4 MCP Servers** - Engineering-KB, Context7, Exa, grep.app
 
 **Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
 
@@ -47,10 +47,10 @@ After installation, restart Claude Code. The plugin provides:
 
 | Component | Count |
 |-----------|-------|
-| Agents | 32 |
-| Commands | 28 |
+| Agents | 33 |
+| Commands | 29 |
 | Skills | 19 |
-| MCP Servers | 2 |
+| MCP Servers | 4 |
 
 ## Model Tier Strategy
 

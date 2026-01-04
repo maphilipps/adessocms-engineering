@@ -1,5 +1,76 @@
 # Changelog
 
+## [1.43.0] - 2026-01-04
+
+### Added - Engineering Knowledge Base Integration
+
+**Zentrale, team-übergreifende Knowledge Base für Patterns, ADRs, Best Practices und Anti-Patterns.**
+
+#### New MCP Server: engineering-kb
+
+Integration des **engineering-kb MCP Servers** für team-weites Knowledge Sharing:
+
+```json
+"engineering-kb": {
+  "type": "sse",
+  "url": "https://mcp.adessocms.de/mcp"
+}
+```
+
+**Verfügbare Tools:**
+- `search_knowledge` - NL-Suche in Team-Knowledge
+- `get_knowledge` - Details zu einem Knowledge Item
+- `create_knowledge` - Neues Item erstellen
+- `generate_draft` - AI-generierter Draft
+- `submit_for_review` - Draft zur Review übermitteln
+- `approve_knowledge` / `reject_knowledge` - Review-Workflow
+- `list_stacks` / `list_projects` - Stack/Project Management
+
+#### Updated: Librarian Agent
+
+**Engineering-KB als primäre Quelle** (vor Context7/Web):
+
+1. **Step 0.5: Engineering Knowledge Base** - Neuer Abschnitt vor TYPE A/B/C/D
+2. Team-Knowledge hat Vorrang vor externen Quellen
+3. Neue Tools: `search_knowledge`, `get_knowledge`
+
+#### Updated: /acms-compound Workflow
+
+**Automatischer Draft-Push nach lokalem Speichern:**
+
+1. Lokale Datei schreiben (wie bisher)
+2. `generate_draft` → AI erstellt strukturierten Content
+3. `submit_for_review` → Draft wartet auf Team-Approval
+4. User-Feedback mit KB-ID und Review-Status
+
+#### New Agent: knowledge-bulk-loader
+
+**Bulk-Upload bestehender Dokumentation zum Engineering-KB:**
+
+- Scannt `docs/solutions/`, `docs/patterns/`, `docs/adr/`, etc.
+- AI-Klassifikation für Type-Mapping
+- Duplicate-Check gegen bestehende KB-Items
+- Batch-Upload in 5er-Gruppen
+
+#### New Command: /sync-knowledge
+
+**Manuelles Synchronisieren lokaler Docs zum KB:**
+
+```bash
+/sync-knowledge              # Standard sync
+/sync-knowledge --force      # Re-Upload ohne Duplicate-Check
+/sync-knowledge --dry-run    # Nur Report, kein Upload
+/sync-knowledge --path=docs/patterns/  # Nur bestimmtes Verzeichnis
+```
+
+#### Component Counts
+
+- **Agents:** 32 → 33 (+1 knowledge-bulk-loader)
+- **Commands:** 28 → 29 (+1 /sync-knowledge)
+- **MCP Servers:** 3 → 4 (+1 engineering-kb)
+
+---
+
 ## [1.42.0] - 2026-01-04
 
 ### Changed - /acms-work Simplified for Ralph Wiggum
