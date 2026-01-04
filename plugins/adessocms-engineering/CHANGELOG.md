@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.42.0] - 2026-01-04
+
+### Changed - /acms-work Simplified for Ralph Wiggum
+
+**Simplified `/acms-work` to work directly with Ralph Wiggum loop.**
+
+#### Key Changes
+
+- **No Epic/Feature Resolution**: Beads werden nicht mehr zu Tasks aufgelöst - sie werden direkt in die Work-Queue geschrieben
+- **Ralph Wiggum Native**: Schreibt `.claude/beads-work-queue.md` und startet `/ralph-loop`
+- **Chrome Verification**: Features mit UI-Änderungen werden automatisch mit Claude in Chrome visuell geprüft
+- **Simpler Workflow**: Pending → Implementieren → Chrome Check → Done → Commit
+
+#### New Workflow
+
+```
+/acms-work epic-001 feat-002
+  ↓
+.claude/beads-work-queue.md (Pending/Done lists)
+  ↓
+/ralph-loop "Process .claude/beads-work-queue.md"
+  ↓
+<promise>ALL_BEADS_COMPLETE</promise>
+```
+
 ## [1.41.0] - 2026-01-04
 
 ### Changed - Opus 4.5 Optimization

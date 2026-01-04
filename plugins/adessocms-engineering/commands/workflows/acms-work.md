@@ -1,314 +1,86 @@
 ---
 name: acms-work
-description: Execute Tasks from Epics/Features via Ralph Wiggum loop (always drills down to Task level)
-argument-hint: "[bean-ids or leave empty to select]"
+description: Execute Beads (Epics/Features/Tasks) via Ralph Wiggum loop
+argument-hint: "[bean-ids or leave empty for auto-select]"
 ---
 
-# /acms-work - Beads Task Executor
+# /acms-work - Beads Executor
 
-Arbeitet immer auf **Task-Ebene**. Epics und Features werden zu ihren Tasks aufgelöst.
+Schreibt Beads in die Work-Queue und startet Ralph Wiggum.
 
-## Beads Hierarchie
-
-```
-Epic (groß)
-  └── Feature (mittel)
-        └── Task (atomar) ← HIER wird gearbeitet
-```
-
-## 0. Environment Initialization (Anthropic init.sh Pattern)
-
-### 0.1 Prerequisite Checks
+## Schritt 1: Environment Check
 
 ```bash
 # Beads CLI Check
-if ! command -v bd &> /dev/null; then
-  echo "❌ Beads CLI nicht installiert!"
-  echo "Installation: npm install -g @beads/bd"
-  exit 1
-fi
+command -v bd &> /dev/null || { echo "❌ bd nicht installiert"; exit 1; }
 
-# DDEV Check + Auto-Start
-if command -v ddev &> /dev/null; then
-  if ! ddev describe &> /dev/null 2>&1; then
-    echo "🔄 DDEV nicht gestartet - starte automatisch..."
-    ddev start
-    echo "✅ DDEV gestartet"
-  fi
-fi
+# DDEV Auto-Start
+command -v ddev &> /dev/null && ! ddev describe &> /dev/null 2>&1 && ddev start
 ```
 
-### 0.2 Session Recovery
+## Schritt 2: Beads sammeln
+
+### Mit Argumenten (`/acms-work epic-001 feat-002`)
+
+Direkt die angegebenen Bean-IDs verwenden.
+
+### Ohne Argumente (Auto-Select)
 
 ```bash
-if [ -f ".beads/session-state.md" ]; then
-  echo "📋 Vorherige Session gefunden - lade Kontext..."
-  echo ""
-  cat .beads/session-state.md
-  echo ""
-
-  # Frage: Kontext übernehmen?
-  AskUserQuestion(questions=[{
-    "question": "Session-Kontext aus PreCompact übernehmen?",
-    "header": "Recovery",
-    "options": [
-      {"label": "Ja, fortsetzen", "description": "Mit Task aus session-state.md weitermachen"},
-      {"label": "Nein, neu starten", "description": "Session-State ignorieren, neu auswählen"}
-    ],
-    "multiSelect": false
-  }])
-
-  # Bei "Ja": Task-ID aus session-state.md extrahieren und direkt verwenden
-  # Bei "Nein": Weiter mit normaler Auswahl
-fi
+bd ready --json | jq -r '.[].id'
 ```
 
-## 1. Auto-Select oder manuelle Auswahl
+## Schritt 3: Work-Queue schreiben
 
-### Option A: Auto-Select (Default bei `/acms-work` ohne Argumente)
-
-**Anthropic Pattern: "Identify highest-priority incomplete feature"**
-
-```bash
-# Höchster Priority Ready Task
-next_task=$(bd ready --json 2>/dev/null | jq -r 'sort_by(.priority) | .[0].id // empty')
-
-if [ -z "$next_task" ]; then
-  echo "✅ Keine offenen Tasks - alle Beads erledigt!"
-  exit 0
-fi
-
-echo "🎯 Nächster Task (Auto-Select): $next_task"
-bd show $next_task
-
-# Markiere als in_progress
-bd update $next_task --status in_progress
-```
-
-### Option B: Manuelle Auswahl (bei expliziten Bean-IDs)
-
-```bash
-# Liste alle offenen Beans
-bd list --status open
-```
-
-Frage User mit AskUserQuestion (Mehrfachauswahl):
-
-```
-AskUserQuestion(questions=[{
-  "question": "Welche Beans möchtest du bearbeiten?",
-  "header": "Beans",
-  "options": [
-    {"label": "epic-001", "description": "[Epic] 2 Features, 5 Tasks"},
-    {"label": "feat-002", "description": "[Feature] 3 Tasks"},
-    {"label": "task-003", "description": "[Task] Direkt bearbeitbar"},
-    ...
-  ],
-  "multiSelect": true
-}])
-```
-
-**Labels = nur IDs** (keine Sonderzeichen!)
-
-## 2. Zu Tasks auflösen
-
-```bash
-# Für jede ausgewählte Bean: Zu Tasks auflösen
-resolve_to_tasks() {
-  bean_id=$1
-  type=$(bd show $bean_id --format json | jq -r '.type')
-
-  case $type in
-    epic)
-      # Epic → Features → Tasks
-      bd list --parent $bean_id --type feature --format json | \
-        jq -r '.[].id' | while read feat_id; do
-          bd list --parent $feat_id --type task --format json | jq -r '.[].id'
-        done
-      ;;
-    feature)
-      # Feature → Tasks
-      bd list --parent $bean_id --type task --format json | jq -r '.[].id'
-      ;;
-    task)
-      # Task → direkt
-      echo $bean_id
-      ;;
-  esac
-}
-
-# Alle Tasks in Datei sammeln
-> .beads/work-queue.txt
-for bean_id in $selected_beans; do
-  resolve_to_tasks $bean_id >> .beads/work-queue.txt
-done
-```
-
-## 3. Ralph Wiggum Loop starten
-
-**Hinweis: Der Prompt sollte statisch sein - keine Variablen, keine Bean-IDs.**
-
-```
-Skill ralph-wiggum:ralph-loop
-```
-
-**Exakter Loop-Prompt (copy-paste, NICHTS ändern):**
-
-```
-Beads work queue loop
-```
-
-Das ist der gesamte Prompt. Keine IDs, keine Details. Alles steht in `.beads/work-queue.txt`.
-
-**Was Claude im Loop tut:**
-
-```
-1. task_id=$(head -1 .beads/work-queue.txt)
-   Falls leer → EXIT
-
-2. bd show $task_id
-   → Details lesen
-
-3. Implementieren + Commit
-
-4. bd close $task_id
-   sed -i '' '1d' .beads/work-queue.txt
-
-5. → Schritt 1
-```
-
-## 4. Abschlusskriterien (Exit Conditions)
-
-**Alle ausgewählten Beans sind FERTIG wenn:**
-- [ ] Jede Bean (Epic/Task) wurde bearbeitet
-- [ ] Alle Subtasks von Epics haben Status "closed"
-- [ ] Alle Commits gepusht: `git push`
-
-**Nach jeder Bean:**
-```bash
-bd close <bean-id> --reason "Completed"
-bd sync
-```
-
-**Am Ende aller Beans:**
-```bash
-git push
-```
-
-## 5. Bei Blockern
-
-Falls ein Task nicht abgeschlossen werden kann:
-
-```bash
-# Task als blocked markieren
-bd update <task-id> --status blocked -d "Grund: <beschreibung>"
-
-# Weiter zum nächsten Task
-→ zurück zu Schritt 1
-```
-
-## Quality Gates (pro Task)
-
-Vor `bd close`:
-
-### Gate 1: Basis-Checks
-
-```bash
-# Code kompiliert/läuft
-ddev drush cr  # Cache clear
-ddev exec phpcs --standard=Drupal,DrupalPractice <changed_files>
-```
-
-- [ ] Code kompiliert/läuft
-- [ ] Tests passen (falls vorhanden)
-- [ ] Commit erstellt
-
-### Gate 2: Specialist Agents (by file type)
-
-| Datei-Pattern | Agent |
-|---------------|-------|
-| `*.component.yml`, `components/*.twig` | @agent-sdc-specialist |
-| `*.html.twig` (nicht in components/) | @agent-twig-specialist |
-| `paragraph--*.html.twig` | @agent-paragraphs-specialist |
-
-**Invoke Specialist für Review:**
-```
-Task(
-  subagent_type="adessocms-engineering:specialists:sdc-specialist",
-  prompt="Review these SDC changes for best practices: <list_of_changed_files>",
-  description="SDC review"
-)
-```
-
-### Gate 3: UI Verification (bei UI-Tasks)
-
-**Hinweis: UI-Tasks sollten vor dem Schliessen einen Verification-Screenshot haben.**
-
-**Trigger:** Task hat Label `ui`, `frontend`, `twig`, `sdc` ODER Twig/CSS-Dateien wurden geändert.
-
-**Invoke webapp-testing Skill:**
-
-```
-Skill("webapp-testing")
-```
-
-**Playwright Verification Script:**
-
-```python
-from playwright.sync_api import sync_playwright
-
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    page = browser.new_page()
-
-    # DDEV URL navigieren
-    page.goto('https://PROJECT.ddev.site/PATH')
-    page.wait_for_load_state('networkidle')
-
-    # Screenshot für Evidence
-    screenshot_path = f'screenshots/{task_id}-verified.png'
-    page.screenshot(path=screenshot_path, full_page=True)
-
-    browser.close()
-```
-
-**Nach erfolgreicher Verification:**
-
-```bash
-# Update Beads Notes mit Screenshot-Pfad
-bd update <task-id> --notes "VERIFIED: screenshots/<task-id>-verified.png at $(date -Iseconds)"
-```
-
-### Agent-Feedback verarbeiten
-
-- **Critical Issues**: Sollten behoben werden vor `bd close`
-- **High Priority**: Sollten behoben werden
-- **Medium/Low**: Optional, nach Ermessen
-
-### Notes-Format für UI-Tasks
+Schreibe `.claude/beads-work-queue.md`:
 
 ```markdown
-COMPLETED:
-- [x] Component implementiert
-- [x] Twig-Template angepasst
+# Beads Work Queue
 
-VERIFIED:
-- Screenshot: screenshots/bd-a3f8.1-verified.png
-- URL: https://project.ddev.site/node/123
-- Timestamp: 2026-01-02T14:30:00Z
+## Pending
+- [ ] epic-001: Hero Section implementieren
+- [ ] feat-002: Card-Komponente erstellen
+- [ ] task-003: Tailwind Config anpassen
 
-NEXT:
-- PR erstellen
+## Done
+(hier werden erledigte eingetragen)
+
+## Instructions
+
+Für jeden Bead in "Pending":
+
+1. `bd show <bead-id>` - Details lesen
+2. Implementieren (Epic = mehrere Commits, Feature = 1-2 Commits, Task = 1 Commit)
+3. Bei **Features mit UI**: Chrome-Verification durchführen (siehe unten)
+4. `bd close <bead-id>`
+5. Von Pending nach Done verschieben
+6. Commit + Push
+
+## Chrome Verification (für Features/UI-Arbeit)
+
+Wenn ein Feature UI-Änderungen enthält:
+
+1. DDEV URL öffnen: `mcp__claude-in-chrome__navigate`
+2. Screenshot machen: `mcp__claude-in-chrome__computer` mit action="screenshot"
+3. Visuell prüfen ob es korrekt aussieht
+4. Bei Fehlern: Fixen und erneut prüfen
+
+## Completion
+
+Wenn "Pending" leer ist:
+- `bd sync && git push`
+- Ausgabe: <promise>ALL_BEADS_COMPLETE</promise>
 ```
 
-## Land the Plane
+## Schritt 4: Ralph starten
 
-Nach Epic-Abschluss:
+```
+/ralph-loop "Process .claude/beads-work-queue.md" --completion-promise "ALL_BEADS_COMPLETE" --max-iterations 100
+```
+
+## Nach Abschluss
 
 ```bash
 bd sync
 git push
-git status  # "up to date with origin"
 ```
-
-> **"Work is NOT complete until `git push` succeeds"**
