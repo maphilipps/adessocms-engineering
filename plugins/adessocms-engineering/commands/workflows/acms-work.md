@@ -75,7 +75,7 @@ Wenn "Pending" leer ist:
 ## Schritt 4: Ralph starten
 
 ```
-/ralph-loop "Process .claude/beads-work-queue.md" --completion-promise "ALL_BEADS_COMPLETE" --max-iterations 100
+/ralph-loop "Arbeite .claude/beads-work-queue.md ab bis fertig" --completion-promise "ALL_BEADS_COMPLETE"
 ```
 
 ## Nach Abschluss
