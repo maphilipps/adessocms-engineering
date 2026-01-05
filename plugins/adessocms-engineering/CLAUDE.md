@@ -45,3 +45,77 @@ skills/
 ## Documentation
 
 See `docs/solutions/plugin-versioning-requirements.md` for detailed versioning workflow.
+
+---
+
+## adesso CMS Engineering Workflow
+
+### Hauptworkflow
+
+```
+/acms-spec          # Spezifikation erstellen (optional mit Research)
+      ↓
+CC Plan Mode        # Native Claude Code Planung
+      ↓
+CC Implementation   # Native Claude Code Umsetzung
+      ↓
+/acms-review        # Parallel Specialist Review
+      ↓
+/acms-compound      # Learnings extrahieren
+```
+
+### /acms-spec (mit optionalem Research)
+
+Nach dem Interview fragt `/acms-spec` ob Research Agents gestartet werden sollen:
+- `repo-research-analyst` - Codebase Patterns und Konventionen
+- `librarian` - Externe Dokumentation mit Permalinks
+- `design-system-guardian` - UI/Design: existierende Komponenten und Tokens
+
+### CC Plan Mode - Specialist Usage
+
+Wenn du in Plan Mode wechselst, nutze unsere Agents:
+
+**Phase 1 (Explore):**
+```
+Task(subagent_type="adessocms-engineering:research:repo-research-analyst", ...)
+Task(subagent_type="adessocms-engineering:core:librarian", ...)
+```
+
+**Phase 2 (Design) - für große Änderungen:**
+```
+Task(subagent_type="adessocms-engineering:specialists:architecture-strategist", ...)
+```
+
+**Plan Output:**
+- Schreibe Plan nach `plans/<feature>.md`
+- Öffne in Typora: `open -a Typora plans/<feature>.md`
+
+### CC Implementation - Specialist Usage
+
+Während der Implementation, nutze Specialists basierend auf Change Type:
+
+| Change Type | Specialists |
+|-------------|-------------|
+| PHP/Module | `drupal-specialist`, `security-sentinel` |
+| Twig/Theme | `twig-specialist`, `drupal-theme-specialist` |
+| SDC Components | `sdc-specialist` |
+| CSS/Tailwind | `tailwind-specialist` |
+| Tests | `test-coverage-specialist` |
+| Database/Migrations | `data-integrity-guardian` |
+| Performance-kritisch | `performance-oracle` |
+| **Vor jedem Commit** | `code-simplifier` |
+
+### Nach Implementation
+
+1. `/acms-review` - Parallel Specialist Review basierend auf geänderten Dateien
+2. `/acms-compound` - Learnings und Patterns extrahieren
+3. Git commit + push
+
+### Verfügbare Specialists (18+)
+
+**Drupal Core:** `drupal-specialist`, `drupal-theme-specialist`, `paragraphs-specialist`
+**Frontend:** `twig-specialist`, `sdc-specialist`, `tailwind-specialist`, `storybook-specialist`
+**Quality:** `security-sentinel`, `accessibility-specialist`, `test-coverage-specialist`
+**Architecture:** `architecture-strategist`, `performance-oracle`, `code-simplifier`
+**Data:** `data-integrity-guardian`, `composer-specialist`
+**Design:** `design-system-guardian`, `component-reuse-specialist`

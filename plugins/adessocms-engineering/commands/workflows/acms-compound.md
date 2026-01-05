@@ -237,7 +237,6 @@ Bei Fehler (z.B. MCP nicht erreichbar):
 ```bash
 git add docs/
 git commit -m "docs: Add [pattern|adr|anti-pattern|checklist] - [title]"
-bd sync
 git push
 ```
 

@@ -166,6 +166,47 @@ AskUserQuestion(questions=[{
 }])
 ```
 
+### 4.5 Optional: Research Phase
+
+**Nach dem Interview, VOR dem Schreiben der Spec:**
+
+Frage ob zusätzlicher Research-Kontext gewünscht ist:
+
+```
+AskUserQuestion(questions=[{
+  "question": "Soll ich Research Agents für zusätzlichen Kontext starten?",
+  "header": "Research?",
+  "multiSelect": false,
+  "options": [
+    {"label": "Ja, Research starten", "description": "Starte repo-research-analyst + librarian parallel für Codebase-Patterns und externe Docs"},
+    {"label": "Nein, direkt zur Spec", "description": "Interview-Ergebnisse reichen aus, Spec direkt schreiben"}
+  ]
+}])
+```
+
+**Wenn "Ja, Research starten":**
+
+Starte diese Agents parallel mit dem Feature-Kontext aus dem Interview:
+
+```
+# Parallel Research Agents
+Task(subagent_type="adessocms-engineering:research:repo-research-analyst",
+     prompt="Analysiere die Codebase für: [feature_description]. Finde relevante Patterns, existierende Implementierungen, und Konventionen.")
+
+Task(subagent_type="adessocms-engineering:core:librarian",
+     prompt="Recherchiere externe Dokumentation für: [feature_description]. Finde Best Practices, Framework-Docs, und relevante Beispiele mit Permalinks.")
+
+# Für UI/Design Features zusätzlich:
+Task(subagent_type="adessocms-engineering:specialists:design-system-guardian",
+     prompt="Analysiere Design Tokens und existierende Komponenten für: [feature_description]. Welche können wiederverwendet werden?")
+```
+
+**Research Findings integrieren:**
+
+- Füge relevante Findings in die Spec ein (separater Abschnitt "Research Findings")
+- Verlinke zu gefundenen Code-Beispielen und Dokumentation
+- Notiere Patterns die befolgt werden sollten
+
 ### 5. Write the Specification
 
 When the interview is complete, write a structured spec:
@@ -212,6 +253,12 @@ When the interview is complete, write a structured spec:
 - [ ] [Specific, measurable criterion]
 - [ ] [Another criterion]
 
+## Research Findings (if research was conducted)
+[Findings from repo-research-analyst, librarian, design-system-guardian]
+- Relevant code patterns: [links]
+- External documentation: [links]
+- Reusable components: [list]
+
 ## Open Questions (if any)
 [Only if truly unresolved - prefer resolving during interview]
 
@@ -232,22 +279,22 @@ When the interview is complete, write a structured spec:
 
 3. **Report completion:**
 
-> "Spec erstellt: `[path]` - Datei wurde in Typora geöffnet. Nächster Schritt: `/acms-plan [path]`"
+> "Spec erstellt: `[path]` - Datei wurde in Typora geöffnet. Nächster Schritt: Plan Mode aktivieren für die Planung."
 
 ## Integration with Workflow
 
 ```
-/acms-spec  →  /acms-plan  →  /acms-work  →  /acms-review  →  /acms-compound
-    ↑              ↑
-  (this)      (uses spec)
+/acms-spec  →  CC Plan Mode  →  CC Implementation  →  /acms-review  →  /acms-compound
+    ↑              ↑                    ↑
+  (this)      (uses spec)       (uses plan)
 ```
 
-**This command produces input for `/acms-plan`.** The spec should be detailed enough that planning requires no additional clarification from the user.
+**This command produces input for Claude Code's native Plan Mode.** The spec should be detailed enough that planning requires no additional clarification from the user.
 
 ## Hinweis: Ende der Spezifikationsphase
 
 Dieser Command endet nach dem Schreiben der Spezifikation:
 - Fokus bleibt auf Dokumentation
-- Keine automatische Weiterleitung zu `/acms-plan`
+- Keine automatische Weiterleitung zu Plan Mode
 
-Der User entscheidet selbst, wann und ob `/acms-plan` ausgeführt wird.
+**Nächster Schritt:** Der User aktiviert Claude Code Plan Mode manuell für die Planung.

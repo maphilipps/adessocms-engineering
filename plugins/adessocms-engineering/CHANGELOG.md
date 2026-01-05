@@ -1,5 +1,57 @@
 # Changelog
 
+## [2.0.0] - 2026-01-05
+
+### BREAKING CHANGES - Workflow Simplification
+
+**Radikale Vereinfachung:** Der Workflow nutzt jetzt Claude Code's native Plan Mode und Implementation statt eigener Commands.
+
+#### Removed Commands (5)
+
+- `/acms-plan` - Ersetzt durch CC Plan Mode
+- `/acms-work` - Ersetzt durch CC native Implementation
+- `/acms-deepen-plan` - In Plan Mode integriert
+- `/acms-plan-review` - Entfernt
+- `/acms-beads` - Beads komplett entfernt
+
+#### Removed Features
+
+- **Beads Integration** - Komplett entfernt (`.beads/` Verzeichnis, Hooks, Skill)
+- **Ralph Wiggum Loop als Default** - Optional verfügbar für sehr lange Tasks
+
+#### New Workflow
+
+```
+/acms-spec (optional Research)  →  CC Plan Mode  →  CC Implementation  →  /acms-review  →  /acms-compound
+```
+
+#### Updated: /acms-spec
+
+- Neue optionale Research-Phase nach dem Interview
+- Kann `repo-research-analyst`, `librarian`, `design-system-guardian` parallel starten
+- Research Findings werden in die Spec integriert
+
+#### Updated: CLAUDE.md
+
+- Neuer Workflow-Guide für CC Plan Mode und Implementation
+- Specialist Usage Matrix für verschiedene Change Types
+- Verfügbare Specialists Übersicht (18+)
+
+#### Updated: AGENTS.md
+
+- Beads-Referenzen entfernt
+- Neuer Workflow-Guide
+
+### Kept (unchanged)
+
+- `/acms-spec` - Interview-driven specification (erweitert)
+- `/acms-review` - Parallel specialist review
+- `/acms-compound` - Learnings extraction
+- Alle 33 Specialist Agents
+- Engineering-KB Integration
+
+---
+
 ## [1.43.0] - 2026-01-04
 
 ### Added - Engineering Knowledge Base Integration
