@@ -37,7 +37,7 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 After installation, restart Claude Code. The plugin provides:
 
 - **33 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
-- **25 Commands** - Available via `/command-name`
+- **30 Commands** - Available via `/command-name`
 - **19 Skills** - Available via `Skill` tool
 - **4 MCP Servers** - Engineering-KB, Context7, Exa, grep.app
 
@@ -48,7 +48,7 @@ After installation, restart Claude Code. The plugin provides:
 | Component | Count |
 |-----------|-------|
 | Agents | 33 |
-| Commands | 25 |
+| Commands | 30 |
 | Skills | 19 |
 | MCP Servers | 4 |
 
