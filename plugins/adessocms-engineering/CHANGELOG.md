@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0] - 2026-01-05
+
+### Added
+
+- **gemini-imagegen Skill** - Generate and edit images using Google's Gemini API
+  - Text-to-image generation with customizable aspect ratios (1:1, 16:9, 9:16, etc.)
+  - Image editing with natural language instructions
+  - Multi-image composition (up to 14 reference images)
+  - Multi-turn refinement via chat interface
+  - Python library (`gemini_images.py`) and CLI scripts
+  - Supports 1K, 2K, 4K resolutions
+  - From [compound-engineering](https://github.com/EveryInc/compound-engineering-plugin)
+
 ## [2.0.0] - 2026-01-05
 
 ### BREAKING CHANGES - Workflow Simplification

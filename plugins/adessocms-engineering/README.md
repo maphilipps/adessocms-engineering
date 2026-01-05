@@ -38,7 +38,7 @@ After installation, restart Claude Code. The plugin provides:
 
 - **33 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
 - **24 Commands** - Available via `/command-name`
-- **18 Skills** - Available via `Skill` tool
+- **19 Skills** - Available via `Skill` tool
 - **4 MCP Servers** - Engineering-KB, Context7, Exa, grep.app
 
 **Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
@@ -49,7 +49,7 @@ After installation, restart Claude Code. The plugin provides:
 |-----------|-------|
 | Agents | 33 |
 | Commands | 24 |
-| Skills | 18 |
+| Skills | 19 |
 | MCP Servers | 4 |
 
 ## Model Tier Strategy
@@ -178,6 +178,7 @@ After installation, restart Claude Code. The plugin provides:
 | `frontend-design` | Create production-grade frontend interfaces |
 | `adesso-styleguide` | adesso Corporate Design compliance |
 | `skill-creator` | Guide for creating effective Claude Code skills |
+| `gemini-imagegen` | Generate/edit images with Gemini API (text-to-image, editing, composition) |
 
 ### Workflow
 
