@@ -13,6 +13,12 @@
   - Supports 1K, 2K, 4K resolutions
   - From [compound-engineering](https://github.com/EveryInc/compound-engineering-plugin)
 
+- **`/generate-isometric-3d` Command** - Generate isometric low-poly 3D style images
+  - Corporate illustration style with clean geometric shapes
+  - Soft diffuse shadows, matte materials
+  - Customizable aspect ratios and resolutions
+  - Perfect for business presentations and marketing materials
+
 ## [2.0.0] - 2026-01-05
 
 ### BREAKING CHANGES - Workflow Simplification
