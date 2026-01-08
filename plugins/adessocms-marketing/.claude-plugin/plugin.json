@@ -1,7 +1,7 @@
 {
   "name": "adessocms-marketing",
-  "version": "0.3.0",
-  "description": "Vollständige Marketing-Analyse für Unternehmen: 7 Commands, 22 Agents, 5 Skills - Opus 4.5 optimiert mit paralleler Agenten-Ausführung",
+  "version": "0.4.0",
+  "description": "Vollständige Marketing-Analyse für Unternehmen: 7 Commands, 25 Agents, 6 Skills - inkl. Website-Audit für Drupal-Relaunches mit dualer Schätzung",
   "author": {
     "name": "adesso SE",
     "email": "drupal@adesso.de"
@@ -16,6 +16,10 @@
     "brand",
     "competitive-analysis",
     "market-research",
-    "content-strategy"
+    "content-strategy",
+    "website-audit",
+    "drupal-relaunch",
+    "estimation",
+    "accessibility"
   ]
 }

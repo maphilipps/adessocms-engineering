@@ -1,0 +1,141 @@
+# Claude Progress Log
+# Letzte Aktualisierung: 2026-01-08 10:41:23
+# Projekt: references
+
+## Git Status
+ M ../../../../adessocms-engineering/.claude-plugin/plugin.json
+ M ../../../../adessocms-engineering/CHANGELOG.md
+ M ../../../../adessocms-engineering/CLAUDE.md
+ M ../../../../adessocms-engineering/README.md
+ D ../../../../adessocms-engineering/commands/workflows/acms-spec.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/.sync-metadata
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/SKILL.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/about.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/actions.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/ai.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/ajax.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/attribution.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/blocks.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/bq.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/caching.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/composer.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/config.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/contribute.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/cron.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/dates.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/debugging.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/decoupled.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/development.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/drush.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/dtt.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/email.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/entities.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/events.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/forms.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/general.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/hooks.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/index.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/javascript.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/layoutbuilder.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/learn.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/links.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/logging.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/menus.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/migrate.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/modals.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/modules.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/mysteries.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/nodes-and-fields.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/off-island.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/paragraphs.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/php.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/plugins.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/queries.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/redirects.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/render.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/routes.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/security.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/services.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/setup_mac.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/state.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/taxonomy.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/twig.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/upgrade.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/utility.md
+ D ../../../../adessocms-engineering/skills/drupal-at-your-fingertips/references/views.md
+ D ../../../../adessocms-engineering/skills/drupal-config-mgmt/SKILL.md
+ D ../../../../adessocms-engineering/skills/drupal-config-mgmt/references/full-guide.md
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/SKILL.md
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/examples/create-custom-patch.sh
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/examples/find-and-apply-patch.sh
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/examples/major-version-upgrade.sh
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/examples/update-with-patch.sh
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/references/d11-common-deprecations.md
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/references/drupal-patches-workflow.md
+ D ../../../../adessocms-engineering/skills/drupal-contrib-mgmt/references/issue-queue-rss-feeds.md
+ D ../../../../adessocms-engineering/skills/drupal-ddev/SKILL.md
+ D ../../../../adessocms-engineering/skills/drupal-ddev/references/config-yaml.md
+ D ../../../../adessocms-engineering/skills/git-worktree/SKILL.md
+ D ../../../../adessocms-engineering/skills/git-worktree/scripts/worktree-manager.sh
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/SKILL.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/assets/component.js.template
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/assets/component.tailwind.css.template
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/assets/component.twig.template
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/assets/component.yml.template
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/assets/design-philosophy.md.template
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/accessibility-checklist.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/component-schema-patterns.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/design-philosophy-guide.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/mercury-sdc-patterns.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/tailwind-v4-integration.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/workflow-copy-showcase.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/workflow-design-component.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/workflow-generate-variants.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/workflow-refactor-to-sdc.md
+ D ../../../../adessocms-engineering/skills/sdc-design-factory/references/workflow-review-component.md
+ D ../../../../adessocms-engineering/skills/tailwindplus-sdc-builder/SKILL.md
+ D ../../../../adessocms-engineering/skills/tailwindplus-sdc-builder/references/paragraph-field-mapping.md
+ D ../../../../adessocms-engineering/skills/tailwindplus-sdc-builder/references/sdc-schema-patterns.md
+ D ../../../../adessocms-engineering/skills/tailwindplus-sdc-builder/references/tailwindplus-component-map.md
+ D ../../../../adessocms-engineering/skills/web-to-adessocms/SKILL.md
+ D ../../../../adessocms-engineering/skills/web-to-adessocms/references/alpine-patterns.md
+ D ../../../../adessocms-engineering/skills/web-to-adessocms/references/drupal-integration.md
+ D ../../../../adessocms-engineering/skills/web-to-adessocms/references/existing-components.md
+ D ../../../../adessocms-engineering/skills/web-to-adessocms/references/sdc-patterns.md
+ D ../../../../adessocms-engineering/skills/web-to-adessocms/references/sdc-schema.md
+ D ../../../../adessocms-engineering/skills/web-to-adessocms/references/tailwind-patterns.md
+?? ../../../../adessocms-engineering/claude-progress.txt
+?? ../../../../adessocms-engineering/commands/workflows/acms-refine.md
+?? ../../../../adessocms-engineering/commands/workflows/acms-work.md
+?? ../../../../adessocms-engineering/plans/feat-engineering-kb-mcp-integration.md
+?? ../../../../adessocms-engineering/skills/adessocms-frontend/
+?? ../../../../adessocms-engineering/skills/devops/
+?? ../../../../adessocms-engineering/skills/drupal-backend/
+?? ../../../../adessocms-engineering/skills/github/
+?? ../../../../adessocms-engineering/skills/gitlab/
+?? ../../../../adessocms-engineering/skills/skill-guardian/
+?? ../
+
+## Letzte Commits
+edb884e feat: Add 5 more image generation style commands
+3082b62 feat: Add /generate-isometric-3d command for low-poly 3D images
+2e9dd4a feat(v2.1.0): Add gemini-imagegen skill from compound-engineering
+a8482d9 feat(v2.0.0)!: Replace custom workflows with CC native Plan Mode
+ef96c8f feat(v1.43.0): Engineering Knowledge Base MCP Integration
+
+## Aktueller Branch
+main
+
+## Offene Beads/Tasks
+Beads nicht verfügbar
+
+## Unstaged Changes (Zusammenfassung)
+ .../references/existing-components.md              |  133 ---
+ .../web-to-adessocms/references/sdc-patterns.md    |  406 -------
+ .../web-to-adessocms/references/sdc-schema.md      |  242 ----
+ .../references/tailwind-patterns.md                |  268 -----
+ 101 files changed, 278 insertions(+), 14719 deletions(-)
+
+---
+Diese Datei wurde automatisch vom PreCompact Hook erstellt.
+Lies diese Datei am Anfang einer neuen Session um den Kontext wiederherzustellen.

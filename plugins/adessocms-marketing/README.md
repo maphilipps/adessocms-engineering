@@ -22,7 +22,7 @@ Vollständige Marketing-Intelligence für Unternehmen - von der Recherche bis zu
 | `/analyze-brand` | Marken- & Kommunikationsanalyse |
 | `/generate-context` | AI-Kontext aus Analysen erstellen |
 
-## Agents (22)
+## Agents (25)
 
 ### Research & Discovery
 - `company-researcher` - Firmengeschichte, Team, Kultur
@@ -55,14 +55,20 @@ Vollständige Marketing-Intelligence für Unternehmen - von der Recherche bis zu
 ### Output & Synthese
 - `context-generator` - AI-Kontext erstellen
 - `analysis-synthesizer` - Erkenntnisse zusammenführen
+- `estimation-synthesizer` - Schätzungsvergleich erstellen
 
-## Skills (5)
+### Estimation (Website-Audit)
+- `traditional-estimator` - Schätzung ohne AI
+- `ai-estimator` - Schätzung mit AI (~67% Reduktion)
+
+## Skills (6)
 
 - `marketing-methodology` - Analyse-Frameworks
 - `conversion-psychology` - Kaufpsychologie
 - `persona-development` - Persona-Methodik
 - `competitive-analysis` - Wettbewerbsanalyse-Frameworks
 - `brand-strategy` - Markenstrategien
+- `website-audit` - **NEU** Website-Audit für Drupal-Relaunches (siehe unten)
 
 ## Output
 
@@ -103,6 +109,59 @@ analysis/
 /analyze-audience https://example.com
 ```
 
+## Website-Audit Skill (NEU)
+
+AI-gestütztes Website-Audit für **Drupal-Relaunch-Projekte**. Analysiert bestehende Websites und erstellt duale Schätzungen (mit/ohne AI-Unterstützung).
+
+### Features
+
+- **CMS-Erkennung**: WordPress, Drupal, Typo3, Magnolia, Sitecore, AEM
+- **Content-Mapping**: Automatische Zuordnung zu Drupal-Entities
+- **Duale Schätzung**: Traditionell vs. KI-unterstützt (~67% Reduktion)
+- **Accessibility-Audit**: WCAG 2.1 AA Prüfung
+- **Document Matching**: Website gegen Briefing/Specs matchen
+- **VitePress-Output**: Automatische Dokumentations-Site
+
+### Workflows
+
+| Workflow | Beschreibung | Dauer |
+|----------|--------------|-------|
+| Full Audit | Komplette 11-Phasen-Analyse + VitePress | 2-4h |
+| Quick Tech Check | CMS + Tech-Stack | 15-30min |
+| Estimation Only | Entity-Count → Duale Schätzung | 30-60min |
+| Document Match | Gap-Analyse gegen Briefing | 1-2h |
+
+### Estimation Agents (3)
+
+| Agent | Funktion |
+|-------|----------|
+| `traditional-estimator` | Schätzung ohne AI (100% manuell) |
+| `ai-estimator` | Schätzung mit Claude Code (~67% Reduktion) |
+| `estimation-synthesizer` | Vergleichsreport erstellen |
+
+### Beispiel-Output
+
+```
+╔═══════════════════════════════════════════════════════════════╗
+║              PROJEKT-SCHÄTZUNG VERGLEICH                       ║
+╠═══════════════════════════════════════════════════════════════╣
+║ Kategorie             │ Traditionell │ KI-Unterstützt │ Erspart║
+╠═══════════════════════════════════════════════════════════════╣
+║ Inhaltstypen          │ 24h          │ 8h             │ 67%    ║
+║ Paragraphs            │ 52h          │ 17h            │ 67%    ║
+║ Theme-Komponenten     │ 120h         │ 40h            │ 67%    ║
+╠═══════════════════════════════════════════════════════════════╣
+║ GESAMT                │ 874h         │ 294h           │ 66%    ║
+║ KI-ERSPARNIS          │         66% Reduktion (580h)          ║
+╚═══════════════════════════════════════════════════════════════╝
+```
+
+### Tools
+
+- **Browser**: Claude in Chrome MCP (exklusiv)
+- **Accessibility**: Accessibility MCP (WCAG 2.1)
+- **Tech Detection**: WebSearch (BuiltWith, Wappalyzer)
+
 ## Opus 4.5 Optimierung
 
 Dieses Plugin ist für **Opus 4.5** optimiert:
@@ -129,6 +188,14 @@ Dieses Plugin ist für **Opus 4.5** optimiert:
 
 ## Version
 
+- **v0.4.0** - Website-Audit Skill
+  - Neuer Skill: `website-audit` für Drupal-Relaunch-Projekte
+  - Duale Schätzung: Traditionell vs. KI-unterstützt (~67% Reduktion)
+  - 3 neue Agents: `traditional-estimator`, `ai-estimator`, `estimation-synthesizer`
+  - 4 Workflows: Full Audit, Quick Tech Check, Estimation Only, Document Match
+  - Claude in Chrome MCP Integration
+  - Accessibility MCP für WCAG 2.1 Tests
+  - VitePress Dokumentations-Generator
 - **v0.3.0** - Opus 4.5 Optimierung
   - Parallelisierungsanweisungen für alle Commands
   - Model-Selection für kreative/analytische Agents (opus)
