@@ -28,9 +28,9 @@ Perform code reviews using parallel specialist agents.
 - `gh pr view --json title,body,files,additions,deletions`
 - Identify changed files
 
-### 2. Run Specialists (Parallel)
+### 2. Run Specialists (Parallel - MANDATORY)
 
-Select based on changes:
+**Select specialists based on changed file types, then invoke them IN PARALLEL:**
 
 | Change Type | Specialists |
 |-------------|-------------|
@@ -43,6 +43,17 @@ Select based on changes:
 | Database | data-integrity-guardian |
 | Large changes | architecture-strategist, performance-oracle |
 | ALL reviews | code-simplifier (after synthesis) |
+
+**INVOKE with Task tool - ALL in a single message for parallelism:**
+
+```
+Task(subagent_type: "adessocms-engineering:specialists:drupal-specialist", prompt: "Review PHP changes in this PR: [file list]")
+Task(subagent_type: "adessocms-engineering:specialists:security-sentinel", prompt: "Audit security of changes: [file list]")
+Task(subagent_type: "adessocms-engineering:specialists:twig-specialist", prompt: "Review Twig templates: [file list]")
+// ... more in same message = parallel execution
+```
+
+**This is MANDATORY.** Do not just list specialists - actually invoke them with the Task tool.
 
 ### 3. Deep Interview (nach den Specialists)
 

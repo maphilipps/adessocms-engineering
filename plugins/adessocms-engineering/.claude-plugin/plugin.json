@@ -1,7 +1,7 @@
 {
   "name": "adessocms-engineering",
-  "version": "2.1.0",
-  "description": "AI-powered Drupal development with Spec→CC Plan Mode→CC Implementation→Review→Compound workflow. 33 agents, 30 commands, 19 skills.",
+  "version": "3.2.0",
+  "description": "AI-powered Drupal development with Ralph Loop workflow (Refine→Work→Review→Compound). 32 agents, 27 commands, 17 skills. Auto-Invoke Rules ensure skills/specialists are actually used. Uses official code-simplifier from marketplace.",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",
@@ -31,7 +31,7 @@
       "type": "sse",
       "url": "https://mcp.adessocms.de/mcp",
       "headers": {
-        "Authorization": "Bearer ekb_0mR0Iw8RNZABL0KhxTHqn1h6uDZspRGyeu_pe5QT6jA"
+        "Authorization": "Bearer ekb_Y3uQeIoaZ5Y1gMVLlHGdz_ZNXV3gIPW0rdNC3fe6mpU"
       }
     },
     "context7": {

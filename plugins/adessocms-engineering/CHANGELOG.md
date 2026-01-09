@@ -1,5 +1,115 @@
 # Changelog
 
+## [3.2.0] - 2026-01-09
+
+### Added
+
+- **Auto-Invoke Rules** in CLAUDE.md - Explicit instructions for WHEN to invoke skills/specialists
+  - Skills invoked based on `feature.skill` field in feature-list.json
+  - Specialists invoked based on changed file types during `/acms-review`
+  - **code-simplifier MANDATORY** after every implementation (uses official Anthropic marketplace plugin)
+
+### Changed
+
+- **`/acms-work`** - Added Step 5: code-simplifier (MANDATORY before commit)
+- **`/acms-review`** - Explicit Task tool invocation for parallel specialist execution
+- **Specialist count**: 18 → 17 (code-simplifier moved to official marketplace)
+
+### Removed
+
+- `agents/specialists/code-simplifier.md` - Replaced by official `claude-plugins-official` marketplace plugin
+- 4 duplicate commands (underscore variants): `generate_command`, `resolve_parallel`, `resolve_pr_parallel`, `resolve_todo_parallel`
+
+### Fixed
+
+- **Invoke Logic** - Skills and Specialists now actually get invoked (Boris Cherny pattern)
+
+---
+
+## [3.1.0] - 2026-01-08
+
+### Added
+
+- **skill-guardian Skill** - Maintains ownership, quality, and consistency across all skills
+  - **13 files total**: SKILL.md (router) + 6 workflows + 4 references + 2 templates
+  - **Inventory dashboard**: List all skills with health metrics (✅⚠️❌)
+  - **Deep audit**: 25+ criteria check against Anthropic official best practices
+  - **Optimization**: Apply fixes with user approval, before/after previews
+  - **Batch audit**: Parallel audit all skills with aggregate report
+  - **Consistency enforcement**: Cross-skill naming, structure, pattern checks
+  - **Migration**: Pre-Opus 4.5 → current patterns (markdown→XML, verbose→concise)
+  - **Quality metrics**: Scored 0-100 across 4 dimensions (Description, Structure, Content, Disclosure)
+  - References Anthropic's official skill-creator as authoritative source
+
+### Changed
+
+- **`/acms-work` Command** - Now uses Ralph Wiggum Pattern with Completion Promises
+  - Explicit Task Definition with monitoring criteria
+  - Completion Promise with integrity statement ("I have not taken any shortcuts or faked anything")
+  - "While Waiting" section - no idle time during CI/builds
+  - Evidence-based verification for each acceptance criterion
+- Skill count: 16 → 17
+
+---
+
+## [3.0.0] - 2026-01-08
+
+### BREAKING CHANGES - Ralph Loop & Consolidated Skills
+
+**Major workflow redesign** based on [Anthropic's Feature-List approach](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) and [Ralph's skill patterns](https://github.com/snarktank/ralph/tree/main/skills).
+
+#### New Workflow: Ralph Loop
+
+```
+/acms-refine (Feature-List)  →  /acms-work (Ralph Loop)  →  /acms-review  →  /acms-compound
+```
+
+- **`/acms-refine`** (was `/acms-spec`) - Interview + Research → Feature-List (`feature-list.json`)
+- **`/acms-work`** (NEW) - Ralph Loop: Work feature-by-feature until all `passes: true`
+- Features are atomic, one per session, strict order (Schema → Backend → Frontend → Tests)
+
+#### Consolidated Meta-Skills (Domain Expertise Pattern)
+
+**8 skills consolidated into 5 Meta-Skills** following the pattern: `SKILL.md (router) → workflows/ → references/`
+
+| New Meta-Skill | Consolidates | Files |
+|----------------|--------------|-------|
+| `adessocms-frontend` | sdc-design-factory, tailwindplus-sdc-builder, web-to-adessocms | 15 files (SKILL.md + 5 workflows + 9 references) |
+| `drupal-backend` | drupal-at-your-fingertips, drupal-config-mgmt, drupal-contrib-mgmt | 20 files (SKILL.md + 7 workflows + 12 references) |
+| `devops` | drupal-ddev, git-worktree | 9 files (SKILL.md + 5 workflows + 3 references) |
+| `gitlab` | NEW | 8 files (SKILL.md + 4 workflows + 3 references) |
+| `github` | NEW | 8 files (SKILL.md + 4 workflows + 3 references) |
+
+#### Removed Skills (8)
+
+- `sdc-design-factory` → `adessocms-frontend`
+- `tailwindplus-sdc-builder` → `adessocms-frontend`
+- `web-to-adessocms` → `adessocms-frontend`
+- `drupal-at-your-fingertips` → `drupal-backend`
+- `drupal-config-mgmt` → `drupal-backend`
+- `drupal-contrib-mgmt` → `drupal-backend`
+- `drupal-ddev` → `devops`
+- `git-worktree` → `devops`
+
+#### Renamed Commands
+
+- `/acms-spec` → `/acms-refine` (same functionality, new name + Feature-List output)
+
+### Added
+
+- **5 New Consolidated Skills** with Domain Expertise Pattern
+- **`/acms-work` Command** - Ralph Loop for feature-by-feature implementation
+- **60+ Reference Files** - Comprehensive documentation for each skill domain
+- **Feature-List Format** - JSON-based task tracking with `passes` boolean
+
+### Changed
+
+- Skill count: 19 → 16 (8 removed, 5 added)
+- Command count: 30 → 31 (+1 /acms-work)
+- Workflow: Interview → Feature-List → Ralph Loop
+
+---
+
 ## [2.1.0] - 2026-01-05
 
 ### Added

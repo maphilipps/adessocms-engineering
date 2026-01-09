@@ -37,8 +37,8 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 After installation, restart Claude Code. The plugin provides:
 
 - **33 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
-- **30 Commands** - Available via `/command-name`
-- **19 Skills** - Available via `Skill` tool
+- **31 Commands** - Available via `/command-name`
+- **17 Skills** - Available via `Skill` tool (5 consolidated Meta-Skills + skill-guardian in v3.1.0)
 - **4 MCP Servers** - Engineering-KB, Context7, Exa, grep.app
 
 **Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
@@ -48,8 +48,8 @@ After installation, restart Claude Code. The plugin provides:
 | Component | Count |
 |-----------|-------|
 | Agents | 33 |
-| Commands | 30 |
-| Skills | 19 |
+| Commands | 31 |
+| Skills | 17 |
 | MCP Servers | 4 |
 
 ## Model Tier Strategy
@@ -131,15 +131,16 @@ After installation, restart Claude Code. The plugin provides:
 
 ## Commands
 
-### Workflow Commands
+### Workflow Commands (Ralph Loop)
 
 | Command | Description |
 |---------|-------------|
-| `/acms-spec` | Interview-driven specification creation (optional research agents) |
+| `/acms-refine` | Interview + Feature-List creation (was `/acms-spec`) |
+| `/acms-work` | Ralph Loop - Work feature-by-feature from `feature-list.json` |
 | `/acms-review` | Run comprehensive code reviews (~15 parallel agents) |
 | `/acms-compound` | Document solved problems to compound team knowledge |
 
-**Note (v2.0.0):** `/acms-plan` and `/acms-work` removed. Use Claude Code's native Plan Mode and Implementation instead. See CLAUDE.md for specialist usage guidelines.
+**New in v3.0.0:** Ralph Loop workflow based on Anthropic's Feature-List approach. See CLAUDE.md for detailed workflow.
 
 ### Utility Commands
 
@@ -157,27 +158,31 @@ After installation, restart Claude Code. The plugin provides:
 
 ## Skills
 
-### Drupal Development
+### Consolidated Meta-Skills (v3.0.0)
+
+**Domain Expertise Pattern:** Each Meta-Skill has `SKILL.md (router) → workflows/ → references/`
+
+| Skill | Description | Files |
+|-------|-------------|-------|
+| `adessocms-frontend` | SDC, Tailwind v4, Twig, Alpine.js, Storybook | 15 files |
+| `drupal-backend` | Entities, Services, Plugins, Config, Migration, Security | 20 files |
+| `devops` | DDEV, Composer, Docker, CI/CD | 9 files |
+| `gitlab` | glab CLI, MRs, Pipelines, Issues | 8 files |
+| `github` | gh CLI, PRs, Actions, Issues | 8 files |
+
+### Drupal Security
 
 | Skill | Description |
 |-------|-------------|
-| `drupal-at-your-fingertips` | Comprehensive Drupal patterns from Selwyn Polit's d9book (50+ topics) |
-| `drupal-config-mgmt` | Configuration management best practices |
-| `drupal-contrib-mgmt` | Contrib module management and patching |
-| `drupal-ddev` | DDEV integration and workflows |
 | `ivangrynenko-cursorrules-drupal` | Drupal security guidelines (OWASP-based) |
 
 ### Development Tools
 
 | Skill | Description |
 |-------|-------------|
-| `tailwindplus-sdc-builder` | Build SDC + Paragraphs from TailwindPlus templates (DRY-first) |
-| `sdc-design-factory` | Create beautiful SDC components with design philosophy |
 | `compound-docs` | Capture solved problems as categorized documentation |
 | `create-agent-skills` | Expert guidance for creating Claude Code skills |
-| `frontend-design` | Create production-grade frontend interfaces |
 | `adesso-styleguide` | adesso Corporate Design compliance |
-| `skill-creator` | Guide for creating effective Claude Code skills |
 | `gemini-imagegen` | Generate/edit images with Gemini API (text-to-image, editing, composition) |
 
 ### Workflow
@@ -185,10 +190,10 @@ After installation, restart Claude Code. The plugin provides:
 | Skill | Description |
 |-------|-------------|
 | `file-todos` | File-based todo tracking system |
-| `git-worktree` | Manage Git worktrees for parallel development |
 | `plan-from-jira` | Create implementation plans from Jira tickets |
 | `project-ownership` | Product ownership patterns |
 | `landing-page-optimizer` | Plan and optimize landing pages for conversion (AIDA framework) |
+| `skill-guardian` | Skill quality governance, auditing, optimization, consistency enforcement |
 
 ## MCP Servers
 
@@ -234,29 +239,31 @@ Skill(skill="dev-browser")
 
 ## Usage Examples
 
-### Code Review
+### Full Workflow (Ralph Loop)
 
-```
+```bash
+# 1. Create Feature-List
+/acms-refine "Add new paragraph type for testimonials"
+
+# 2. Work feature-by-feature (Ralph Loop)
+/acms-work
+
+# 3. Review code
 /acms-review
-```
 
-Runs ~15 parallel agents with **model="sonnet"** for token efficiency.
-
-### Create Specification
-
-```
-/acms-spec "Add new paragraph type for testimonials"
-```
-
-Interview-driven spec creation with optional research agents. Then use CC Plan Mode for planning.
-
-### Document a Solution
-
-```
+# 4. Document learnings
 /acms-compound
 ```
 
-Captures solved problems to `docs/solutions/` with YAML frontmatter.
+### Quick Actions
+
+```bash
+# Just review current changes
+/acms-review
+
+# Just document a solved problem
+/acms-compound
+```
 
 ### Specialist Combinations
 

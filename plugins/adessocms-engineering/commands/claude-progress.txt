@@ -1,0 +1,149 @@
+# Claude Progress Log
+# Letzte Aktualisierung: 2026-01-09 11:05:46
+# Projekt: commands
+
+## Git Status
+ M ../.claude-plugin/plugin.json
+ M ../CHANGELOG.md
+ M ../CLAUDE.md
+ M ../README.md
+ D ../agents/specialists/code-simplifier.md
+ D generate_command.md
+ D resolve_parallel.md
+ D resolve_pr_parallel.md
+ D resolve_todo_parallel.md
+ D workflows/acms-spec.md
+ D ../hooks/paragraph-template-validator.md
+ D ../hooks/sdc-twig-validator.md
+ D ../hooks/twig-template-validator.md
+ D ../skills/drupal-at-your-fingertips/.sync-metadata
+ D ../skills/drupal-at-your-fingertips/SKILL.md
+ D ../skills/drupal-at-your-fingertips/references/about.md
+ D ../skills/drupal-at-your-fingertips/references/actions.md
+ D ../skills/drupal-at-your-fingertips/references/ai.md
+ D ../skills/drupal-at-your-fingertips/references/ajax.md
+ D ../skills/drupal-at-your-fingertips/references/attribution.md
+ D ../skills/drupal-at-your-fingertips/references/blocks.md
+ D ../skills/drupal-at-your-fingertips/references/bq.md
+ D ../skills/drupal-at-your-fingertips/references/caching.md
+ D ../skills/drupal-at-your-fingertips/references/composer.md
+ D ../skills/drupal-at-your-fingertips/references/config.md
+ D ../skills/drupal-at-your-fingertips/references/contribute.md
+ D ../skills/drupal-at-your-fingertips/references/cron.md
+ D ../skills/drupal-at-your-fingertips/references/dates.md
+ D ../skills/drupal-at-your-fingertips/references/debugging.md
+ D ../skills/drupal-at-your-fingertips/references/decoupled.md
+ D ../skills/drupal-at-your-fingertips/references/development.md
+ D ../skills/drupal-at-your-fingertips/references/drush.md
+ D ../skills/drupal-at-your-fingertips/references/dtt.md
+ D ../skills/drupal-at-your-fingertips/references/email.md
+ D ../skills/drupal-at-your-fingertips/references/entities.md
+ D ../skills/drupal-at-your-fingertips/references/events.md
+ D ../skills/drupal-at-your-fingertips/references/forms.md
+ D ../skills/drupal-at-your-fingertips/references/general.md
+ D ../skills/drupal-at-your-fingertips/references/hooks.md
+ D ../skills/drupal-at-your-fingertips/references/index.md
+ D ../skills/drupal-at-your-fingertips/references/javascript.md
+ D ../skills/drupal-at-your-fingertips/references/layoutbuilder.md
+ D ../skills/drupal-at-your-fingertips/references/learn.md
+ D ../skills/drupal-at-your-fingertips/references/links.md
+ D ../skills/drupal-at-your-fingertips/references/logging.md
+ D ../skills/drupal-at-your-fingertips/references/menus.md
+ D ../skills/drupal-at-your-fingertips/references/migrate.md
+ D ../skills/drupal-at-your-fingertips/references/modals.md
+ D ../skills/drupal-at-your-fingertips/references/modules.md
+ D ../skills/drupal-at-your-fingertips/references/mysteries.md
+ D ../skills/drupal-at-your-fingertips/references/nodes-and-fields.md
+ D ../skills/drupal-at-your-fingertips/references/off-island.md
+ D ../skills/drupal-at-your-fingertips/references/paragraphs.md
+ D ../skills/drupal-at-your-fingertips/references/php.md
+ D ../skills/drupal-at-your-fingertips/references/plugins.md
+ D ../skills/drupal-at-your-fingertips/references/queries.md
+ D ../skills/drupal-at-your-fingertips/references/redirects.md
+ D ../skills/drupal-at-your-fingertips/references/render.md
+ D ../skills/drupal-at-your-fingertips/references/routes.md
+ D ../skills/drupal-at-your-fingertips/references/security.md
+ D ../skills/drupal-at-your-fingertips/references/services.md
+ D ../skills/drupal-at-your-fingertips/references/setup_mac.md
+ D ../skills/drupal-at-your-fingertips/references/state.md
+ D ../skills/drupal-at-your-fingertips/references/taxonomy.md
+ D ../skills/drupal-at-your-fingertips/references/twig.md
+ D ../skills/drupal-at-your-fingertips/references/upgrade.md
+ D ../skills/drupal-at-your-fingertips/references/utility.md
+ D ../skills/drupal-at-your-fingertips/references/views.md
+ D ../skills/drupal-config-mgmt/SKILL.md
+ D ../skills/drupal-config-mgmt/references/full-guide.md
+ D ../skills/drupal-contrib-mgmt/SKILL.md
+ D ../skills/drupal-contrib-mgmt/examples/create-custom-patch.sh
+ D ../skills/drupal-contrib-mgmt/examples/find-and-apply-patch.sh
+ D ../skills/drupal-contrib-mgmt/examples/major-version-upgrade.sh
+ D ../skills/drupal-contrib-mgmt/examples/update-with-patch.sh
+ D ../skills/drupal-contrib-mgmt/references/d11-common-deprecations.md
+ D ../skills/drupal-contrib-mgmt/references/drupal-patches-workflow.md
+ D ../skills/drupal-contrib-mgmt/references/issue-queue-rss-feeds.md
+ D ../skills/drupal-ddev/SKILL.md
+ D ../skills/drupal-ddev/references/config-yaml.md
+ D ../skills/git-worktree/SKILL.md
+ D ../skills/git-worktree/scripts/worktree-manager.sh
+ D ../skills/sdc-design-factory/SKILL.md
+ D ../skills/sdc-design-factory/assets/component.js.template
+ D ../skills/sdc-design-factory/assets/component.tailwind.css.template
+ D ../skills/sdc-design-factory/assets/component.twig.template
+ D ../skills/sdc-design-factory/assets/component.yml.template
+ D ../skills/sdc-design-factory/assets/design-philosophy.md.template
+ D ../skills/sdc-design-factory/references/accessibility-checklist.md
+ D ../skills/sdc-design-factory/references/component-schema-patterns.md
+ D ../skills/sdc-design-factory/references/design-philosophy-guide.md
+ D ../skills/sdc-design-factory/references/mercury-sdc-patterns.md
+ D ../skills/sdc-design-factory/references/tailwind-v4-integration.md
+ D ../skills/sdc-design-factory/references/workflow-copy-showcase.md
+ D ../skills/sdc-design-factory/references/workflow-design-component.md
+ D ../skills/sdc-design-factory/references/workflow-generate-variants.md
+ D ../skills/sdc-design-factory/references/workflow-refactor-to-sdc.md
+ D ../skills/sdc-design-factory/references/workflow-review-component.md
+ D ../skills/tailwindplus-sdc-builder/SKILL.md
+ D ../skills/tailwindplus-sdc-builder/references/paragraph-field-mapping.md
+ D ../skills/tailwindplus-sdc-builder/references/sdc-schema-patterns.md
+ D ../skills/tailwindplus-sdc-builder/references/tailwindplus-component-map.md
+ D ../skills/web-to-adessocms/SKILL.md
+ D ../skills/web-to-adessocms/references/alpine-patterns.md
+ D ../skills/web-to-adessocms/references/drupal-integration.md
+ D ../skills/web-to-adessocms/references/existing-components.md
+ D ../skills/web-to-adessocms/references/sdc-patterns.md
+ D ../skills/web-to-adessocms/references/sdc-schema.md
+ D ../skills/web-to-adessocms/references/tailwind-patterns.md
+?? ../claude-progress.txt
+?? claude-progress.txt
+?? workflows/acms-refine.md
+?? workflows/acms-work.md
+?? ../plans/feat-engineering-kb-mcp-integration.md
+?? ../skills/adessocms-frontend/
+?? ../skills/devops/
+?? ../skills/drupal-backend/
+?? ../skills/github/
+?? ../skills/gitlab/
+?? ../skills/skill-guardian/
+
+## Letzte Commits
+9277a8b feat(v0.4.0): Add website-audit skill for Drupal relaunch projects
+edb884e feat: Add 5 more image generation style commands
+3082b62 feat: Add /generate-isometric-3d command for low-poly 3D images
+2e9dd4a feat(v2.1.0): Add gemini-imagegen skill from compound-engineering
+a8482d9 feat(v2.0.0)!: Replace custom workflows with CC native Plan Mode
+
+## Aktueller Branch
+main
+
+## Offene Beads/Tasks
+Beads nicht verfügbar
+
+## Unstaged Changes (Zusammenfassung)
+ .../references/existing-components.md              |  133 ---
+ .../web-to-adessocms/references/sdc-patterns.md    |  406 -------
+ .../web-to-adessocms/references/sdc-schema.md      |  242 ----
+ .../references/tailwind-patterns.md                |  268 -----
+ 109 files changed, 324 insertions(+), 15243 deletions(-)
+
+---
+Diese Datei wurde automatisch vom PreCompact Hook erstellt.
+Lies diese Datei am Anfang einer neuen Session um den Kontext wiederherzustellen.
