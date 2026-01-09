@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.3.0] - 2026-01-09
+
+### Removed - Compounding Simplified
+
+**Removed unused complexity following Boris Cherny's minimal approach:**
+
+- **Engineering-KB MCP Server** - Removed external KB (was never populated or used)
+- **`/acms-compound` command** - Removed (patterns now live in local `docs/` folder)
+- **`knowledge-bulk-loader` agent** - Removed
+- **MCP Server Management** section from CLAUDE.md
+
+### Changed
+
+- **`librarian` agent** - Now uses local `docs/` folder instead of Engineering-KB
+- **Workflow simplified**: Refine → Work → Review (no more Compound step)
+- **Component counts**: 31 agents, 25 commands, 17 skills
+
+### Philosophy
+
+> Knowledge belongs in the repo, not external systems.
+> Patterns live in `docs/patterns/`, ADRs in `docs/adr/`.
+
+---
+
 ## [3.2.0] - 2026-01-09
 
 ### Added

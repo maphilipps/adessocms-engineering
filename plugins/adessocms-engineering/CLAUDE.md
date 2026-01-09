@@ -66,8 +66,6 @@ See `docs/solutions/plugin-versioning-requirements.md` for detailed versioning w
 /acms-work          # Ralph Loop: Feature für Feature abarbeiten
       ↓
 /acms-review        # Parallel Specialist Review
-      ↓
-/acms-compound      # Learnings extrahieren
 ```
 
 ### Phase 1: /acms-refine
@@ -130,8 +128,7 @@ Arbeitet Features ab mit **einem Feature pro Session**:
 ### Phase 3: Nach Implementation
 
 1. `/acms-review` - Parallel Specialist Review
-2. `/acms-compound` - Learnings extrahieren
-3. Git commit + push
+2. Git commit + push
 
 ### Meta-Skills (v3.0.0)
 
@@ -198,89 +195,3 @@ Invoke specialists based on file types changed:
 | All changes | `architecture-strategist`, `accessibility-specialist` |
 
 **Launch specialists IN PARALLEL** using multiple Task tool calls in a single message.
-
----
-
-## MCP Server Management
-
-### Engineering-KB Server
-
-**Location:** `https://mcp.adessocms.de/mcp` (Hetzner: 95.216.208.185)
-
-**Configuration:** `.claude-plugin/plugin.json`
-```json
-"engineering-kb": {
-  "type": "sse",
-  "url": "https://mcp.adessocms.de/mcp",
-  "headers": {
-    "Authorization": "Bearer <API_KEY>"
-  }
-}
-```
-
-### API Key Generation
-
-**When token expires or becomes invalid:**
-
-1. **SSH to server:**
-```bash
-ssh root@95.216.208.185 -i ~/.ssh/id_rsa
-```
-
-2. **Navigate to project:**
-```bash
-cd /var/www/engineering-kb
-```
-
-3. **Generate new key:**
-```bash
-node -e "
-const { nanoid } = require('nanoid');
-const { randomBytes, createHash } = require('crypto');
-const bcrypt = require('bcryptjs');
-const db = require('better-sqlite3')('/var/www/engineering-kb/data/engineering-kb.db');
-
-function createUser(username, password, role) {
-  const id = nanoid();
-  const now = new Date().toISOString();
-  const passwordHash = bcrypt.hashSync(password, 12);
-  db.prepare('INSERT INTO users (id, username, password_hash, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)')
-    .run(id, username, passwordHash, role, now, now);
-  return db.prepare('SELECT * FROM users WHERE id = ?').get(id);
-}
-
-function createApiKey(userId, name, scopes) {
-  const id = nanoid();
-  const rawKey = 'ekb_' + randomBytes(32).toString('base64url');
-  const keyHash = createHash('sha256').update(rawKey).digest('hex');
-  const keyPrefix = rawKey.slice(0, 12);
-  const now = new Date().toISOString();
-  db.prepare('INSERT INTO api_keys (id, name, key_hash, key_prefix, user_id, scopes, expires_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-    .run(id, name, keyHash, keyPrefix, userId, JSON.stringify(scopes), null, now);
-  return { id, rawKey, keyPrefix, userId };
-}
-
-const user = createUser('claude-code', 'temp-password-123', 'admin');
-const apiKey = createApiKey(user.id, 'Claude Code Plugin', ['read', 'write', 'admin']);
-console.log('NEW API KEY:', apiKey.rawKey);
-"
-```
-
-4. **Update plugin.json:** Replace the Bearer token with the new key
-
-5. **Test connection:**
-```bash
-curl -s -H "Authorization: Bearer <NEW_KEY>" -H "Accept: application/json, text/event-stream" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}' \
-  https://mcp.adessocms.de/mcp
-```
-
-**Server Status Check:**
-```bash
-ssh root@95.216.208.185 -i ~/.ssh/id_rsa "pm2 list"
-```
-
-**Common Errors:**
-- `-32000 Invalid session or missing initialization`: MCP needs proper SSE headers
-- `-32001 Invalid API key`: Bearer token is expired or invalid
-- Connection refused: PM2 service not running
