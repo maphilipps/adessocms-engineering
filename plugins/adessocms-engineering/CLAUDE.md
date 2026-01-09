@@ -28,25 +28,30 @@ Before committing ANY changes:
 
 ```
 agents/
-├── review/     # Code review agents
-├── research/   # Research and analysis agents
-├── design/     # Design and UI agents
-├── workflow/   # Workflow automation agents
-└── docs/       # Documentation agents
+├── core/          # Core workflow agents (frontend-engineer, librarian, etc.)
+├── review/        # Code review agents (code-simplicity, architecture, security)
+├── research/      # Research agents (repo-analyst, best-practices, git-history)
+├── design/        # Design agents (iterator, implementation-reviewer, figma-sync)
+├── workflow/      # Workflow automation (lint, bug-validator, pr-resolver)
+├── docs/          # Documentation agents (document-writer)
+└── specialists/   # Drupal domain specialists (17 experts)
 
 commands/
-├── workflows/  # Core workflow commands (/refine, /work, /review, /compound)
-└── *.md        # Utility commands
+├── workflows/     # Core workflow commands (plan, work, review)
+├── lfg.md         # Full autonomous workflow
+├── spec.md        # Interview-based specification
+├── compound.md    # Knowledge compounding
+├── triage.md      # Finding triage
+└── *.md           # Utility commands (generate-*, resolve-*)
 
 skills/
 ├── adessocms-frontend/  # Meta-Skill: SDC, Tailwind, Twig, Alpine
-│   ├── SKILL.md         # Router
-│   ├── workflows/       # Build, Convert, Verify
-│   └── references/      # Patterns, Anti-patterns
 ├── drupal-backend/      # Meta-Skill: Entities, Services, Plugins
 ├── devops/              # Meta-Skill: DDEV, Composer, CI/CD
 ├── gitlab/              # MR, Pipelines, glab CLI
 ├── github/              # PR, Actions, gh CLI
+├── file-todos/          # File-based todo tracking
+├── compound-docs/       # Knowledge documentation
 └── *.md                 # Other skills (standalone)
 ```
 
@@ -56,63 +61,58 @@ See `docs/solutions/plugin-versioning-requirements.md` for detailed versioning w
 
 ---
 
-## adesso CMS Engineering Workflow (v3.0.0)
+## Compound Engineering Workflow (v4.0.0)
 
-### Ralph Loop - Hauptworkflow
+### Core Workflow
 
 ```
-/acms-refine        # Feature-List erstellen (Interview + Research)
+/plan               # Research + structured planning
       ↓
-/acms-work          # Ralph Loop: Feature für Feature abarbeiten
+/deepen-plan        # Add implementation details (optional)
       ↓
-/acms-review        # Parallel Specialist Review
+/work               # TodoWrite-driven implementation
+      ↓
+/review             # Parallel specialist review
+      ↓
+/compound           # Document learnings
 ```
 
-### Phase 1: /acms-refine
+### Full Autonomous (/lfg)
 
-Erstellt `tasks/<task>/feature-list.json` mit atomaren Features:
-
-```json
-{
-  "features": [
-    {
-      "id": "F001",
-      "title": "Database schema",
-      "type": "backend",
-      "skill": "drupal-backend",
-      "passes": false
-    }
-  ]
-}
+Complete workflow from idea to PR:
+```
+/lfg "Feature description"
+  → /plan → /deepen-plan → /work → /review
+  → /resolve-todo-parallel → /playwright-test → /feature-video → PR
 ```
 
-**Optional Research Agents:**
-- `repo-research-analyst` - Codebase Patterns
-- `librarian` - Externe Dokumentation
-- `design-system-guardian` - UI/Design Tokens
+Requires `ralph-loop` plugin for autonomous execution.
 
-### Phase 2: /acms-work (Ralph Loop)
+---
 
-Arbeitet Features ab mit **einem Feature pro Session**:
+### Phase 1: /plan
 
-1. Lese `feature-list.json`
-2. Wähle nächste Feature mit `passes: false`
-3. Invoke passenden Skill automatisch
-4. Implementiere + Teste
-5. Setze `passes: true` + Commit
-6. Loop → nächste Feature
+- Launches parallel research agents (repo-research-analyst, best-practices-researcher, framework-docs-researcher)
+- Creates structured implementation plan
+- Optionally uses `design-system-guardian` for UI decisions
 
-**Skill Auto-Invocation basierend auf `feature.skill`:**
+### Phase 2: /work
 
-| skill | Invokes |
-|-------|---------|
-| `adessocms-frontend` | SDC, Tailwind, Twig, Alpine.js |
-| `drupal-backend` | Entities, Services, Plugins, Config |
-| `devops` | DDEV, Composer, CI/CD |
-| `gitlab` | glab MR, Pipelines |
-| `github` | gh PR, Actions |
+- Uses TodoWrite for task tracking
+- Supports git worktrees for parallel development
+- Auto-invokes skills based on file types
 
-### Specialist Usage während Implementation
+**Skill Auto-Invocation:**
+
+| File Type | Skill Invoked |
+|-----------|---------------|
+| SDC, Twig, Tailwind | `adessocms-frontend` |
+| PHP, Module, Services | `drupal-backend` |
+| DDEV, Composer, CI | `devops` |
+| GitLab MR, Pipelines | `gitlab` |
+| GitHub PR, Actions | `github` |
+
+**Specialist Usage during Implementation:**
 
 | Change Type | Specialists |
 |-------------|-------------|
@@ -122,49 +122,71 @@ Arbeitet Features ab mit **einem Feature pro Session**:
 | CSS/Tailwind | `tailwind-specialist` |
 | Tests | `test-coverage-specialist` |
 | Database/Migrations | `data-integrity-guardian` |
-| Performance-kritisch | `performance-oracle` |
-| **Vor jedem Commit** | `code-simplifier` |
+| Performance-critical | `performance-oracle` |
+| **Before every commit** | `code-simplifier` |
 
-### Phase 3: Nach Implementation
+### Phase 3: /review
 
-1. `/acms-review` - Parallel Specialist Review
-2. Git commit + push
+- Launches 10+ specialists in parallel
+- Creates file-todos for findings in `todos/` directory
+- Uses `/triage` for one-by-one resolution
 
-### Meta-Skills (v3.0.0)
+### Phase 4: /compound
 
-**5 konsolidierte Skills mit Domain Expertise Pattern:**
+- Documents solved problems in `docs/solutions/`
+- Builds cumulative knowledge base
+- Uses YAML frontmatter for categorization
 
-| Meta-Skill | Beschreibung | Dateien |
-|------------|--------------|---------|
+---
+
+### Meta-Skills (v4.0.0)
+
+**5 consolidated skills with Domain Expertise Pattern:**
+
+| Meta-Skill | Description | Files |
+|------------|-------------|-------|
 | `adessocms-frontend` | SDC, Tailwind v4, Twig, Alpine.js | 15 files |
 | `drupal-backend` | Entities, Services, Plugins, Config | 20 files |
 | `devops` | DDEV, Composer, CI/CD | 9 files |
 | `gitlab` | glab CLI, MRs, Pipelines | 8 files |
 | `github` | gh CLI, PRs, Actions | 8 files |
 
-### Specialist Agents (17)
+### Agent Categories (40 total)
 
-**Drupal Core:** `drupal-specialist`, `drupal-theme-specialist`, `paragraphs-specialist`
-**Frontend:** `twig-specialist`, `sdc-specialist`, `tailwind-specialist`, `storybook-specialist`
-**Quality:** `security-sentinel`, `accessibility-specialist`, `test-coverage-specialist`
-**Architecture:** `architecture-strategist`, `performance-oracle`
-**Data:** `data-integrity-guardian`, `composer-specialist`
-**Design:** `design-system-guardian`, `component-reuse-specialist`
+**Review Agents (6):** `code-simplicity-reviewer`, `architecture-strategist`, `security-sentinel`, `performance-oracle`, `data-integrity-guardian`, `pattern-recognition-specialist`
+
+**Research Agents (4):** `repo-research-analyst`, `best-practices-researcher`, `framework-docs-researcher`, `git-history-analyzer`
+
+**Design Agents (3):** `design-iterator`, `design-implementation-reviewer`, `figma-design-sync`
+
+**Workflow Agents (4):** `bug-reproduction-validator`, `lint`, `pr-comment-resolver`, `spec-flow-analyzer`
+
+**Docs Agents (1):** `document-writer`
+
+**Core Agents (5):** `frontend-engineer`, `librarian`, `reviewer-selector`, `skill-invoker`, `agent-native-reviewer`
+
+**Drupal Specialists (17):**
+- **Core:** `drupal-specialist`, `drupal-theme-specialist`, `paragraphs-specialist`
+- **Frontend:** `twig-specialist`, `sdc-specialist`, `tailwind-specialist`, `storybook-specialist`
+- **Quality:** `accessibility-specialist`, `test-coverage-specialist`
+- **Architecture:** `component-reuse-specialist`
+- **Data:** `composer-specialist`
+- **Design:** `design-system-guardian`
 
 ---
 
 ## Auto-Invoke Rules (MANDATORY)
 
-### During Implementation (/acms-work)
+### During Implementation (/work)
 
-When `feature-list.json` specifies a skill, Claude MUST invoke it:
+When working on features, Claude MUST invoke skills based on file types:
 
 ```
-"skill": "adessocms-frontend" → Skill(skill: "adessocms-frontend")
-"skill": "drupal-backend"    → Skill(skill: "drupal-backend")
-"skill": "devops"            → Skill(skill: "devops")
-"skill": "gitlab"            → Skill(skill: "gitlab")
-"skill": "github"            → Skill(skill: "github")
+SDC/Twig/Tailwind work → Skill(skill: "adessocms-frontend")
+PHP/Module work        → Skill(skill: "drupal-backend")
+DDEV/CI work          → Skill(skill: "devops")
+GitLab work           → Skill(skill: "gitlab")
+GitHub work           → Skill(skill: "github")
 ```
 
 ### After Implementation: code-simplifier (MANDATORY)
@@ -173,7 +195,7 @@ After completing ANY implementation task, Claude MUST automatically invoke
 the code-simplifier agent to ensure code is minimal and simple.
 
 **This applies to:**
-- After /acms-work completes a feature
+- After /work completes a feature
 - After any significant code changes (5+ lines)
 - Before committing changes
 
@@ -181,7 +203,7 @@ the code-simplifier agent to ensure code is minimal and simple.
 
 **This is MANDATORY, not optional. No exceptions.**
 
-### During Review (/acms-review)
+### During Review (/review)
 
 Invoke specialists based on file types changed:
 

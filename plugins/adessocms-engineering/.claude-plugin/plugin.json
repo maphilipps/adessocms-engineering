@@ -1,7 +1,7 @@
 {
   "name": "adessocms-engineering",
-  "version": "3.3.0",
-  "description": "AI-powered Drupal development with Ralph Loop workflow (Refine→Work→Review). 31 agents, 25 commands, 17 skills. Auto-Invoke Rules ensure skills/specialists are actually used.",
+  "version": "4.0.0",
+  "description": "AI-powered Drupal 11 engineering with compound workflow pattern. 40 agents, 32 commands, 17 skills. Workflow: Plan→Work→Review→Compound. Auto-Invoke Rules for skills/specialists.",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",
@@ -37,6 +37,11 @@
     "grep": {
       "type": "http",
       "url": "https://mcp.grep.app"
+    },
+    "tailwindplus": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "tailwindplus-mcp"]
     }
   }
 }

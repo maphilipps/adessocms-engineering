@@ -36,21 +36,21 @@ git clone https://github.com/maphilipps/adessocms-engineering.git .claude/plugin
 
 After installation, restart Claude Code. The plugin provides:
 
-- **33 Agents** - Available via `@agent-name` in conversations (DRY consolidated in v1.38.0)
-- **31 Commands** - Available via `/command-name`
-- **17 Skills** - Available via `Skill` tool (5 consolidated Meta-Skills + skill-guardian in v3.1.0)
-- **4 MCP Servers** - Engineering-KB, Context7, Exa, grep.app
+- **40 Agents** - Organized in 7 categories: review, research, design, workflow, docs, core, specialists
+- **32 Commands** - Compound Engineering workflow + utilities
+- **17 Skills** - 5 consolidated Meta-Skills + specialized tools
+- **4 MCP Servers** - Context7, Exa, grep.app, TailwindPlus
 
 **Required Dependency:** Install the `dev-browser` skill separately for browser automation (see Prerequisites below).
 
 ## Components
 
-| Component | Count |
-|-----------|-------|
-| Agents | 33 |
-| Commands | 31 |
-| Skills | 17 |
-| MCP Servers | 4 |
+| Component | Count | Description |
+|-----------|-------|-------------|
+| Agents | 40 | Review (6), Research (4), Design (3), Workflow (4), Docs (1), Core (5), Specialists (17) |
+| Commands | 32 | Compound workflow (5), Full autonomous (1), Utilities (26) |
+| Skills | 17 | Meta-Skills (5), Tools (12) |
+| MCP Servers | 4 | Context7, Exa, grep.app, TailwindPlus |
 
 ## Model Tier Strategy
 
@@ -62,9 +62,9 @@ After installation, restart Claude Code. The plugin provides:
 | **sonnet** | Standard reviews, external research | 21 agents |
 | **haiku** | Local research, simple tasks | 5 agents |
 
-**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `acms-bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
+**No model field (inherits session):** `security-sentinel`, `architecture-strategist`, `performance-oracle`, `bug-reproduction-validator`, `design-implementation-reviewer`, `design-iterator`
 
-**Haiku:** `acms-lint`, `composer-specialist`, `git-history-analyzer`, `repo-research-analyst`, `reviewer-selector`
+**Haiku:** `lint`, `composer-specialist`, `git-history-analyzer`, `repo-research-analyst`, `reviewer-selector`
 
 ## Agents
 
@@ -95,12 +95,25 @@ After installation, restart Claude Code. The plugin provides:
 | `agent-native-reviewer` | sonnet | Agent-native design, agent-user parity |
 | `design-system-guardian` | sonnet | Design tokens, component discovery, reuse |
 
-### Research (2)
+### Review Agents (6)
 
 | Agent | Model | Description |
 |-------|-------|-------------|
-| `git-history-analyzer` | haiku | Analyze git history and code evolution |
+| `code-simplicity-reviewer` | sonnet | Ensure code is minimal and simple, prevent over-engineering |
+| `architecture-strategist` | - | Architectural decisions and compliance |
+| `security-sentinel` | - | Security implementation and audits (OWASP) |
+| `performance-oracle` | - | Performance analysis and optimization |
+| `data-integrity-guardian` | sonnet | Database migrations and data integrity |
+| `pattern-recognition-specialist` | sonnet | Detect patterns, anti-patterns, and refactoring opportunities |
+
+### Research Agents (4)
+
+| Agent | Model | Description |
+|-------|-------|-------------|
 | `repo-research-analyst` | haiku | Research repository structure and conventions |
+| `best-practices-researcher` | sonnet | Research external best practices and patterns |
+| `framework-docs-researcher` | sonnet | Look up framework/library documentation |
+| `git-history-analyzer` | haiku | Analyze git history and code evolution |
 
 ### Core (5)
 
@@ -124,23 +137,27 @@ After installation, restart Claude Code. The plugin provides:
 
 | Agent | Model | Description |
 |-------|-------|-------------|
-| `acms-bug-reproduction-validator` | - | Systematically reproduce and validate bug reports |
-| `acms-lint` | haiku | Run linting and code quality checks (PHP, Twig, JS, CSS) |
-| `acms-pr-comment-resolver` | sonnet | Address PR comments and implement fixes |
-| `acms-spec-flow-analyzer` | sonnet | Analyze user flows and identify gaps in specifications |
+| `bug-reproduction-validator` | - | Systematically reproduce and validate bug reports |
+| `lint` | haiku | Run linting and code quality checks (PHP, Twig, JS, CSS) |
+| `pr-comment-resolver` | sonnet | Address PR comments and implement fixes |
+| `spec-flow-analyzer` | sonnet | Analyze user flows and identify gaps in specifications |
 
 ## Commands
 
-### Workflow Commands (Ralph Loop)
+### Compound Engineering Workflow
 
 | Command | Description |
 |---------|-------------|
-| `/acms-refine` | Interview + Feature-List creation (was `/acms-spec`) |
-| `/acms-work` | Ralph Loop - Work feature-by-feature from `feature-list.json` |
-| `/acms-review` | Run comprehensive code reviews (~15 parallel agents) |
-| `/acms-compound` | Document solved problems to compound team knowledge |
-
-**New in v3.0.0:** Ralph Loop workflow based on Anthropic's Feature-List approach. See CLAUDE.md for detailed workflow.
+| `/plan` | Research + create structured implementation plans |
+| `/work` | TodoWrite-driven systematic implementation |
+| `/review` | Run comprehensive code reviews (~15 parallel agents) |
+| `/compound` | Document solved problems to compound knowledge |
+| `/triage` | Process review findings one-by-one |
+| `/spec` | Interview-driven specification creation |
+| `/lfg` | Full autonomous workflow (plan → review → PR + video) |
+| `/deepen-plan` | Add implementation details to existing plan |
+| `/playwright-test` | Run E2E tests with visual verification |
+| `/feature-video` | Record feature demo for PR |
 
 ### Utility Commands
 
@@ -200,6 +217,9 @@ After installation, restart Claude Code. The plugin provides:
 | Server | Description |
 |--------|-------------|
 | `context7` | Framework documentation lookup via Context7 |
+| `exa` | Web search with AI |
+| `grep` | GitHub code search |
+| `tailwindplus` | TailwindPlus component browser |
 
 MCP servers start automatically when the plugin is enabled.
 
@@ -239,30 +259,49 @@ Skill(skill="dev-browser")
 
 ## Usage Examples
 
-### Full Workflow (Ralph Loop)
+### Compound Engineering Workflow
 
 ```bash
-# 1. Create Feature-List
-/acms-refine "Add new paragraph type for testimonials"
+# 1. Research and plan
+/plan "Add user authentication with OAuth"
 
-# 2. Work feature-by-feature (Ralph Loop)
-/acms-work
+# 2. Add implementation details
+/deepen-plan
 
-# 3. Review code
-/acms-review
+# 3. Implement systematically
+/work
 
-# 4. Document learnings
-/acms-compound
+# 4. Comprehensive review
+/review
+
+# 5. Process findings
+/triage
+
+# 6. Document learnings
+/compound
+```
+
+### Full Autonomous (/lfg)
+
+```bash
+# Complete workflow from idea to PR with video demo
+/lfg "Add contact form with CAPTCHA validation"
 ```
 
 ### Quick Actions
 
 ```bash
 # Just review current changes
-/acms-review
+/review
 
 # Just document a solved problem
-/acms-compound
+/compound
+
+# Create interview-based spec
+/spec
+
+# Run E2E tests
+/playwright-test
 ```
 
 ### Specialist Combinations

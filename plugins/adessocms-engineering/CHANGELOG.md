@@ -1,5 +1,80 @@
 # Changelog
 
+## [4.0.0] - 2026-01-09
+
+### BREAKING CHANGES - Compound Engineering Workflow
+
+**Complete workflow redesign** based on [compound-engineering](https://github.com/EveryInc/compound-engineering-plugin) philosophy: make each unit of engineering work easier than the last.
+
+#### Workflow: Compound Engineering
+
+Single workflow with research-driven, structured approach:
+
+```
+/plan → /work → /review → /compound
+```
+
+| Command | Description |
+|---------|-------------|
+| `/plan` | Research + create structured implementation plans |
+| `/work` | TodoWrite-driven systematic implementation |
+| `/review` | Parallel specialist reviews with file-todos |
+| `/compound` | Document solved problems to compound knowledge |
+| `/lfg` | Full autonomous workflow (plan → review → PR + video) |
+
+### Added
+
+#### New Agents (9)
+- **Review Agents**: `code-simplicity-reviewer`, `pattern-recognition-specialist`
+- **Research Agents**: `best-practices-researcher`, `framework-docs-researcher`
+- **Design Agents**: `design-iterator`, `design-implementation-reviewer`, `figma-design-sync`
+- **Docs Agents**: `document-writer`
+- Existing agents reorganized into 7 categories: review, research, design, workflow, docs, core, specialists
+
+#### New Commands (10)
+- `/plan` - Research + create structured implementation plans
+- `/work` - TodoWrite-driven systematic implementation
+- `/review` - Parallel specialist reviews with file-todos
+- `/compound` - Document solved problems to compound knowledge
+- `/triage` - Process review findings one-by-one
+- `/spec` - Interview-driven specification creation
+- `/lfg` - Full autonomous workflow (plan → review → PR + video)
+- `/deepen-plan` - Add implementation details to existing plan
+- `/playwright-test` - Run E2E tests with visual verification
+- `/feature-video` - Record feature demo for PR
+
+#### New MCP Server
+- `tailwindplus` - TailwindPlus component browser integration
+
+### Removed
+
+- `/acms-refine` - Replaced by `/plan`
+- `/acms-work` - Replaced by `/work`
+- `/acms-review` - Replaced by `/review`
+
+### Changed
+
+- **Agent organization**: New directory structure with 7 categories
+- **Component counts**: 40 agents (+9), 32 commands (+7), 17 skills (unchanged)
+- **Single workflow**: Compound Engineering replaces previous Ralph Loop
+- **plugin.json**: Updated description and version
+- **CLAUDE.md**: Single workflow documentation
+- **README.md**: New workflow examples and command tables
+
+### Agent Categories (v4.0.0)
+
+| Category | Count | Examples |
+|----------|-------|----------|
+| Review | 6 | code-simplicity, architecture, security, performance |
+| Research | 4 | repo-analyst, best-practices, framework-docs, git-history |
+| Design | 3 | design-iterator, implementation-reviewer, figma-sync |
+| Workflow | 4 | lint, bug-validator, pr-resolver, spec-analyzer |
+| Docs | 1 | document-writer |
+| Core | 5 | frontend-engineer, librarian, skill-invoker |
+| Specialists | 17 | All Drupal domain specialists |
+
+---
+
 ## [3.3.0] - 2026-01-09
 
 ### Removed - Compounding Simplified
