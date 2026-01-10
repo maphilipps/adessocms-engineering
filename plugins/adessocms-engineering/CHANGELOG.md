@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.1] - 2026-01-10
+
+### Fixed
+- `/lfg` command now uses fully-qualified `adessocms-engineering:*` command names
+- Replaced external `ralph-wiggum` with our own `ralph-loop:ralph-loop`
+- Removed all remaining ACMS workflow references from agents and commands
+- Cleaned up auxiliary analysis files
+
 ## [4.0.0] - 2026-01-09
 
 ### BREAKING CHANGES - Compound Engineering Workflow
