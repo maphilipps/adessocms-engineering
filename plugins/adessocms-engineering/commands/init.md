@@ -1,12 +1,12 @@
 ---
-name: acms-init
-description: Initialize project with adesso CMS Engineering workflow
+name: init
+description: Initialize project with Compound Engineering workflow
 allowed-tools: [Read, Write, Edit, Bash(mkdir:*), Bash(git:*)]
 ---
 
-# /acms-init Command
+# /init Command
 
-Initialize this project for adesso CMS Engineering workflow.
+Initialize this project for Compound Engineering workflow.
 
 ## Your Task
 
@@ -24,18 +24,19 @@ Create or update `.claude/CLAUDE.md` with the core workflow and agent instructio
 3. **Write/Update `.claude/CLAUDE.md`** with the following content (preserve any existing custom sections):
 
 ```markdown
-# Project CLAUDE.md - adesso CMS Engineering
+# Project CLAUDE.md - Compound Engineering
 
 ## Workflow Commands
 
 | Command | Purpose |
 |---------|---------|
-| `/acms-plan` | Create implementation plan with research agents |
-| `/acms-review` | Review code with specialist agents |
-| `/acms-work` | Execute work plan |
-| `/acms-compound` | Document learnings |
+| `/plan` | Create implementation plan with research agents |
+| `/work` | Execute plan with TodoWrite tracking |
+| `/review` | Review code with specialist agents |
+| `/compound` | Document learnings |
+| `/triage` | Process review findings one-by-one |
 
-**Workflow:** Plan → Review → Work → Review → Compound
+**Workflow:** Plan → Work → Review → Compound
 
 ## Agent Categories
 
@@ -55,7 +56,7 @@ Use for domain-specific expertise (format: `adessocms-engineering:specialists:<n
 ### Research Agents (Parallel Analysis)
 
 - `repo-research-analyst` - Codebase research (local)
-- `librarian` - External docs, framework research, best practices (consolidated)
+- `librarian` - External docs, framework research, best practices
 - `git-history-analyzer` - Git history analysis
 
 ### Core Agents
@@ -77,7 +78,7 @@ Document learnings after:
 - Non-trivial fix completed
 - Pattern discovered
 
-Use `/acms-compound` to capture learnings.
+Use `/compound` to capture learnings in `docs/solutions/`.
 
 ## Philosophy
 
@@ -86,10 +87,10 @@ Use `/acms-compound` to capture learnings.
 
 4. **Confirm initialization**:
    - Report what was created/updated
-   - Suggest next steps (e.g., run `/acms-plan` for first feature)
+   - Suggest next steps (e.g., run `/plan` for first feature)
 
 ## Notes
 
 - Preserve any existing custom content in CLAUDE.md
-- Add the adesso CMS Engineering section at the beginning
+- Add the Compound Engineering section at the beginning
 - Create backup of existing CLAUDE.md if it has significant content

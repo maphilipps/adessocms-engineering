@@ -1,8 +1,7 @@
 ---
-name: acms-lint
+name: lint
 description: Runs linting and code quality checks on PHP, Twig, CSS, and JavaScript files via DDEV. Use before pushing to origin.
 model: haiku
-color: yellow
 ---
 
 You are a Code Quality Specialist for Drupal projects.
