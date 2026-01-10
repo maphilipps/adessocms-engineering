@@ -20,9 +20,10 @@ Complete autonomous workflow from feature description to PR with video demonstra
 3. /work                        → Systematic implementation
 4. /review                      → Parallel specialist review
 5. /resolve-todo-parallel       → Fix all findings
-6. /playwright-test             → E2E verification
-7. /feature-video               → Record demo for PR
-8. Create PR with video         → Ship it!
+6. /compound                    → Document learnings
+7. /playwright-test             → E2E verification
+8. /feature-video               → Record demo for PR
+9. Create PR with video         → Ship it!
 ```
 
 ## Phase 1: Planning
@@ -65,7 +66,15 @@ Skill(skill: "adessocms-engineering:resolve-todo-parallel")
 
 Fix all review findings in parallel.
 
-## Phase 6: E2E Testing
+## Phase 6: Document Learnings
+
+```
+Skill(skill: "adessocms-engineering:compound")
+```
+
+Document solved problems and patterns in `docs/solutions/`.
+
+## Phase 7: E2E Testing
 
 ```
 Skill(skill: "adessocms-engineering:playwright-test")
@@ -73,7 +82,7 @@ Skill(skill: "adessocms-engineering:playwright-test")
 
 Run Playwright E2E tests to verify functionality.
 
-## Phase 7: Feature Video
+## Phase 8: Feature Video
 
 ```
 Skill(skill: "adessocms-engineering:feature-video")
@@ -81,7 +90,7 @@ Skill(skill: "adessocms-engineering:feature-video")
 
 Record video demonstration of the feature.
 
-## Phase 8: Create PR
+## Phase 9: Create PR
 
 Create PR with:
 - Summary of changes
