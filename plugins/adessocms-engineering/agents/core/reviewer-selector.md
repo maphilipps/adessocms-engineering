@@ -15,7 +15,7 @@ Replaces static reviewer lists with intelligent, context-aware selection.
 
 ## When to Use
 
-- Called by `/acms-plan-review` before launching reviewers
+- Called by `/review` before launching reviewers
 - When reviewing plans with mixed or unclear domain focus
 - To ensure no relevant specialist is missed
 

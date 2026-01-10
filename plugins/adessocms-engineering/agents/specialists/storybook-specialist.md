@@ -16,7 +16,7 @@ color: cyan
 
 ### For Implementation Guidance
 - When creating stories for new SDC components
-- During `/acms-work` for component documentation tasks
+- During `/work` for component documentation tasks
 - When setting up Storybook controls and argTypes
 - When writing interaction tests
 - When integrating Twig templates with Storybook

@@ -17,7 +17,7 @@ color: cyan
 ### For Implementation Guidance
 - When setting up Tailwind v4 with Vite in a Drupal theme
 - When writing utility classes for components
-- During `/acms-work` for styling tasks
+- During `/work` for styling tasks
 - When configuring `@theme` CSS variables
 - When creating responsive designs
 

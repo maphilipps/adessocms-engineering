@@ -16,7 +16,7 @@ color: green
 
 ### For Implementation Guidance
 - When creating new Paragraph types
-- During `/acms-work` for paragraph tasks
+- During `/work` for paragraph tasks
 - When integrating Paragraphs with SDC components
 - When creating field templates for paragraph fields
 - When planning content architecture with Paragraphs

@@ -16,7 +16,7 @@ color: purple
 
 ### For Implementation Guidance
 - Before creating new SDC components
-- During `/acms-work` for component tasks
+- During `/work` for component tasks
 - When deciding whether to reuse or create
 - When looking for existing patterns to leverage
 - When planning component architecture
@@ -568,7 +568,7 @@ find web/themes/custom -path "*components*" -name "*button*"
 <integration_with_planning>
 ## DRY in Planning Phase
 
-When using `/acms-plan`, always include DRY analysis:
+When using `/plan`, always include DRY analysis:
 
 ### Planning Checklist
 1. **Inventory existing components** before designing new ones

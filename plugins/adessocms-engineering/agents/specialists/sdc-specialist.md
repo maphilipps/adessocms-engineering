@@ -18,7 +18,7 @@ color: green
 - When creating new SDC components
 - When defining component.yml schemas
 - When deciding between props vs slots
-- During `/acms-work` for component tasks
+- During `/work` for component tasks
 - When integrating SDC with Paragraphs or other entities
 - When unsure about include vs embed patterns
 

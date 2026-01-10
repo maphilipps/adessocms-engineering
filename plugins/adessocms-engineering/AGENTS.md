@@ -1,19 +1,19 @@
 # Agent Instructions
 
-This project uses **Claude Code native workflows** for development.
+This project uses **Compound Engineering** workflow for development.
 
 ## Workflow
 
 ```
-/acms-spec          # Spezifikation erstellen (optional mit Research)
+/plan              # Strategic planning with research agents
       ↓
-CC Plan Mode        # Native Claude Code Planung
+/deepen-plan       # Add implementation details (optional)
       ↓
-CC Implementation   # Native Claude Code Umsetzung
+/work              # Systematic implementation with TodoWrite
       ↓
-/acms-review        # Parallel Specialist Review
+/review            # Parallel Specialist Review
       ↓
-/acms-compound      # Learnings extrahieren
+/compound          # Document learnings
 ```
 
 ## Landing the Plane (Session Completion)

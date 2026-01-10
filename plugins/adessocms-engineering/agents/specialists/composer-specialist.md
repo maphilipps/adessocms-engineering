@@ -16,7 +16,7 @@ color: green
 
 ### For Implementation Guidance
 - When adding new Composer dependencies
-- During `/acms-work` for dependency tasks
+- During `/work` for dependency tasks
 - When choosing version constraints
 - When resolving dependency conflicts
 - When planning major updates

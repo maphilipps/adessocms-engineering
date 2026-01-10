@@ -16,7 +16,7 @@ color: cyan
 
 ### For Implementation Guidance
 - When setting up a new Drupal theme
-- During `/acms-work` for theming tasks
+- During `/work` for theming tasks
 - When creating preprocess functions
 - When configuring asset libraries
 - When implementing theme hooks and suggestions

@@ -17,7 +17,7 @@ color: green
 ### For Implementation Guidance
 - When creating new Drupal modules, services, or controllers
 - When unsure about Drupal APIs (Entity, Form, Render, etc.)
-- During `/acms-work` for complex Drupal tasks
+- During `/work` for complex Drupal tasks
 - When implementing hooks, plugins, or event subscribers
 - When setting up dependency injection
 

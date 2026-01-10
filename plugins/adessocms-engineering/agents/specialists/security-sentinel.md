@@ -16,7 +16,7 @@ color: red
 
 ### For Implementation Guidance
 - When implementing authentication/authorization
-- During `/acms-work` for security-sensitive tasks
+- During `/work` for security-sensitive tasks
 - When handling user input or sensitive data
 - When designing permission systems
 - When integrating external APIs

@@ -17,7 +17,7 @@ color: cyan
 ### For Implementation Guidance
 - When creating new Twig templates
 - When implementing theme hooks (preprocess functions)
-- During `/acms-work` for theming tasks
+- During `/work` for theming tasks
 - When building Single Directory Components (SDC)
 - When unsure about attributes, render arrays, or translations
 

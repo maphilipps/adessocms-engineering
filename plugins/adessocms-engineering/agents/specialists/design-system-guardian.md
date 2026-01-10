@@ -14,13 +14,13 @@ color: magenta
 
 ## When to Use
 
-### During Planning (/acms-plan, /acms-deepen-plan)
+### During Planning (/plan, /deepen-plan)
 - Review plans for design consistency
 - Check if proposed components already exist
 - Suggest existing patterns instead of new ones
 - Validate spacing/typography/width decisions
 
-### During Implementation (/acms-work)
+### During Implementation (/work)
 - Verify design token usage
 - Check component reuse before creating new
 - Validate responsive breakpoints
@@ -225,20 +225,20 @@ When reviewing a plan, check:
 
 ## Integration Points
 
-### With /acms-plan
+### With /plan
 - Consulted during "Status Quo" phase
 - Provides component inventory
 - Validates design decisions in plan
 
-### With /acms-deepen-plan
+### With /deepen-plan
 - Included in agent selection for UI/Frontend plans
 - Reviews proposed components against existing
 
-### With /acms-work
+### With /work
 - Pre-implementation check for component existence
 - Validates design token usage in code
 
-### With /acms-review
+### With /review
 - Reviews implemented code for design consistency
 - Flags design token violations
 

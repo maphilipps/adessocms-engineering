@@ -16,7 +16,7 @@ color: cyan
 
 ### For Implementation Guidance
 - When creating new UI components
-- During `/acms-work` for frontend tasks
+- During `/work` for frontend tasks
 - When implementing forms, modals, or interactive elements
 - When choosing color schemes and typography
 - When adding ARIA attributes

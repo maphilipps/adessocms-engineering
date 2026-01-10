@@ -16,7 +16,7 @@ color: yellow
 
 ### For Implementation Guidance
 - When writing PHPUnit tests (Unit, Kernel, Functional)
-- During `/acms-work` for TDD tasks
+- During `/work` for TDD tasks
 - When setting up Playwright E2E tests
 - When creating Storybook interaction tests
 - When unsure which test type to use
