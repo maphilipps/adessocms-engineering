@@ -1,0 +1,76 @@
+site_name: Benutzerhandbuch
+site_description: Anleitung für Redakteure
+site_author: Ihr Unternehmen
+
+theme:
+  name: material
+  language: de
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Dunkelmodus aktivieren
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Hellmodus aktivieren
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+    - toc.follow
+  icon:
+    logo: material/book-open-page-variant
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+plugins:
+  - search:
+      lang: de
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      width: 100%
+      height: auto
+      zoomable: true
+      draggable: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Startseite: index.md
+  - Erste Schritte:
+    - Anmeldung: erste-schritte/anmeldung.md
+    - Die Oberfläche: erste-schritte/oberflaeche.md
+  - Inhalte bearbeiten:
+    - Neue Seite erstellen: inhalte/seite-erstellen.md
+    - Seite bearbeiten: inhalte/seite-bearbeiten.md
+    - Paragraphen verwenden: inhalte/paragraphen.md
+    - Medien einfügen: inhalte/medien.md
