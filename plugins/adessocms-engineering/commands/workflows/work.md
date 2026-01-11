@@ -1,5 +1,5 @@
 ---
-name: work
+name: workflows:work
 description: Execute implementation plans systematically with TodoWrite tracking and quality gates
 argument-hint: "[plan file or task description]"
 ---

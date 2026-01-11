@@ -30,13 +30,13 @@ Create or update `.claude/CLAUDE.md` with the core workflow and agent instructio
 
 | Command | Purpose |
 |---------|---------|
-| `/plan` | Create implementation plan with research agents |
-| `/work` | Execute plan with TodoWrite tracking |
-| `/review` | Review code with specialist agents |
-| `/compound` | Document learnings |
+| `/workflows:plan` | Create implementation plan with research agents |
+| `/workflows:work` | Execute plan with TodoWrite tracking |
+| `/workflows:review` | Review code with specialist agents |
+| `/workflows:compound` | Document learnings |
 | `/triage` | Process review findings one-by-one |
 
-**Workflow:** Plan → Work → Review → Compound
+**Workflow:** /workflows:plan → /workflows:work → /workflows:review → /workflows:compound
 
 ## Agent Categories
 
@@ -78,7 +78,7 @@ Document learnings after:
 - Non-trivial fix completed
 - Pattern discovered
 
-Use `/compound` to capture learnings in `docs/solutions/`.
+Use `/workflows:compound` to capture learnings in `docs/solutions/`.
 
 ## Philosophy
 
@@ -87,7 +87,7 @@ Use `/compound` to capture learnings in `docs/solutions/`.
 
 4. **Confirm initialization**:
    - Report what was created/updated
-   - Suggest next steps (e.g., run `/plan` for first feature)
+   - Suggest next steps (e.g., run `/workflows:plan` for first feature)
 
 ## Notes
 

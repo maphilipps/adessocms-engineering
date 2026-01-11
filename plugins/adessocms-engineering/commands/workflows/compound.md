@@ -1,10 +1,10 @@
 ---
-name: compound
+name: workflows:compound
 description: Document solved problems to compound engineering knowledge for future reference
 argument-hint: "[problem category or empty for current context]"
 ---
 
-# /compound - Knowledge Compounding Workflow
+# /workflows:compound - Knowledge Compounding Workflow
 
 Capture solved problems, patterns, and learnings to build cumulative engineering knowledge.
 

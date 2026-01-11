@@ -37,10 +37,9 @@ agents/
 └── specialists/   # Drupal domain specialists (17 experts)
 
 commands/
-├── workflows/     # Core workflow commands (plan, work, review)
+├── workflows/     # Core workflow commands (plan, work, review, compound)
 ├── lfg.md         # Full autonomous workflow
 ├── spec.md        # Interview-based specification
-├── compound.md    # Knowledge compounding
 ├── triage.md      # Finding triage
 └── *.md           # Utility commands (generate-*, resolve-*)
 
@@ -66,15 +65,15 @@ See `docs/solutions/plugin-versioning-requirements.md` for detailed versioning w
 ### Core Workflow
 
 ```
-/plan               # Research + structured planning
+/workflows:plan     # Research + structured planning
       ↓
 /deepen-plan        # Add implementation details (optional)
       ↓
-/work               # TodoWrite-driven implementation
+/workflows:work     # TodoWrite-driven implementation
       ↓
-/review             # Parallel specialist review
+/workflows:review   # Parallel specialist review
       ↓
-/compound           # Document learnings
+/workflows:compound # Document learnings
 ```
 
 ### Full Autonomous (/lfg)
@@ -82,7 +81,7 @@ See `docs/solutions/plugin-versioning-requirements.md` for detailed versioning w
 Complete workflow from idea to PR:
 ```
 /lfg "Feature description"
-  → /plan → /deepen-plan → /work → /review
+  → /workflows:plan → /deepen-plan → /workflows:work → /workflows:review
   → /resolve-todo-parallel → /playwright-test → /feature-video → PR
 ```
 

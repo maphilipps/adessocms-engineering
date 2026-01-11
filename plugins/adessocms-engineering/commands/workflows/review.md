@@ -1,5 +1,5 @@
 ---
-name: review
+name: workflows:review
 description: Exhaustive multi-agent code review with parallel specialists and file-todos tracking
 argument-hint: "[branch, PR URL, or file paths]"
 ---

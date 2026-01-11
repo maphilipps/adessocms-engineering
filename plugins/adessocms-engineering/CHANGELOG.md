@@ -1,5 +1,28 @@
 # Changelog
 
+## [4.1.0] - 2026-01-11
+
+### Changed
+- **BREAKING:** All workflow commands renamed with `workflows:` prefix:
+  - `/plan` → `/workflows:plan`
+  - `/work` → `/workflows:work`
+  - `/review` → `/workflows:review`
+  - `/compound` → `/workflows:compound` (also moved to `commands/workflows/`)
+- Command `name` fields in YAML frontmatter now match folder structure
+- `/lfg` command now matches compound-engineering style: simple command list with `ralph-loop:ralph-loop`
+- Aligned with [compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) structure
+
+### Fixed
+- `/lfg` now uses simple prompt format: `"finish all slash commands"` instead of complex args
+- Shell escaping issues resolved by using minimal Ralph Loop prompt
+
+## [4.0.2] - 2026-01-11
+
+### Fixed
+- `/lfg` command now explicitly uses `Skill(skill: "ralph-loop:ralph-loop", ...)` syntax
+- Clearer instructions for Ralph Loop integration with proper prompt structure
+- Added step-by-step workflow documentation inside lfg.md
+
 ## [4.0.1] - 2026-01-10
 
 ### Fixed

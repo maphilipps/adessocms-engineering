@@ -5,15 +5,15 @@ This project uses **Compound Engineering** workflow for development.
 ## Workflow
 
 ```
-/plan              # Strategic planning with research agents
+/workflows:plan     # Strategic planning with research agents
       ↓
-/deepen-plan       # Add implementation details (optional)
+/deepen-plan        # Add implementation details (optional)
       ↓
-/work              # Systematic implementation with TodoWrite
+/workflows:work     # Systematic implementation with TodoWrite
       ↓
-/review            # Parallel Specialist Review
+/workflows:review   # Parallel Specialist Review
       ↓
-/compound          # Document learnings
+/workflows:compound # Document learnings
 ```
 
 ## Landing the Plane (Session Completion)

@@ -148,10 +148,10 @@ After installation, restart Claude Code. The plugin provides:
 
 | Command | Description |
 |---------|-------------|
-| `/plan` | Research + create structured implementation plans |
-| `/work` | TodoWrite-driven systematic implementation |
-| `/review` | Run comprehensive code reviews (~15 parallel agents) |
-| `/compound` | Document solved problems to compound knowledge |
+| `/workflows:plan` | Research + create structured implementation plans |
+| `/workflows:work` | TodoWrite-driven systematic implementation |
+| `/workflows:review` | Run comprehensive code reviews (~15 parallel agents) |
+| `/workflows:compound` | Document solved problems to compound knowledge |
 | `/triage` | Process review findings one-by-one |
 | `/spec` | Interview-driven specification creation |
 | `/lfg` | Full autonomous workflow (plan → review → PR + video) |
@@ -263,22 +263,22 @@ Skill(skill="dev-browser")
 
 ```bash
 # 1. Research and plan
-/plan "Add user authentication with OAuth"
+/workflows:plan "Add user authentication with OAuth"
 
 # 2. Add implementation details
 /deepen-plan
 
 # 3. Implement systematically
-/work
+/workflows:work
 
 # 4. Comprehensive review
-/review
+/workflows:review
 
 # 5. Process findings
 /triage
 
 # 6. Document learnings
-/compound
+/workflows:compound
 ```
 
 ### Full Autonomous (/lfg)
@@ -292,10 +292,10 @@ Skill(skill="dev-browser")
 
 ```bash
 # Just review current changes
-/review
+/workflows:review
 
 # Just document a solved problem
-/compound
+/workflows:compound
 
 # Create interview-based spec
 /spec

@@ -1,6 +1,6 @@
 {
   "name": "adessocms-engineering",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "AI-powered Drupal 11 engineering with compound workflow pattern. 40 agents, 32 commands, 17 skills. Workflow: Plan→Work→Review→Compound. Auto-Invoke Rules for skills/specialists.",
   "author": {
     "name": "Marc Philipps",

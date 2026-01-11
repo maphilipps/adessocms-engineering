@@ -1,5 +1,5 @@
 ---
-name: plan
+name: workflows:plan
 description: Transform feature descriptions into structured implementation plans using parallel research agents
 argument-hint: "[feature description or JIRA ticket]"
 ---
