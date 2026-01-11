@@ -6,15 +6,17 @@ argument-hint: "[feature description]"
 
 Run these slash commands in order. Do not do anything else.
 
-1. `/ralph-loop:ralph-loop "finish all slash commands" --completion-promise "DONE"`
-2. `/workflows:plan $ARGUMENTS`
-3. `/deepen-plan`
-4. `/workflows:work`
-5. `/workflows:review`
-6. `/resolve-todo-parallel`
-7. `/workflows:compound`
-8. `/playwright-test`
-9. `/feature-video`
-10. Output `<promise>DONE</promise>` when video is in PR
+**Step 1:** Use the Skill tool to invoke `ralph-loop:ralph-loop` with args: `"finish all slash commands" --completion-promise "DONE"`
 
-Start with step 1 now.
+Then execute these commands in sequence:
+- `/adessocms-engineering:workflows:plan $ARGUMENTS`
+- `/adessocms-engineering:deepen-plan`
+- `/adessocms-engineering:workflows:work`
+- `/adessocms-engineering:workflows:review`
+- `/adessocms-engineering:resolve-todo-parallel`
+- `/adessocms-engineering:workflows:compound`
+- `/adessocms-engineering:playwright-test`
+- `/adessocms-engineering:feature-video`
+- Output `<promise>DONE</promise>` when video is in PR
+
+Start with Step 1 now - invoke the Skill tool with skill="ralph-loop:ralph-loop".
