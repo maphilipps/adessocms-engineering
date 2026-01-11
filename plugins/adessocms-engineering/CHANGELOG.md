@@ -1,9 +1,14 @@
 # Changelog
 
+## [4.1.2] - 2026-01-11
+
+### Fixed
+- `/lfg` now uses correct plugin name: `ralph-wiggum:ralph-loop` (not `ralph-loop:ralph-loop`)
+
 ## [4.1.1] - 2026-01-11
 
 ### Fixed
-- `/lfg` now explicitly instructs Claude to use `Skill(skill: "ralph-loop:ralph-loop")` with fully qualified name
+- `/lfg` now explicitly instructs Claude to use Skill tool with fully qualified name
 - Claude was dropping the `:ralph-loop` suffix and calling `Skill(ralph-loop)` which doesn't exist
 - All internal commands now use fully qualified names with `adessocms-engineering:` prefix
 
