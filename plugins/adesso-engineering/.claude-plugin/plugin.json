@@ -1,0 +1,47 @@
+{
+  "name": "adesso-engineering",
+  "version": "1.0.1",
+  "description": "Drupal engineering tools for adesso SE. 38 agents, 32 commands, 18 skills, 3 MCP servers for Drupal development, DDEV, code review, and workflow automation.",
+  "author": {
+    "name": "Marc Philipps",
+    "email": "marc.philipps@adesso.de",
+    "url": "https://www.drupal.org/u/philipps"
+  },
+  "homepage": "https://adesso.de",
+  "repository": "https://github.com/adesso-se/adesso-engineering",
+  "license": "MIT",
+  "keywords": [
+    "drupal",
+    "drupal-11",
+    "ddev",
+    "php",
+    "twig",
+    "tailwindcss",
+    "sdc",
+    "single-directory-components",
+    "workflow-automation",
+    "code-review",
+    "knowledge-management",
+    "image-generation",
+    "gitlab",
+    "github",
+    "ci-cd"
+  ],
+  "mcpServers": {
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "exa": {
+      "command": "npx",
+      "args": ["-y", "exa-mcp-server"],
+      "env": {
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      }
+    },
+    "grep": {
+      "command": "uvx",
+      "args": ["mcp-server-git"]
+    }
+  }
+}
