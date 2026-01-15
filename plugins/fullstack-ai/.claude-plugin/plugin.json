@@ -1,0 +1,60 @@
+{
+  "name": "fullstack-ai",
+  "version": "1.0.0",
+  "description": "AI-powered development for Next.js/ShadCN/AI-SDK stack. 24 agents, 21 commands, 14 skills, 6 MCP servers for code review, research, design, and workflow automation.",
+  "author": {
+    "name": "Marc Philipps",
+    "email": "marc.philipps@adesso.de",
+    "url": "https://github.com/marcphilipps"
+  },
+  "homepage": "https://github.com/adesso-ai/fullstack-ai",
+  "repository": "https://github.com/adesso-ai/adessocms-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "ai-powered",
+    "fullstack-ai",
+    "workflow-automation",
+    "code-review",
+    "next.js",
+    "react",
+    "shadcn",
+    "ai-sdk",
+    "ai-elements",
+    "vercel",
+    "typescript",
+    "knowledge-management",
+    "agent-browser",
+    "browser-automation",
+    "agent-native"
+  ],
+  "mcpServers": {
+    "ai-elements": {
+      "type": "http",
+      "url": "https://registry.ai-sdk.dev/api/mcp"
+    },
+    "shadcn": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "agent-browser": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["agent-browser"]
+    },
+    "next-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"]
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  }
+}

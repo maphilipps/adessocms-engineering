@@ -54,6 +54,32 @@
       },
       "tags": ["audit", "website-analysis", "cms-evaluation", "business-development", "lead-qualification", "vitepress", "performance", "accessibility", "seo"],
       "source": "./plugins/bd-audit"
+    },
+    {
+      "name": "adesso-engineering",
+      "description": "Drupal engineering tools for adesso SE. 38 agents, 32 commands, 18 skills, 3 MCP servers for Drupal development, DDEV, code review, and workflow automation.",
+      "version": "1.0.1",
+      "author": {
+        "name": "Marc Philipps",
+        "url": "https://www.drupal.org/u/philipps",
+        "email": "marc.philipps@adesso.de"
+      },
+      "homepage": "https://github.com/adesso-se/adesso-engineering",
+      "tags": ["drupal", "drupal-11", "ddev", "php", "twig", "tailwindcss", "sdc", "workflow-automation", "code-review", "gitlab", "github", "ci-cd"],
+      "source": "./plugins/adesso-engineering"
+    },
+    {
+      "name": "fullstack-ai",
+      "description": "AI-powered development for Next.js/ShadCN/AI-SDK stack. 23 agents, 23 commands, 14 skills, 6 MCP servers for code review, research, design, and workflow automation.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Marc Philipps",
+        "url": "https://github.com/marcphilipps",
+        "email": "marc.philipps@adesso.de"
+      },
+      "homepage": "https://github.com/adesso-ai/fullstack-ai",
+      "tags": ["next.js", "react", "shadcn", "ai-sdk", "ai-elements", "vercel", "typescript", "agent-native", "browser-automation"],
+      "source": "./plugins/fullstack-ai"
     }
   ]
 }
