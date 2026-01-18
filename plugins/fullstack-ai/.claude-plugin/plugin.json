@@ -1,7 +1,7 @@
 {
   "name": "fullstack-ai",
-  "version": "1.0.0",
-  "description": "AI-powered development for Next.js/ShadCN/AI-SDK stack. 24 agents, 21 commands, 14 skills, 6 MCP servers for code review, research, design, and workflow automation.",
+  "version": "1.1.0",
+  "description": "AI-powered development for Next.js/ShadCN/AI-SDK stack. 23 agents (6 Opus, 12 Sonnet, 5 Haiku), 21 commands, 14 skills, 6 MCP servers for code review, research, design, and workflow automation.",
   "author": {
     "name": "Marc Philipps",
     "email": "marc.philipps@adesso.de",

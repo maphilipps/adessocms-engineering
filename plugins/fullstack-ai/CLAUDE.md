@@ -125,7 +125,7 @@ GitHub PR/Actions            → Skill(skill: "github")
 
 | File Pattern | Specialists to Invoke |
 |--------------|----------------------|
-| `.tsx`, `.ts` | `kieran-typescript-reviewer`, `nextjs-reviewer` |
+| `.tsx`, `.ts` | `kieran-typescript-reviewer`, `nextjs-reviewer`, `julik-frontend-races-reviewer` |
 | API routes | `security-sentinel` |
 | All changes | `agent-native-reviewer`, `architecture-strategist` |
 

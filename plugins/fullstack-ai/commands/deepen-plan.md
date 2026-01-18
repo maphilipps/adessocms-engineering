@@ -131,13 +131,15 @@ The skill tells you what to do - follow it. Execute the skill completely."
 
 **Example spawns:**
 ```
-Task general-purpose: "Use the dhh-rails-style skill at ~/.claude/plugins/.../dhh-rails-style. Read SKILL.md and apply it to: [Rails sections of plan]"
+Task general-purpose: "Use the nextjs-frontend skill at ~/.claude/plugins/.../nextjs-frontend. Read SKILL.md and apply it to: [Next.js pages/components sections of plan]"
 
-Task general-purpose: "Use the frontend-design skill at ~/.claude/plugins/.../frontend-design. Read SKILL.md and apply it to: [UI sections of plan]"
+Task general-purpose: "Use the ai-backend skill at ~/.claude/plugins/.../ai-backend. Read SKILL.md and apply it to: [AI SDK backend sections of plan]"
+
+Task general-purpose: "Use the ai-elements skill at ~/.claude/plugins/.../ai-elements. Read SKILL.md and apply it to: [AI chat UI sections of plan]"
+
+Task general-purpose: "Use the frontend-design skill at ~/.claude/plugins/.../frontend-design. Read SKILL.md and apply it to: [UI/design sections of plan]"
 
 Task general-purpose: "Use the agent-native-architecture skill at ~/.claude/plugins/.../agent-native-architecture. Read SKILL.md and apply it to: [agent/tool sections of plan]"
-
-Task general-purpose: "Use the security-patterns skill at ~/.claude/skills/security-patterns. Read SKILL.md and apply it to: [full plan]"
 ```
 
 **No limit on skill sub-agents. Spawn one for every skill that could possibly be relevant.**
@@ -185,12 +187,12 @@ Each learning file has YAML frontmatter with metadata. Read the first ~20 lines 
 
 ```yaml
 ---
-title: "N+1 Query Fix for Briefs"
+title: "Server Component Data Fetching Pattern"
 category: performance-issues
-tags: [activerecord, n-plus-one, includes, eager-loading]
-module: Briefs
-symptom: "Slow page load, multiple queries in logs"
-root_cause: "Missing includes on association"
+tags: [nextjs, server-components, data-fetching, streaming]
+module: Dashboard
+symptom: "Slow page load, waterfall requests"
+root_cause: "Client-side fetching instead of Server Components"
 ---
 ```
 
@@ -211,7 +213,7 @@ Compare each learning's frontmatter against the plan:
 
 **SKIP learnings that are clearly not applicable:**
 - Plan is frontend-only → skip `database-migrations/` learnings
-- Plan is Python → skip `rails-specific/` learnings
+- Plan is Python → skip `nextjs-specific/` learnings
 - Plan has no auth → skip `authentication-issues/` learnings
 
 **SPAWN sub-agents for learnings that MIGHT apply:**
@@ -248,17 +250,17 @@ If NOT relevant after deeper analysis:
 
 **Example filtering:**
 ```
-# Found 15 learning files, plan is about "Rails API caching"
+# Found 15 learning files, plan is about "Next.js API route caching"
 
 # SPAWN (likely relevant):
-docs/solutions/performance-issues/n-plus-one-queries.md      # tags: [activerecord] ✓
-docs/solutions/performance-issues/redis-cache-stampede.md    # tags: [caching, redis] ✓
-docs/solutions/configuration-fixes/redis-connection-pool.md  # tags: [redis] ✓
+docs/solutions/performance-issues/api-route-slow-response.md    # tags: [nextjs, api-routes] ✓
+docs/solutions/performance-issues/redis-cache-stampede.md       # tags: [caching, redis] ✓
+docs/solutions/configuration-fixes/redis-connection-pool.md     # tags: [redis] ✓
 
 # SKIP (clearly not applicable):
-docs/solutions/deployment-issues/heroku-memory-quota.md      # not about caching
-docs/solutions/frontend-issues/stimulus-race-condition.md    # plan is API, not frontend
-docs/solutions/authentication-issues/jwt-expiry.md           # plan has no auth
+docs/solutions/deployment-issues/vercel-memory-quota.md         # not about caching
+docs/solutions/frontend-issues/react-race-condition.md          # plan is API, not frontend
+docs/solutions/authentication-issues/jwt-expiry.md              # plan has no auth
 ```
 
 **Spawn sub-agents in PARALLEL for all filtered learnings.**
@@ -498,49 +500,67 @@ Based on selection:
 ```markdown
 ## Technical Approach
 
-Use React Query for data fetching with optimistic updates.
+Use Server Components for data fetching with streaming UI.
 ```
 
 **After (from /workflows:deepen-plan):**
 ```markdown
 ## Technical Approach
 
-Use React Query for data fetching with optimistic updates.
+Use Server Components for data fetching with streaming UI.
 
 ### Research Insights
 
 **Best Practices:**
-- Configure `staleTime` and `cacheTime` based on data freshness requirements
-- Use `queryKey` factories for consistent cache invalidation
-- Implement error boundaries around query-dependent components
+- Use `async`/`await` directly in Server Components for data fetching
+- Implement loading.tsx for instant loading states
+- Use `<Suspense>` boundaries for granular streaming
+- Leverage `unstable_cache` for frequently accessed data
 
 **Performance Considerations:**
-- Enable `refetchOnWindowFocus: false` for stable data to reduce unnecessary requests
-- Use `select` option to transform and memoize data at query level
-- Consider `placeholderData` for instant perceived loading
+- Parallel data fetching with Promise.all() in Server Components
+- Use `fetch` with `next: { revalidate }` for incremental static regeneration
+- Implement proper cache tags for targeted revalidation
+- Consider streaming with React 19's `use()` hook for sequential data
 
 **Implementation Details:**
 ```typescript
-// Recommended query configuration
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 2,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+// Recommended Server Component pattern
+export default async function DashboardPage() {
+  // Parallel data fetching
+  const [user, stats] = await Promise.all([
+    fetchUser(),
+    fetchStats(),
+  ]);
+
+  return (
+    <div>
+      <UserProfile user={user} />
+      <Suspense fallback={<StatsLoading />}>
+        <Stats data={stats} />
+      </Suspense>
+    </div>
+  );
+}
+
+// With caching
+const getStats = unstable_cache(
+  async () => fetchStats(),
+  ['dashboard-stats'],
+  { revalidate: 3600 }
+);
 ```
 
 **Edge Cases:**
-- Handle race conditions with `cancelQueries` on component unmount
-- Implement retry logic for transient network failures
-- Consider offline support with `persistQueryClient`
+- Handle errors with error.tsx error boundaries
+- Implement not-found.tsx for 404 cases
+- Use dynamic rendering when needed with `dynamic = 'force-dynamic'`
+- Consider partial prerendering (PPR) for mixed static/dynamic content
 
 **References:**
-- https://tanstack.com/query/latest/docs/react/guides/optimistic-updates
-- https://tkdodo.eu/blog/practical-react-query
+- https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
+- https://react.dev/reference/react/use
+- https://nextjs.org/docs/app/api-reference/functions/unstable_cache
 ```
 
 NEVER CODE! Just research and enhance the plan.

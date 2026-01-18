@@ -5,6 +5,35 @@ All notable changes to the fullstack-ai plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-18
+
+### Added
+
+- **`/lfg` command** - Re-enabled `/deepen-plan` step for comprehensive research before implementation
+  - Provides deep analysis of requirements and technical approaches
+  - Enhances plans with parallel research agents
+  - Note: Token-intensive; users can skip by using `/workflows:plan` + `/workflows:work` directly
+
+### Changed
+
+- **Model Optimization** - Optimized agent model usage for cost efficiency (23 agents total)
+  - **6 agents on Opus** (complex reasoning): `kieran-typescript-reviewer`, `architecture-strategist`, `security-sentinel`, `data-integrity-guardian`, `agent-native-reviewer`, `design-iterator`
+  - **12 agents on Sonnet** (balanced): `nextjs-reviewer`, `julik-frontend-races-reviewer`, `performance-oracle`, `pattern-recognition-specialist`, `data-migration-expert`, `deployment-verification-agent`, `git-history-analyzer`, `framework-docs-researcher`, `best-practices-researcher`, `design-implementation-reviewer`, `figma-design-sync`, `spec-flow-analyzer`
+  - **5 agents on Haiku** (fast & efficient): `code-simplicity-reviewer`, `lint`, `pr-comment-resolver`, `bug-reproduction-validator`, `repo-research-analyst`
+
+- **`/workflows:review`** - Updated agent references for Next.js/TypeScript stack
+  - Replaced non-existent Rails agents (`kieran-rails-reviewer`, `dhh-rails-reviewer`, `rails-turbo-expert`, `dependency-detective`, `code-philosopher`, `devops-harmony-analyst`)
+  - Now uses: `kieran-typescript-reviewer`, `nextjs-reviewer`, `julik-frontend-races-reviewer`, `git-history-analyzer`, `pattern-recognition-specialist`, `architecture-strategist`, `security-sentinel`, `performance-oracle`, `data-integrity-guardian`, `agent-native-reviewer`, `code-simplicity-reviewer`
+
+- **`/plan_review`** - Updated to use TypeScript/Next.js review agents
+  - Now uses: `kieran-typescript-reviewer`, `nextjs-reviewer`, `architecture-strategist`, `code-simplicity-reviewer`, `agent-native-reviewer`
+
+### Fixed
+
+- Corrected agent count in documentation (23 agents, not 24)
+- Removed all references to non-existent Rails-specific agents
+- Updated specialist table in CLAUDE.md to include `julik-frontend-races-reviewer`
+
 ## [1.0.0] - 2025-01-15
 
 ### Added

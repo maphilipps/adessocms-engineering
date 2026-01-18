@@ -54,19 +54,17 @@ Ensure that the code is ready for analysis (either in worktree or on current bra
 
 Run ALL or most of these agents at the same time:
 
-1. Task kieran-rails-reviewer(PR content)
-2. Task dhh-rails-reviewer(PR title)
-3. If turbo is used: Task rails-turbo-expert(PR content)
+1. Task kieran-typescript-reviewer(PR content)
+2. Task nextjs-reviewer(PR content)
+3. Task julik-frontend-races-reviewer(PR content) - Check for UI race conditions
 4. Task git-history-analyzer(PR content)
-5. Task dependency-detective(PR content)
-6. Task pattern-recognition-specialist(PR content)
-7. Task architecture-strategist(PR content)
-8. Task code-philosopher(PR content)
-9. Task security-sentinel(PR content)
-10. Task performance-oracle(PR content)
-11. Task devops-harmony-analyst(PR content)
-12. Task data-integrity-guardian(PR content)
-13. Task agent-native-reviewer(PR content) - Verify new features are agent-accessible
+5. Task pattern-recognition-specialist(PR content)
+6. Task architecture-strategist(PR content)
+7. Task security-sentinel(PR content)
+8. Task performance-oracle(PR content)
+9. Task data-integrity-guardian(PR content)
+10. Task agent-native-reviewer(PR content) - Verify new features are agent-accessible
+11. Task code-simplicity-reviewer(PR content) - Check for unnecessary complexity
 
 </parallel_tasks>
 
@@ -367,11 +365,14 @@ After creating all todo files, present comprehensive summary:
 
 ### Review Agents Used:
 
-- kieran-rails-reviewer
+- kieran-typescript-reviewer
+- nextjs-reviewer
+- julik-frontend-races-reviewer
 - security-sentinel
 - performance-oracle
 - architecture-strategist
 - agent-native-reviewer
+- code-simplicity-reviewer
 - [other agents]
 
 ### Next Steps:
